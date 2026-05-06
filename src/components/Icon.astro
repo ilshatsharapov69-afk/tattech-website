@@ -1,0 +1,62 @@
+---
+import code from './icons/code.svg?raw';
+import wrench from './icons/wrench.svg?raw';
+import globe from './icons/globe.svg?raw';
+import shield from './icons/shield.svg?raw';
+import server from './icons/server.svg?raw';
+import chart from './icons/chart.svg?raw';
+import telegram from './icons/telegram.svg?raw';
+import whatsapp from './icons/whatsapp.svg?raw';
+import arrowRight from './icons/arrow-right.svg?raw';
+import chevronRight from './icons/chevron-right.svg?raw';
+import chevronLeft from './icons/chevron-left.svg?raw';
+import star from './icons/star.svg?raw';
+import check from './icons/check.svg?raw';
+
+const icons: Record<string, string> = {
+  code,
+  wrench,
+  globe,
+  shield,
+  server,
+  chart,
+  telegram,
+  whatsapp,
+  'arrow-right': arrowRight,
+  'chevron-right': chevronRight,
+  'chevron-left': chevronLeft,
+  star,
+  check,
+};
+
+interface Props {
+  name: keyof typeof icons | string;
+  size?: number | string;
+  class?: string;
+}
+
+const { name, size = 24, class: className } = Astro.props;
+const svg = icons[name];
+const sizeStr = typeof size === 'number' ? `${size}px` : size;
+---
+
+{svg && (
+  <span
+    class={`icon ${className ?? ''}`}
+    style={`--icon-size: ${sizeStr}`}
+    set:html={svg}
+  />
+)}
+
+<style>
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .icon :global(svg) {
+    width: var(--icon-size);
+    height: var(--icon-size);
+  }
+</style>

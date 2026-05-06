@@ -1,0 +1,287 @@
+---
+import Icon from './Icon.astro';
+---
+
+<section class="hero">
+  <div class="bg" aria-hidden="true">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="dots"></div>
+  </div>
+
+  <div class="container hero-inner">
+    <span class="pill hero-pill">
+      <Icon name="star" size={14} />
+      <span>Официальный партнёр 1С • С 2016 года</span>
+    </span>
+
+    <h1 class="h1 hero-title">
+      Автоматизация бизнеса <br class="d-desk" />
+      <span class="text-gradient">на 1С</span> — без хаоса,<br class="d-desk" />
+      в срок, под ключ.
+    </h1>
+
+    <p class="lead hero-sub">
+      Внедряем 1С, поддерживаем и обучаем вашу команду. <strong>300+ компаний</strong> по&nbsp;России уже работают спокойнее.
+    </p>
+
+    <div class="hero-cta">
+      <a
+        href="https://t.me/CyclesOfID"
+        target="_blank"
+        rel="noopener"
+        class="btn btn-primary btn-lg"
+      >
+        <Icon name="telegram" size={18} />
+        <span>Написать в Telegram</span>
+      </a>
+      <a href="#cases" class="btn btn-secondary btn-lg">
+        <span>Посмотреть кейсы</span>
+        <Icon name="arrow-right" size={16} />
+      </a>
+    </div>
+
+    <div class="hero-contacts">
+      <a href="tel:+79520434277" class="contact-link">
+        <span class="contact-icon">📞</span>
+        <span>+7 952 043 4277</span>
+      </a>
+      <span class="contact-sep">•</span>
+      <a href="mailto:ttech.kzn.it@gmail.com" class="contact-link">
+        <span class="contact-icon">✉️</span>
+        <span>ttech.kzn.it@gmail.com</span>
+      </a>
+    </div>
+
+    <div class="hero-trust">
+      <div class="trust-item">
+        <Icon name="check" size={18} class="trust-icon" />
+        <span>Без хаоса в проекте</span>
+      </div>
+      <div class="trust-item">
+        <Icon name="check" size={18} class="trust-icon" />
+        <span>Сроки в договоре</span>
+      </div>
+      <div class="trust-item">
+        <Icon name="check" size={18} class="trust-icon" />
+        <span>Поддержка после внедрения</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    padding-top: calc(var(--header-h) + var(--space-12));
+    padding-bottom: var(--space-24);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.55;
+    animation: float 12s ease-in-out infinite alternate;
+  }
+  .glow-1 {
+    top: -10%;
+    left: -10%;
+    width: 60vw;
+    height: 60vw;
+    max-width: 720px;
+    max-height: 720px;
+    background: radial-gradient(circle at 30% 30%, rgba(37, 99, 235, 0.36), transparent 65%);
+  }
+  .glow-2 {
+    bottom: -20%;
+    right: -10%;
+    width: 55vw;
+    height: 55vw;
+    max-width: 680px;
+    max-height: 680px;
+    background: radial-gradient(circle at 70% 70%, rgba(99, 91, 255, 0.32), transparent 65%);
+    animation-delay: -6s;
+  }
+  @keyframes float {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(20px, -30px) scale(1.05); }
+  }
+
+  .dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(15, 23, 42, 0.07) 1px, transparent 1px);
+    background-size: 24px 24px;
+    mask-image: radial-gradient(ellipse 60% 60% at 50% 40%, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 40%, black 30%, transparent 80%);
+  }
+
+  .hero-inner {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .hero-pill {
+    animation: fadeUp 800ms var(--ease-spring) both;
+  }
+
+  .hero-title {
+    max-width: 980px;
+    animation: fadeUpBlur 900ms var(--ease-spring) both;
+    animation-delay: 80ms;
+  }
+
+  .hero-sub {
+    max-width: 620px;
+    margin-top: 0;
+    animation: fadeUp 800ms var(--ease-spring) both;
+    animation-delay: 220ms;
+  }
+
+  .hero-sub strong {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: var(--space-4);
+    animation: fadeUp 800ms var(--ease-spring) both;
+    animation-delay: 340ms;
+  }
+
+  .btn-lg {
+    padding: 18px 28px;
+    font-size: 1rem;
+  }
+
+  .hero-contacts {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    justify-content: center;
+    color: var(--color-text-soft);
+    font-size: 0.9375rem;
+    animation: fadeUp 800ms var(--ease-spring) both;
+    animation-delay: 440ms;
+  }
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 200ms;
+  }
+  .contact-link:hover {
+    color: var(--color-brand-500);
+  }
+  .contact-icon {
+    opacity: 0.8;
+  }
+  .contact-sep {
+    opacity: 0.4;
+  }
+
+  .hero-trust {
+    display: flex;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+    width: 100%;
+    max-width: 720px;
+    animation: fadeUp 800ms var(--ease-spring) both;
+    animation-delay: 540ms;
+  }
+  .trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: var(--color-text-soft);
+    font-weight: 500;
+  }
+  .trust-icon {
+    color: var(--color-success);
+  }
+
+  .d-desk {
+    display: inline;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUpBlur {
+    from { opacity: 0; transform: translateY(20px); filter: blur(8px); }
+    to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      min-height: 100vh;
+      padding-top: calc(var(--header-h) + var(--space-8));
+    }
+    .d-desk {
+      display: none;
+    }
+    .hero-title {
+      font-size: clamp(1.875rem, 7vw, 2.5rem);
+    }
+    .hero-cta {
+      flex-direction: column;
+      width: 100%;
+    }
+    .hero-cta .btn {
+      width: 100%;
+    }
+    .hero-contacts {
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .contact-sep {
+      display: none;
+    }
+    .hero-trust {
+      gap: var(--space-3);
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glow {
+      animation: none;
+    }
+    .hero-pill,
+    .hero-title,
+    .hero-sub,
+    .hero-cta,
+    .hero-contacts,
+    .hero-trust {
+      animation: none;
+    }
+  }
+</style>

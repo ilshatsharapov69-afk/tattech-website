@@ -1,0 +1,295 @@
+---
+import Icon from './Icon.astro';
+
+const programs = [
+  {
+    emoji: '📊',
+    title: '1С:Бухгалтерия',
+    price: 'от 4 000 ₽',
+    desc: 'Учёт, отчётность, налоги для ИП и ООО.',
+    msg: 'Хочу узнать про 1С:Бухгалтерию',
+  },
+  {
+    emoji: '🛒',
+    title: '1С:Управление торговлей',
+    price: 'от 8 200 ₽',
+    desc: 'Склад, продажи, поставщики, цены.',
+    msg: 'Хочу узнать про 1С:Управление торговлей',
+  },
+  {
+    emoji: '📁',
+    title: '1С:Документооборот',
+    price: '48 500 ₽',
+    desc: 'Маршруты согласования, канбан, версии документов.',
+    msg: 'Хочу узнать про 1С:Документооборот',
+  },
+  {
+    emoji: '🏪',
+    title: '1С:Розница',
+    price: 'от 4 400 ₽',
+    desc: 'Касса, ассортимент, программы лояльности.',
+    msg: 'Хочу узнать про 1С:Розницу',
+  },
+  {
+    emoji: '👥',
+    title: '1С:ЗУП',
+    price: 'от 9 100 ₽',
+    desc: 'Зарплата, кадры, табели и отчётность.',
+    msg: 'Хочу узнать про 1С:ЗУП',
+  },
+];
+
+const tgUrl = (msg: string) => `https://t.me/CyclesOfID?text=${encodeURIComponent(msg)}`;
+---
+
+<section class="section programs" id="programs">
+  <div class="container">
+    <header class="section-head reveal">
+      <span class="eyebrow">Программы</span>
+      <h2 class="h2">Популярные программы 1С</h2>
+      <p class="lead">Лицензии, настройка и обучение под вашу задачу.</p>
+    </header>
+
+    <div class="embla" id="programs-embla">
+      <div class="embla__viewport">
+        <div class="embla__container">
+          {programs.map((p) => (
+            <article class="embla__slide program-card">
+              <div class="program-emoji" aria-hidden="true">{p.emoji}</div>
+              <h3 class="h3 program-title">{p.title}</h3>
+              <div class="program-price">
+                <span class="price-prefix">{p.price.startsWith('от ') ? 'от' : ''}</span>
+                <span class="price-value text-gradient">{p.price.replace('от ', '')}</span>
+              </div>
+              <p class="text-soft program-desc">{p.desc}</p>
+              <a href={tgUrl(p.msg)} target="_blank" rel="noopener" class="program-cta">
+                <Icon name="telegram" size={16} />
+                <span>Заказать в Telegram</span>
+                <Icon name="arrow-right" size={14} />
+              </a>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div class="embla__controls">
+        <button class="embla__btn embla__prev" aria-label="Предыдущая программа">
+          <Icon name="chevron-left" size={18} />
+        </button>
+        <div class="embla__dots" role="tablist" aria-label="Навигация по программам"></div>
+        <button class="embla__btn embla__next" aria-label="Следующая программа">
+          <Icon name="chevron-right" size={18} />
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .programs {
+    background: var(--color-bg-alt);
+  }
+
+  .embla {
+    position: relative;
+  }
+  .embla__viewport {
+    overflow: hidden;
+    margin-inline: calc(var(--container-pad) * -1);
+    padding-inline: var(--container-pad);
+    padding-block: 12px;
+  }
+  .embla__container {
+    display: flex;
+    gap: var(--space-6);
+    touch-action: pan-y;
+  }
+  .embla__slide {
+    flex: 0 0 calc((100% - var(--space-6) * 2) / 3);
+    min-width: 0;
+  }
+
+  .program-card {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    transition: transform 250ms var(--ease-spring), box-shadow 250ms var(--ease-spring),
+      border-color 250ms ease;
+    height: 100%;
+  }
+  .program-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-brand-500);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .program-emoji {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(99, 91, 255, 0.07));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
+
+  .program-title {
+    margin-top: var(--space-2);
+  }
+
+  .program-price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .price-prefix {
+    font-size: 0.875rem;
+    color: var(--color-text-soft);
+    font-weight: 500;
+  }
+  .price-value {
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .program-desc {
+    font-size: 0.9375rem;
+    flex-grow: 1;
+    margin: 0;
+  }
+
+  .program-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    margin-top: var(--space-2);
+    border-radius: var(--radius-md);
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--color-brand-500);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    transition: all 200ms var(--ease-spring);
+  }
+  .program-cta:hover {
+    background: var(--color-brand-500);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  .embla__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+  .embla__btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 200ms ease;
+  }
+  .embla__btn:hover:not(:disabled) {
+    border-color: var(--color-brand-500);
+    color: var(--color-brand-500);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .embla__btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .embla__dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .embla__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-border-strong);
+    transition: all 200ms ease;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+  }
+  .embla__dot.is-selected {
+    width: 28px;
+    border-radius: 4px;
+    background: var(--color-brand-500);
+  }
+
+  @media (max-width: 1024px) {
+    .embla__slide {
+      flex-basis: calc((100% - var(--space-6)) / 2);
+    }
+  }
+  @media (max-width: 640px) {
+    .embla__slide {
+      flex-basis: 88%;
+    }
+  }
+</style>
+
+<script>
+  import EmblaCarousel from 'embla-carousel';
+
+  const root = document.getElementById('programs-embla');
+  if (root) {
+    const viewport = root.querySelector<HTMLElement>('.embla__viewport')!;
+    const dotsNode = root.querySelector<HTMLElement>('.embla__dots')!;
+    const prevBtn = root.querySelector<HTMLButtonElement>('.embla__prev')!;
+    const nextBtn = root.querySelector<HTMLButtonElement>('.embla__next')!;
+
+    const embla = EmblaCarousel(viewport, { loop: false, align: 'start' });
+
+    const renderDots = () => {
+      const count = embla.scrollSnapList().length;
+      dotsNode.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'embla__dot';
+        btn.setAttribute('aria-label', `Перейти к программе ${i + 1}`);
+        btn.addEventListener('click', () => embla.scrollTo(i));
+        dotsNode.appendChild(btn);
+      }
+    };
+    const setSelectedDot = () => {
+      const selected = embla.selectedScrollSnap();
+      dotsNode.querySelectorAll('.embla__dot').forEach((dot, i) => {
+        dot.classList.toggle('is-selected', i === selected);
+      });
+    };
+    const setBtns = () => {
+      prevBtn.disabled = !embla.canScrollPrev();
+      nextBtn.disabled = !embla.canScrollNext();
+    };
+
+    prevBtn.addEventListener('click', () => embla.scrollPrev());
+    nextBtn.addEventListener('click', () => embla.scrollNext());
+
+    embla.on('init', renderDots);
+    embla.on('reInit', renderDots);
+    embla.on('select', setSelectedDot);
+    embla.on('init', setSelectedDot);
+    embla.on('init', setBtns);
+    embla.on('select', setBtns);
+    embla.on('reInit', setBtns);
+  }
+</script>

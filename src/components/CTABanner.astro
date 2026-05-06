@@ -1,0 +1,133 @@
+---
+import Icon from './Icon.astro';
+---
+
+<section class="section cta-banner" id="contacts">
+  <div class="container">
+    <div class="banner reveal">
+      <div class="dots" aria-hidden="true"></div>
+      <div class="banner-glow" aria-hidden="true"></div>
+
+      <div class="banner-content">
+        <h2 class="h2 banner-title">
+          Готовы автоматизировать бизнес?
+        </h2>
+        <p class="banner-sub">
+          Напишите в Telegram — ответим за 15 минут. Бесплатная консультация, без обязательств.
+        </p>
+
+        <div class="banner-cta">
+          <a
+            href="https://t.me/CyclesOfID"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-white btn-lg"
+          >
+            <Icon name="telegram" size={18} />
+            <span>Написать в Telegram</span>
+          </a>
+          <a
+            href="https://wa.me/79950958536"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-ghost btn-lg"
+          >
+            <Icon name="whatsapp" size={18} />
+            <span>WhatsApp</span>
+          </a>
+        </div>
+
+        <a href="tel:+79520434277" class="banner-phone">
+          <span aria-hidden="true">📞</span>
+          <span>+7 952 043 4277</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .banner {
+    position: relative;
+    isolation: isolate;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    background: linear-gradient(135deg, #2563EB 0%, #635BFF 100%);
+    padding: var(--space-24) var(--space-12);
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 40px 80px -20px rgba(37, 99, 235, 0.45);
+  }
+
+  .dots {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.5;
+  }
+  .banner-glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255, 255, 255, 0.25), transparent 60%);
+    pointer-events: none;
+  }
+
+  .banner-content {
+    max-width: 720px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    align-items: center;
+  }
+
+  .banner-title {
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .banner-sub {
+    font-size: 1.125rem;
+    line-height: 1.5;
+    opacity: 0.92;
+    margin: 0;
+  }
+
+  .banner-cta {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: var(--space-2);
+  }
+
+  .banner-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: var(--space-3);
+    font-weight: 600;
+    font-size: 1.0625rem;
+    color: rgba(255, 255, 255, 0.92);
+    transition: color 200ms;
+  }
+  .banner-phone:hover {
+    color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    .banner {
+      padding: var(--space-16) var(--space-6);
+    }
+    .banner-cta {
+      flex-direction: column;
+      width: 100%;
+    }
+    .banner-cta .btn {
+      width: 100%;
+    }
+  }
+</style>

@@ -1,0 +1,128 @@
+---
+import Icon from './Icon.astro';
+
+const services = [
+  {
+    icon: 'code',
+    title: '1С Разработка',
+    description: 'Прикладные решения, конфигурации и интеграция с Битрикс-24 под бизнес-процессы.',
+  },
+  {
+    icon: 'wrench',
+    title: 'Обслуживание 1С',
+    description: 'Техподдержка, обновления, настройки, резервные копии. Без простоев.',
+  },
+  {
+    icon: 'globe',
+    title: 'Разработка сайтов',
+    description: 'WordPress, Tilda, лендинги. SEO-оптимизация и интеграция с 1С.',
+  },
+  {
+    icon: 'shield',
+    title: '1С:ИТС',
+    description: 'ИТ-сопровождение и официальные лицензии 1С. Быстрая активация.',
+  },
+  {
+    icon: 'server',
+    title: 'Подбор оборудования',
+    description: 'Серверы, кассы, POS, сканеры — установка и настройка под ключ.',
+  },
+  {
+    icon: 'chart',
+    title: 'Битрикс-24',
+    description: 'Аудит, настройка CRM, интеграция с 1С и обучение сотрудников.',
+  },
+];
+---
+
+<section class="section services" id="services">
+  <div class="container">
+    <header class="section-head reveal">
+      <span class="eyebrow">Услуги</span>
+      <h2 class="h2">Что мы делаем</h2>
+      <p class="lead">
+        От разработки 1С до интеграций с Битрикс-24 — закрываем весь цикл автоматизации.
+      </p>
+    </header>
+
+    <ul class="grid reveal-stagger">
+      {services.map((service) => (
+        <li class="card service-card">
+          <div class="icon-wrap">
+            <Icon name={service.icon} size={28} />
+          </div>
+          <h3 class="h3">{service.title}</h3>
+          <p class="text-soft service-desc">{service.description}</p>
+          <a href="#contacts" class="service-link">
+            Узнать подробнее
+            <Icon name="arrow-right" size={14} />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+
+  .service-card {
+    gap: var(--space-4);
+    position: relative;
+  }
+
+  .icon-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(99, 91, 255, 0.08));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-brand-500);
+    transition: transform 280ms var(--ease-spring), background 220ms ease;
+  }
+  .service-card:hover .icon-wrap {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(99, 91, 255, 0.14));
+    transform: rotate(-6deg) scale(1.05);
+  }
+
+  .service-desc {
+    flex-grow: 1;
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .service-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-brand-500);
+    margin-top: auto;
+    transition: gap 200ms var(--ease-spring), color 200ms;
+  }
+  .service-card:hover .service-link {
+    gap: 10px;
+    color: var(--color-brand-600);
+  }
+
+  @media (max-width: 1024px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+  }
+</style>

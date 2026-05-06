@@ -1,0 +1,73 @@
+---
+const stats = [
+  { target: 300, suffix: '+', label: 'клиентов', sub: 'по всей России' },
+  { target: 420, suffix: '', label: 'проектов', sub: 'успешно завершено' },
+  { target: 9, suffix: '', label: 'лет опыта', sub: 'с 2016 года' },
+];
+---
+
+<section class="section stats">
+  <div class="bg-glow" aria-hidden="true"></div>
+  <div class="container">
+    <ul class="stats-grid reveal-stagger">
+      {stats.map((stat) => (
+        <li class="stat">
+          <div class="stat-num text-gradient">
+            <span data-counter data-target={stat.target} data-suffix={stat.suffix}>0{stat.suffix}</span>
+          </div>
+          <div class="stat-label">{stat.label}</div>
+          <div class="stat-sub">{stat.sub}</div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .stats {
+    position: relative;
+    isolation: isolate;
+    background: linear-gradient(180deg, var(--color-bg-alt) 0%, #fff 100%);
+  }
+  .bg-glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(37, 99, 235, 0.08), transparent 70%);
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-12);
+    text-align: center;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: center;
+  }
+  .stat-num {
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .stat-label {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  .stat-sub {
+    font-size: 0.9375rem;
+    color: var(--color-text-soft);
+  }
+
+  @media (max-width: 768px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+  }
+</style>

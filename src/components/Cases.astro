@@ -1,0 +1,319 @@
+---
+import Icon from './Icon.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const cases = [
+  {
+    img: '01-zhkh.png',
+    industry: 'ЖКХ',
+    solution: '1С:Учёт в УК ЖКХ',
+    metric: '240 зданий в 4 городах + автообзвон должников',
+    color: '#3B82F6',
+  },
+  {
+    img: '02-food.jpg',
+    industry: 'Пищевое производство',
+    solution: '1С:ERP',
+    metric: 'Учёт автотранспорта + обмен с госсервисами',
+    color: '#10B981',
+  },
+  {
+    img: '03-construction.png',
+    industry: 'Строительство',
+    solution: '1С:Документооборот 8',
+    metric: '50 пользователей, канбан + интеграция с Telegram',
+    color: '#F59E0B',
+  },
+  {
+    img: '04-tires.jpg',
+    industry: 'Сеть шин и дисков',
+    solution: '1С:Управление торговлей',
+    metric: 'Миграция 7.7 → 8.3 + маркировка товаров',
+    color: '#EF4444',
+  },
+  {
+    img: '05-engineering.jpg',
+    industry: 'Инжиниринг',
+    solution: '1С:Управление торговлей',
+    metric: 'Оборот до 1 млрд ₽/год, CRM + проекты',
+    color: '#8B5CF6',
+  },
+  {
+    img: '06-clothing.jpg',
+    industry: 'Сеть одежды',
+    solution: '1С:Комплексная автоматизация',
+    metric: '65 000 позиций/год, обновления → полдня вместо недели',
+    color: '#EC4899',
+  },
+  {
+    img: '07-pharmacy.jpg',
+    industry: 'Аптечная сеть',
+    solution: '1С:Управление торговлей',
+    metric: 'Маркировка лекарств (МДЛП) + маркетплейсы',
+    color: '#06B6D4',
+  },
+  {
+    img: '08-monuments.jpg',
+    industry: 'Производство памятников',
+    solution: '1С:Управление торговлей',
+    metric: '1000+ изделий/год, 8 лет с нами',
+    color: '#64748B',
+  },
+];
+---
+
+<section class="section cases" id="cases">
+  <div class="container">
+    <header class="section-head reveal">
+      <span class="eyebrow">Кейсы</span>
+      <h2 class="h2">Реальные внедрения</h2>
+      <p class="lead">9 лет опыта, 420 завершённых проектов в десятках отраслей.</p>
+    </header>
+
+    <div class="embla" id="cases-embla">
+      <div class="embla__viewport">
+        <div class="embla__container">
+          {cases.map((c) => (
+            <article class="embla__slide case-card">
+              <div class="case-media">
+                <span class="case-badge" style={`background:${c.color}`}>{c.industry}</span>
+                <img src={`${base}/images/cases/${c.img}`} alt={`Кейс: ${c.industry}`} loading="lazy" width="640" height="360" />
+              </div>
+              <div class="case-body">
+                <h3 class="h3">{c.industry}</h3>
+                <p class="text-soft case-solution">{c.solution}</p>
+                <div class="case-metric">
+                  <Icon name="check" size={16} class="case-check" />
+                  <span>{c.metric}</span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div class="embla__controls">
+        <button class="embla__btn embla__prev" aria-label="Предыдущий кейс">
+          <Icon name="chevron-left" size={18} />
+        </button>
+        <div class="embla__dots" role="tablist" aria-label="Навигация по кейсам"></div>
+        <button class="embla__btn embla__next" aria-label="Следующий кейс">
+          <Icon name="chevron-right" size={18} />
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .embla {
+    position: relative;
+  }
+  .embla__viewport {
+    overflow: hidden;
+    margin-inline: calc(var(--container-pad) * -1);
+    padding-inline: var(--container-pad);
+    /* Allow card hover lift to be visible */
+    padding-block: 12px;
+  }
+  .embla__container {
+    display: flex;
+    gap: var(--space-6);
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .embla__slide {
+    flex: 0 0 calc((100% - var(--space-6) * 2) / 3);
+    min-width: 0;
+  }
+
+  .case-card {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 250ms var(--ease-spring), box-shadow 250ms var(--ease-spring),
+      border-color 250ms ease;
+  }
+  .case-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-brand-500);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .case-media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--color-bg-alt);
+  }
+  .case-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 600ms var(--ease-spring);
+  }
+  .case-card:hover .case-media img {
+    transform: scale(1.04);
+  }
+  .case-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #fff;
+    border-radius: var(--radius-full);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    letter-spacing: 0.01em;
+  }
+
+  .case-body {
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    flex: 1;
+  }
+  .case-solution {
+    font-size: 0.875rem;
+    margin: 0;
+  }
+  .case-metric {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.9375rem;
+    color: var(--color-text);
+    font-weight: 500;
+    line-height: 1.45;
+    margin-top: auto;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border);
+  }
+  .case-check {
+    color: var(--color-success);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .embla__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+
+  .embla__btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 200ms ease;
+  }
+  .embla__btn:hover:not(:disabled) {
+    border-color: var(--color-brand-500);
+    color: var(--color-brand-500);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .embla__btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .embla__dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .embla__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-border-strong);
+    transition: all 200ms ease;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+  }
+  .embla__dot.is-selected {
+    width: 28px;
+    border-radius: 4px;
+    background: var(--color-brand-500);
+  }
+
+  @media (max-width: 1024px) {
+    .embla__slide {
+      flex-basis: calc((100% - var(--space-6)) / 2);
+    }
+  }
+  @media (max-width: 640px) {
+    .embla__slide {
+      flex-basis: 88%;
+    }
+  }
+</style>
+
+<script>
+  import EmblaCarousel from 'embla-carousel';
+  import Autoplay from 'embla-carousel-autoplay';
+
+  const root = document.getElementById('cases-embla');
+  if (root) {
+    const viewport = root.querySelector<HTMLElement>('.embla__viewport')!;
+    const dotsNode = root.querySelector<HTMLElement>('.embla__dots')!;
+    const prevBtn = root.querySelector<HTMLButtonElement>('.embla__prev')!;
+    const nextBtn = root.querySelector<HTMLButtonElement>('.embla__next')!;
+
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const plugins = reduced ? [] : [Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true })];
+
+    const embla = EmblaCarousel(viewport, { loop: true, align: 'start' }, plugins);
+
+    const renderDots = () => {
+      const slidesCount = embla.scrollSnapList().length;
+      dotsNode.innerHTML = '';
+      for (let i = 0; i < slidesCount; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'embla__dot';
+        btn.setAttribute('aria-label', `Перейти к слайду ${i + 1}`);
+        btn.addEventListener('click', () => embla.scrollTo(i));
+        dotsNode.appendChild(btn);
+      }
+    };
+    const setSelectedDot = () => {
+      const selected = embla.selectedScrollSnap();
+      dotsNode.querySelectorAll('.embla__dot').forEach((dot, i) => {
+        dot.classList.toggle('is-selected', i === selected);
+      });
+    };
+    const setBtns = () => {
+      prevBtn.disabled = !embla.canScrollPrev();
+      nextBtn.disabled = !embla.canScrollNext();
+    };
+
+    prevBtn.addEventListener('click', () => embla.scrollPrev());
+    nextBtn.addEventListener('click', () => embla.scrollNext());
+
+    embla.on('init', renderDots);
+    embla.on('reInit', renderDots);
+    embla.on('select', setSelectedDot);
+    embla.on('init', setSelectedDot);
+    embla.on('init', setBtns);
+    embla.on('select', setBtns);
+    embla.on('reInit', setBtns);
+  }
+</script>
