@@ -14,7 +14,7 @@ const navLinks = [
 <header class="header" id="site-header">
   <div class="container header-inner">
     <a href={`${base}/`} class="logo">
-      <img src={`${base}/images/logo-240.webp`} alt="" width="40" height="40" />
+      <img src={`${base}/favicon.svg`} alt="" width="36" height="36" />
       <span class="logo-text">T-Tech</span>
     </a>
 
@@ -100,11 +100,29 @@ const navLinks = [
   .logo img {
     width: 36px;
     height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
   }
   .logo-text {
     letter-spacing: -0.01em;
+    transition: color 240ms ease;
+  }
+
+  /* Over the dark Hero (header transparent, not yet scrolled) — light text */
+  .header:not(.is-scrolled) .logo,
+  .header:not(.is-scrolled) .logo-text,
+  .header:not(.is-scrolled) .phone {
+    color: #fff;
+  }
+  .header:not(.is-scrolled) .nav a {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .header:not(.is-scrolled) .nav a:hover {
+    color: #fff;
+  }
+  .header:not(.is-scrolled) .nav a::after {
+    background: #fff;
+  }
+  .header:not(.is-scrolled) .burger span {
+    background: #fff;
   }
   .nav {
     margin-left: auto;
