@@ -28,6 +28,12 @@ const stats = [
     position: relative;
     isolation: isolate;
     background: linear-gradient(180deg, var(--color-bg-alt) 0%, #fff 100%);
+    padding-block: var(--space-12) var(--space-16);
+  }
+  @media (max-width: 768px) {
+    .stats {
+      padding-block: var(--space-8) var(--space-10);
+    }
   }
   .bg-glow {
     position: absolute;
