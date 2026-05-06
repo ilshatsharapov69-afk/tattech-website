@@ -187,46 +187,60 @@ const navLinks = [
   }
   .mobile-menu {
     position: fixed;
-    inset: var(--header-h) 0 0 0;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    padding: var(--space-8) var(--container-pad);
+    padding: var(--space-5) var(--container-pad) var(--space-6);
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
-    transform: translateY(-100%);
-    transition: transform 320ms var(--ease-spring);
+    gap: var(--space-4);
+    max-height: calc(100vh - var(--header-h));
+    overflow-y: auto;
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 16px 32px -8px rgba(15, 23, 42, 0.12);
+    transform: translateY(-105%);
+    transition: transform 320ms var(--ease-spring), opacity 220ms ease;
+    opacity: 0;
     pointer-events: none;
     z-index: 99;
   }
   .mobile-menu.is-open {
     transform: translateY(0);
+    opacity: 1;
     pointer-events: auto;
   }
   .mobile-menu ul {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: 2px;
   }
   .mobile-link {
     display: block;
-    padding: var(--space-4) 0;
-    font-size: 1.25rem;
+    padding: var(--space-3) 0;
+    font-size: 1.0625rem;
     font-weight: 600;
     color: var(--color-text);
     border-bottom: 1px solid var(--color-border);
   }
   .mobile-actions {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-    margin-top: var(--space-6);
+    flex-direction: row;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .mobile-actions .btn {
+    flex-shrink: 0;
   }
   .mobile-phone {
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 600;
     color: var(--color-brand-500);
+    margin-right: auto;
   }
 
   @media (max-width: 960px) {
@@ -245,22 +259,37 @@ const navLinks = [
   const burger = document.getElementById('burger');
   const menu = document.getElementById('mobile-menu');
 
+  let menuOpenAtY = 0;
+
+  const isMenuOpen = () => menu?.classList.contains('is-open') ?? false;
+
+  const toggle = (open?: boolean) => {
+    if (!menu || !burger) return;
+    const next = open ?? !menu.classList.contains('is-open');
+    menu.classList.toggle('is-open', next);
+    menu.setAttribute('aria-hidden', String(!next));
+    burger.setAttribute('aria-expanded', String(next));
+    if (next) menuOpenAtY = window.scrollY;
+  };
+
   const onScroll = () => {
-    if (!header) return;
-    if (window.scrollY > 30) header.classList.add('is-scrolled');
-    else header.classList.remove('is-scrolled');
+    if (header) {
+      if (window.scrollY > 30) header.classList.add('is-scrolled');
+      else header.classList.remove('is-scrolled');
+    }
+    if (isMenuOpen() && Math.abs(window.scrollY - menuOpenAtY) > 20) {
+      toggle(false);
+    }
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  // Close menu when resizing past mobile breakpoint
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 960 && isMenuOpen()) toggle(false);
+  });
+
   if (burger && menu) {
-    const toggle = (open?: boolean) => {
-      const isOpen = open ?? !menu.classList.contains('is-open');
-      menu.classList.toggle('is-open', isOpen);
-      menu.setAttribute('aria-hidden', String(!isOpen));
-      burger.setAttribute('aria-expanded', String(isOpen));
-      document.body.style.overflow = isOpen ? 'hidden' : '';
-    };
     burger.addEventListener('click', () => toggle());
     menu.querySelectorAll('a').forEach((a) =>
       a.addEventListener('click', () => toggle(false))
