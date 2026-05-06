@@ -96,7 +96,7 @@ const tgUrl = (msg: string) => `https://t.me/CyclesOfID?text=${encodeURIComponen
         <button class="embla__btn embla__prev" aria-label="Предыдущая программа">
           <Icon name="chevron-left" size={18} />
         </button>
-        <div class="embla__dots" role="tablist" aria-label="Навигация по программам"></div>
+        <div class="embla__dots" role="group" aria-label="Навигация по программам"></div>
         <button class="embla__btn embla__next" aria-label="Следующая программа">
           <Icon name="chevron-right" size={18} />
         </button>
@@ -264,24 +264,10 @@ const tgUrl = (msg: string) => `https://t.me/CyclesOfID?text=${encodeURIComponen
   }
   .embla__dots {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     align-items: center;
   }
-  .embla__dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--color-border-strong);
-    transition: all 200ms ease;
-    cursor: pointer;
-    border: none;
-    padding: 0;
-  }
-  .embla__dot.is-selected {
-    width: 28px;
-    border-radius: 4px;
-    background: var(--color-brand-500);
-  }
+  /* .embla__dot styles live in global.css (dots are JS-created). */
 
   @media (max-width: 1024px) {
     .embla__slide {

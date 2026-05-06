@@ -13,8 +13,8 @@ const navLinks = [
 
 <header class="header" id="site-header">
   <div class="container header-inner">
-    <a href={`${base}/`} class="logo" aria-label="T-Tech — на главную">
-      <img src={`${base}/images/logo.png`} alt="T-Tech" width="40" height="40" />
+    <a href={`${base}/`} class="logo">
+      <img src={`${base}/images/logo-240.webp`} alt="" width="40" height="40" />
       <span class="logo-text">T-Tech</span>
     </a>
 
@@ -45,7 +45,7 @@ const navLinks = [
     </button>
   </div>
 
-  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <div class="mobile-menu" id="mobile-menu" inert>
     <nav aria-label="Мобильное меню">
       <ul>
         {navLinks.map((link) => (
@@ -267,7 +267,8 @@ const navLinks = [
     if (!menu || !burger) return;
     const next = open ?? !menu.classList.contains('is-open');
     menu.classList.toggle('is-open', next);
-    menu.setAttribute('aria-hidden', String(!next));
+    if (next) menu.removeAttribute('inert');
+    else menu.setAttribute('inert', '');
     burger.setAttribute('aria-expanded', String(next));
     if (next) menuOpenAtY = window.scrollY;
   };

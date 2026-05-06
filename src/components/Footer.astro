@@ -34,7 +34,7 @@ const cols = [
     <div class="grid">
       <div class="brand-col">
         <a href={`${base}/`} class="logo">
-          <img src={`${base}/images/logo.png`} alt="T-Tech" width="44" height="44" />
+          <img src={`${base}/images/logo-240.webp`} alt="" width="44" height="44" />
           <span>T-Tech</span>
         </a>
         <p class="brand-desc">
@@ -55,7 +55,7 @@ const cols = [
 
       {cols.map((col) => (
         <div>
-          <h4 class="col-title">{col.title}</h4>
+          <h3 class="col-title">{col.title}</h3>
           <ul>
             {col.links.map((link) => (
               <li><a href={link.href} class="footer-link">{link.label}</a></li>
@@ -65,7 +65,7 @@ const cols = [
       ))}
 
       <div>
-        <h4 class="col-title">Контакты</h4>
+        <h3 class="col-title">Контакты</h3>
         <ul class="contacts-list">
           <li>
             <span class="ci">📍</span>

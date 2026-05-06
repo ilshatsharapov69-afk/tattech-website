@@ -9,7 +9,7 @@ const cases = [
     industry: 'ЖКХ',
     solution: '1С:Учёт в УК ЖКХ',
     metric: '240 зданий в 4 городах + автообзвон должников',
-    color: '#3B82F6',
+    color: '#1D4ED8',
   },
   {
     img: '02-food.jpg',
@@ -17,49 +17,49 @@ const cases = [
     solution: '1С:ERP',
     // TODO: уточнить у клиента точный список интеграций (сейчас предполагаем Меркурий + Честный знак).
     metric: 'Учёт автотранспорта + обмен с Меркурием и Честным знаком',
-    color: '#10B981',
+    color: '#047857',
   },
   {
     img: '03-construction.png',
     industry: 'Строительство',
     solution: '1С:Документооборот 8',
     metric: '50 пользователей, канбан + интеграция с Telegram',
-    color: '#F59E0B',
+    color: '#B45309',
   },
   {
     img: '04-tires.jpg',
     industry: 'Сеть шин и дисков',
     solution: '1С:Управление торговлей',
     metric: 'Миграция 7.7 → 8.3 + маркировка товаров',
-    color: '#EF4444',
+    color: '#B91C1C',
   },
   {
     img: '05-engineering.jpg',
     industry: 'Инжиниринг',
     solution: '1С:Управление торговлей',
     metric: 'Оборот до 1 млрд ₽/год, CRM + проекты',
-    color: '#8B5CF6',
+    color: '#6D28D9',
   },
   {
     img: '06-clothing.jpg',
     industry: 'Сеть одежды',
     solution: '1С:Комплексная автоматизация',
     metric: '65 000 позиций/год, обновления → полдня вместо недели',
-    color: '#EC4899',
+    color: '#BE185D',
   },
   {
     img: '07-pharmacy.jpg',
     industry: 'Аптечная сеть',
     solution: '1С:Управление торговлей',
     metric: 'Маркировка лекарств (МДЛП) + маркетплейсы',
-    color: '#06B6D4',
+    color: '#0E7490',
   },
   {
     img: '08-monuments.jpg',
     industry: 'Производство памятников',
     solution: '1С:Управление торговлей',
     metric: '1000+ изделий/год, 8 лет с нами',
-    color: '#64748B',
+    color: '#334155',
   },
 ];
 ---
@@ -75,11 +75,25 @@ const cases = [
     <div class="embla" id="cases-embla">
       <div class="embla__viewport">
         <div class="embla__container">
-          {cases.map((c) => (
+          {cases.map((c) => {
+            const slug = c.img.replace(/\.(png|jpe?g)$/i, '');
+            const srcset = [640, 960, 1200]
+              .map((w) => `${base}/images/cases/${slug}-${w}.webp ${w}w`)
+              .join(', ');
+            return (
             <article class="embla__slide case-card">
               <div class="case-media">
                 <span class="case-badge" style={`background:${c.color}`}>{c.industry}</span>
-                <img src={`${base}/images/cases/${c.img}`} alt={`Кейс: ${c.industry}`} loading="lazy" width="640" height="360" />
+                <img
+                  src={`${base}/images/cases/${slug}-1200.webp`}
+                  srcset={srcset}
+                  sizes="(max-width: 640px) 88vw, (max-width: 1024px) 45vw, 380px"
+                  alt={`Кейс: ${c.industry}`}
+                  loading="lazy"
+                  decoding="async"
+                  width="1200"
+                  height="675"
+                />
               </div>
               <div class="case-body">
                 <h3 class="h3">{c.industry}</h3>
@@ -90,7 +104,8 @@ const cases = [
                 </div>
               </div>
             </article>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -98,7 +113,7 @@ const cases = [
         <button class="embla__btn embla__prev" aria-label="Предыдущий кейс">
           <Icon name="chevron-left" size={18} />
         </button>
-        <div class="embla__dots" role="tablist" aria-label="Навигация по кейсам"></div>
+        <div class="embla__dots" role="group" aria-label="Навигация по кейсам"></div>
         <button class="embla__btn embla__next" aria-label="Следующий кейс">
           <Icon name="chevron-right" size={18} />
         </button>
@@ -108,6 +123,9 @@ const cases = [
 </section>
 
 <style>
+  .cases {
+    background: linear-gradient(180deg, #fff 0%, #f8fafc 60%);
+  }
   .embla {
     position: relative;
   }
@@ -237,24 +255,10 @@ const cases = [
 
   .embla__dots {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     align-items: center;
   }
-  .embla__dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--color-border-strong);
-    transition: all 200ms ease;
-    cursor: pointer;
-    border: none;
-    padding: 0;
-  }
-  .embla__dot.is-selected {
-    width: 28px;
-    border-radius: 4px;
-    background: var(--color-brand-500);
-  }
+  /* .embla__dot styles live in global.css (dots are JS-created). */
 
   @media (max-width: 1024px) {
     .embla__slide {

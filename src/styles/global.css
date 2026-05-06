@@ -382,3 +382,58 @@ ul {
   white-space: nowrap;
   border: 0;
 }
+
+/* ==========================================================================
+   Focus-visible & anchor offset (a11y polish)
+   ========================================================================== */
+
+:where(a, button, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+.cta-banner :focus-visible,
+.footer :focus-visible {
+  outline-color: #fff;
+}
+
+[id] {
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+
+/* ==========================================================================
+   Embla carousel dots (shared by Cases & Programs).
+   Lives here because dot buttons are JS-created and miss Astro's scoped
+   data-attribute, so component-scoped styles don't apply to them.
+   ========================================================================== */
+
+.embla__dot {
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  min-height: 28px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.embla__dot::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border-strong);
+  transition: width 200ms ease, background 200ms ease, border-radius 200ms ease;
+}
+
+.embla__dot.is-selected::before {
+  width: 28px;
+  border-radius: 4px;
+  background: var(--color-brand-500);
+}

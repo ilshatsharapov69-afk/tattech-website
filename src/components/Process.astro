@@ -65,7 +65,14 @@ const steps = [
     background: var(--color-bg-alt);
   }
 
+  @property --progress {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 0%;
+  }
+
   .process-list {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-6);
@@ -74,7 +81,29 @@ const steps = [
     counter-reset: step;
   }
 
+  .process-list::before {
+    content: '';
+    position: absolute;
+    left: 54px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(
+      180deg,
+      var(--color-brand-500) var(--progress),
+      var(--color-border) var(--progress)
+    );
+    transition: --progress 1400ms var(--ease-spring);
+    pointer-events: none;
+  }
+
+  .process-list.is-visible::before {
+    --progress: 100%;
+  }
+
   .process-step {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: 88px 1fr;
     gap: var(--space-6);
@@ -134,6 +163,9 @@ const steps = [
   }
 
   @media (max-width: 640px) {
+    .process-list::before {
+      display: none;
+    }
     .process-step {
       grid-template-columns: 1fr;
       gap: var(--space-3);
