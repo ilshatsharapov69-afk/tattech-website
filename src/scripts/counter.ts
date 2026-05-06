@@ -42,7 +42,7 @@ const init = () => {
         }
       });
     },
-    { threshold: 0.5 }
+    { threshold: 0.2 }
   );
 
   counters.forEach((el) => io.observe(el));
