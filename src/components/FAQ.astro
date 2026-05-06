@@ -1,0 +1,130 @@
+---
+const faqs = [
+  {
+    q: 'Сколько стоит внедрение 1С под ключ?',
+    a: 'Зависит от задачи: типовая 1С:Бухгалтерия дешевле, чем сложная ERP с интеграциями. После 30-минутного брифа готовим оценку за день и фиксируем сроки и стоимость в договоре по этапам — без сюрпризов в счёте.',
+  },
+  {
+    q: 'Сколько по времени занимает внедрение?',
+    a: 'Типовое внедрение — 2–4 недели, сложные проекты с миграцией данных и интеграциями — 1–3 месяца. Сроки фиксируем в договоре. Каждую неделю показываем демо, чтобы вы видели прогресс.',
+  },
+  {
+    q: 'Я не из Казани — поможете удалённо?',
+    a: 'Да, большинство наших клиентов — из других городов. Подключаемся по RDP/AnyDesk, демо и обучение проводим в Zoom, обмен файлами и срочные вопросы — в Telegram. Договор и оплата — стандартно через банк.',
+  },
+  {
+    q: 'У нас уже есть 1С, но она «кривая». Возьмётесь?',
+    a: 'Да, это половина наших проектов. Сначала аудит за 3–5 дней — посмотрим, что не так и сколько займёт привести в порядок. Если выгоднее переустановить с нуля — скажем честно и покажем расчёт.',
+  },
+  {
+    q: 'Что входит в поддержку после запуска?',
+    a: 'Регулярные обновления конфигураций, регламентные бэкапы, консультации по телефону и удалённое подключение, мелкие доработки по запросу. Тариф фиксированный — заранее знаете, сколько платите в месяц.',
+  },
+];
+---
+
+<section class="section faq" id="faq">
+  <div class="container">
+    <header class="section-head reveal">
+      <span class="eyebrow">FAQ</span>
+      <h2 class="h2">Частые вопросы</h2>
+      <p class="lead">
+        Если что-то не нашли — спросите в Telegram или по телефону, ответим за 15 минут.
+      </p>
+    </header>
+
+    <div class="faq-list reveal">
+      {faqs.map((item) => (
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>{item.q}</span>
+            <span class="faq-toggle" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </span>
+          </summary>
+          <div class="faq-a">{item.a}</div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-list {
+    max-width: 760px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .faq-item {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+  }
+  .faq-item[open] {
+    border-color: var(--color-brand-500);
+    box-shadow: var(--shadow-md);
+  }
+
+  .faq-q {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-5) var(--space-6);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.4;
+    transition: color 200ms ease;
+  }
+  .faq-q::-webkit-details-marker {
+    display: none;
+  }
+  .faq-q:hover {
+    color: var(--color-brand-500);
+  }
+
+  .faq-toggle {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--color-brand-500);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 240ms var(--ease-spring), background 200ms ease;
+  }
+  .faq-item[open] .faq-toggle {
+    transform: rotate(45deg);
+    background: var(--color-brand-500);
+    color: #fff;
+  }
+
+  .faq-a {
+    padding: 0 var(--space-6) var(--space-5);
+    color: var(--color-text-soft);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 640px) {
+    .faq-q {
+      padding: var(--space-4) var(--space-5);
+      font-size: 0.9375rem;
+    }
+    .faq-a {
+      padding: 0 var(--space-5) var(--space-4);
+    }
+  }
+</style>

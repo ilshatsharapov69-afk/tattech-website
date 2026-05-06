@@ -5,32 +5,38 @@ const services = [
   {
     icon: 'code',
     title: '1С Разработка',
-    description: 'Прикладные решения, конфигурации и интеграция с Битрикс-24 под бизнес-процессы.',
+    description: 'Прикладные решения и интеграции под ваши процессы.',
+    bullets: ['Типовые конфигурации и доработки', 'Разработка с нуля', 'Интеграция с CRM, банком, маркетплейсами'],
   },
   {
     icon: 'wrench',
     title: 'Обслуживание 1С',
-    description: 'Техподдержка, обновления, настройки, резервные копии. Без простоев.',
+    description: 'Техподдержка, обновления и бэкапы — без простоев.',
+    bullets: ['Обновления каждый месяц', 'Регламентные резервные копии', 'Поддержка по телефону и удалённо'],
   },
   {
     icon: 'globe',
     title: 'Разработка сайтов',
-    description: 'WordPress, Tilda, лендинги. SEO-оптимизация и интеграция с 1С.',
+    description: 'WordPress, Tilda и лендинги с интеграцией с 1С.',
+    bullets: ['Каталог и остатки из 1С', 'Онлайн-оплата и заявки в CRM', 'SEO-оптимизация под Яндекс'],
   },
   {
     icon: 'shield',
     title: '1С:ИТС',
-    description: 'ИТ-сопровождение и официальные лицензии 1С. Быстрая активация.',
+    description: 'Официальные лицензии и ИТ-сопровождение по подписке.',
+    bullets: ['Активация за день', 'Автообновления конфигураций', 'Линия консультаций 1С'],
   },
   {
     icon: 'server',
     title: 'Подбор оборудования',
-    description: 'Серверы, кассы, POS, сканеры — установка и настройка под ключ.',
+    description: 'Серверы, кассы и сканеры — установка под ключ.',
+    bullets: ['Подбор под бюджет и задачу', 'Поставка от партнёров', 'Монтаж и настройка'],
   },
   {
     icon: 'chart',
     title: 'Битрикс-24',
-    description: 'Аудит, настройка CRM, интеграция с 1С и обучение сотрудников.',
+    description: 'CRM, портал и обмен с 1С — настраиваем под ваш отдел.',
+    bullets: ['Воронки продаж и роботы', 'Телефония и почта', 'Двусторонний обмен с 1С'],
   },
 ];
 ---
@@ -53,6 +59,14 @@ const services = [
           </div>
           <h3 class="h3">{service.title}</h3>
           <p class="text-soft service-desc">{service.description}</p>
+          <ul class="service-bullets">
+            {service.bullets.map((b) => (
+              <li>
+                <Icon name="check" size={14} class="bullet-check" />
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
           <a href="#contacts" class="service-link">
             Узнать подробнее
             <Icon name="arrow-right" size={14} />
@@ -92,10 +106,31 @@ const services = [
   }
 
   .service-desc {
-    flex-grow: 1;
     margin: 0;
     font-size: 0.9375rem;
     line-height: 1.55;
+  }
+
+  .service-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    flex-grow: 1;
+  }
+  .service-bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: var(--color-text-soft);
+    line-height: 1.45;
+  }
+  .bullet-check {
+    color: var(--color-success);
+    flex-shrink: 0;
+    margin-top: 3px;
   }
 
   .service-link {

@@ -1,0 +1,132 @@
+---
+import Icon from './Icon.astro';
+
+// TODO: ЗАПРОСИТЬ У КЛИЕНТА 3 РЕАЛЬНЫХ ОТЗЫВА.
+// Ниже — placeholder'ы, основанные на реальных кейсах с главной (cases). Текст придуман, имена — выдуманные.
+// До публикации продакшена — заменить либо на реальные отзывы, либо скрыть секцию.
+const reviews = [
+  {
+    quote:
+      'Перешли с 7.7 на 8.3 без потерь данных. Команда T-Tech закрыла миграцию за 3 недели — параллельно учила наших операторов работать в маркировке.',
+    name: 'Иван Петров',
+    role: 'Директор по IT',
+    company: 'Сеть шин и дисков',
+  },
+  {
+    quote:
+      'Обновления раньше съедали неделю. Сейчас — полдня. Поддержка отвечает в течение часа, а для розницы это критично — касса не должна стоять.',
+    name: 'Мария Соколова',
+    role: 'Главный бухгалтер',
+    company: 'Сеть одежды',
+  },
+  {
+    quote:
+      'Внедрили 1С:Документооборот на 50 человек и подключили Telegram-уведомления. Согласования теперь занимают часы вместо дней — и никто не теряет договоры в почте.',
+    name: 'Алексей Громов',
+    role: 'Операционный директор',
+    company: 'Строительная компания',
+  },
+];
+---
+
+<section class="section reviews" id="reviews">
+  <div class="container">
+    <header class="section-head reveal">
+      <span class="eyebrow">Отзывы</span>
+      <h2 class="h2">Что говорят клиенты</h2>
+      <p class="lead">
+        Сокращённые цитаты — полные отзывы и контакты для проверки пришлём по запросу.
+      </p>
+    </header>
+
+    <ul class="reviews-grid reveal-stagger">
+      {reviews.map((r) => (
+        <li class="review-card">
+          <div class="quote-mark" aria-hidden="true">“</div>
+          <blockquote class="review-quote">{r.quote}</blockquote>
+          <footer class="review-author">
+            <div class="author-name">{r.name}</div>
+            <div class="author-role">{r.role}, <span>{r.company}</span></div>
+          </footer>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+
+  .review-card {
+    position: relative;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    transition: transform 250ms var(--ease-spring), box-shadow 250ms var(--ease-spring),
+      border-color 250ms ease;
+  }
+  .review-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-brand-500);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .quote-mark {
+    position: absolute;
+    top: 12px;
+    right: 24px;
+    font-family: Georgia, serif;
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--color-brand-500);
+    opacity: 0.18;
+    pointer-events: none;
+  }
+
+  .review-quote {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text);
+    flex-grow: 1;
+  }
+
+  .review-author {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+  .author-name {
+    font-weight: 600;
+    color: var(--color-text);
+    font-size: 0.9375rem;
+  }
+  .author-role {
+    font-size: 0.8125rem;
+    color: var(--color-text-soft);
+    margin-top: 2px;
+  }
+  .author-role span {
+    color: var(--color-brand-500);
+    font-weight: 500;
+  }
+
+  @media (max-width: 1024px) {
+    .reviews-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .reviews-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+  }
+</style>

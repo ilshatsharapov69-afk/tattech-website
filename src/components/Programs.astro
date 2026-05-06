@@ -1,40 +1,51 @@
 ---
 import Icon from './Icon.astro';
 
+// TODO: подтвердить у клиента, что цены — это стоимость лицензии (без работ по настройке).
 const programs = [
   {
     emoji: '📊',
     title: '1С:Бухгалтерия',
     price: 'от 4 000 ₽',
-    desc: 'Учёт, отчётность, налоги для ИП и ООО.',
+    priceNote: 'лицензия, настройка по проекту',
+    desc: 'Учёт, налоги и отчётность для ИП и ООО.',
+    bullets: ['Отчёты в ФНС, СФР, ФСС', 'Интеграция с банк-клиентом', 'Поддержка ЕНС и УСН/ОСНО'],
     msg: 'Хочу узнать про 1С:Бухгалтерию',
   },
   {
     emoji: '🛒',
     title: '1С:Управление торговлей',
     price: 'от 8 200 ₽',
-    desc: 'Склад, продажи, поставщики, цены.',
+    priceNote: 'лицензия, настройка по проекту',
+    desc: 'Склад, продажи, поставщики, ценообразование.',
+    bullets: ['Маркетплейсы Wildberries и Ozon', 'ЕГАИС и Честный знак', 'Интеграция с кассами и эквайрингом'],
     msg: 'Хочу узнать про 1С:Управление торговлей',
   },
   {
     emoji: '📁',
     title: '1С:Документооборот',
     price: '48 500 ₽',
-    desc: 'Маршруты согласования, канбан, версии документов.',
+    priceNote: 'лицензия, настройка по проекту',
+    desc: 'Согласования, канбан и версии документов.',
+    bullets: ['Маршруты согласования', 'Электронная подпись', 'Мобильный клиент и Telegram-уведомления'],
     msg: 'Хочу узнать про 1С:Документооборот',
   },
   {
     emoji: '🏪',
     title: '1С:Розница',
     price: 'от 4 400 ₽',
-    desc: 'Касса, ассортимент, программы лояльности.',
+    priceNote: 'лицензия, настройка по проекту',
+    desc: 'Кассы, ассортимент, программы лояльности.',
+    bullets: ['Онлайн-касса по 54-ФЗ', 'Акции и скидочные карты', 'Интеграция с эквайрингом'],
     msg: 'Хочу узнать про 1С:Розницу',
   },
   {
     emoji: '👥',
     title: '1С:ЗУП',
     price: 'от 9 100 ₽',
+    priceNote: 'лицензия, настройка по проекту',
     desc: 'Зарплата, кадры, табели и отчётность.',
+    bullets: ['Расчёт ЗП и налогов', 'Кадровое делопроизводство', 'Отчёты в СФР и ФНС'],
     msg: 'Хочу узнать про 1С:ЗУП',
   },
 ];
@@ -61,7 +72,16 @@ const tgUrl = (msg: string) => `https://t.me/CyclesOfID?text=${encodeURIComponen
                 <span class="price-prefix">{p.price.startsWith('от ') ? 'от' : ''}</span>
                 <span class="price-value text-gradient">{p.price.replace('от ', '')}</span>
               </div>
+              <p class="program-price-note">{p.priceNote}</p>
               <p class="text-soft program-desc">{p.desc}</p>
+              <ul class="program-bullets">
+                {p.bullets.map((b) => (
+                  <li>
+                    <Icon name="check" size={14} class="bullet-check" />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
               <a href={tgUrl(p.msg)} target="_blank" rel="noopener" class="program-cta">
                 <Icon name="telegram" size={16} />
                 <span>Заказать в Telegram</span>
@@ -159,10 +179,38 @@ const tgUrl = (msg: string) => `https://t.me/CyclesOfID?text=${encodeURIComponen
     letter-spacing: -0.02em;
   }
 
+  .program-price-note {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    margin: -4px 0 0;
+    line-height: 1.4;
+  }
+
   .program-desc {
     font-size: 0.9375rem;
-    flex-grow: 1;
     margin: 0;
+  }
+
+  .program-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    flex-grow: 1;
+  }
+  .program-bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: var(--color-text-soft);
+    line-height: 1.45;
+  }
+  .bullet-check {
+    color: var(--color-success);
+    flex-shrink: 0;
+    margin-top: 3px;
   }
 
   .program-cta {

@@ -1,0 +1,146 @@
+---
+const steps = [
+  {
+    n: '01',
+    title: 'Бриф',
+    duration: '30 минут',
+    desc: 'Узнаём задачу, текущие процессы, что болит. Без предоплаты и обязательств.',
+  },
+  {
+    n: '02',
+    title: 'Аудит и&nbsp;ТЗ',
+    duration: '3–5 дней',
+    desc: 'Фиксируем объём работ, сроки и стоимость. Подписываем договор по этапам.',
+  },
+  {
+    n: '03',
+    title: 'Внедрение',
+    duration: 'от 2 недель',
+    desc: 'Настраиваем 1С и интеграции. Каждую неделю показываем демо и собираем правки.',
+  },
+  {
+    n: '04',
+    title: 'Обучение',
+    duration: '1–2 дня',
+    desc: 'Тренинг для пользователей + видеоинструкции — чтобы команда не тонула после запуска.',
+  },
+  {
+    n: '05',
+    title: 'Поддержка',
+    duration: '5/2 после запуска',
+    desc: 'Отвечаем на вопросы, делаем доработки, обновляем 1С. По фиксированному тарифу.',
+  },
+];
+---
+
+<section class="section process" id="process">
+  <div class="container">
+    <header class="section-head reveal">
+      <span class="eyebrow">Как мы работаем</span>
+      <h2 class="h2">От первого звонка до&nbsp;поддержки</h2>
+      <p class="lead">
+        Каждый этап — с фиксированным результатом и сроком. Договор подписываем после ТЗ, не «на пустом месте».
+      </p>
+    </header>
+
+    <ol class="process-list reveal-stagger">
+      {steps.map((step) => (
+        <li class="process-step">
+          <div class="step-num" aria-hidden="true">{step.n}</div>
+          <div class="step-body">
+            <div class="step-head">
+              <h3 class="h3 step-title" set:html={step.title} />
+              <span class="step-duration">{step.duration}</span>
+            </div>
+            <p class="text-soft step-desc">{step.desc}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process {
+    background: var(--color-bg-alt);
+  }
+
+  .process-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    max-width: 880px;
+    margin-inline: auto;
+    counter-reset: step;
+  }
+
+  .process-step {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: var(--space-6);
+    align-items: flex-start;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6) var(--space-8);
+    transition: border-color 220ms ease, box-shadow 220ms var(--ease-spring),
+      transform 220ms var(--ease-spring);
+  }
+  .process-step:hover {
+    border-color: var(--color-brand-500);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .step-num {
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .step-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .step-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .step-title {
+    margin: 0;
+  }
+  .step-duration {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-brand-500);
+    background: rgba(37, 99, 235, 0.08);
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+  }
+
+  .step-desc {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 640px) {
+    .process-step {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+      padding: var(--space-5) var(--space-6);
+    }
+    .step-num {
+      font-size: 1.75rem;
+    }
+  }
+</style>
