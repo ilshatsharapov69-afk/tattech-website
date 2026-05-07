@@ -234,8 +234,23 @@ const cases = [
     letter-spacing: 0.01em;
   }
 
-  /* Spotlight gradient + image hover-zoom — desktop only */
+  /* 3D tilt + spotlight gradient + image hover-zoom — desktop only */
   @media (hover: hover) and (pointer: fine) {
+    .case-card {
+      transform: perspective(1000px)
+        rotateX(var(--rx, 0deg))
+        rotateY(var(--ry, 0deg));
+      transform-style: preserve-3d;
+      transition: transform 320ms var(--ease-spring),
+        box-shadow 250ms var(--ease-spring),
+        border-color 250ms ease;
+    }
+    .case-card:hover {
+      transform: perspective(1000px)
+        rotateX(var(--rx, 0deg))
+        rotateY(var(--ry, 0deg))
+        translateZ(10px);
+    }
     .case-card::before {
       content: '';
       position: absolute;
@@ -276,8 +291,10 @@ const cases = [
     .case-media img {
       transition: none;
     }
+    .case-card,
     .case-card:hover {
-      transform: none;
+      transform: none !important;
+      transition: none;
     }
   }
 
@@ -304,6 +321,7 @@ const cases = [
     const grid = document.getElementById('cases-grid');
     if (grid) {
       const rectCache = new WeakMap<Element, DOMRect>();
+      const MAX_TILT = 8; // degrees
 
       grid.addEventListener(
         'pointermove',
@@ -315,11 +333,24 @@ const cases = [
             rect = card.getBoundingClientRect();
             rectCache.set(card, rect);
           }
-          card.style.setProperty('--mx', `${event.clientX - rect.left}px`);
-          card.style.setProperty('--my', `${event.clientY - rect.top}px`);
+          const localX = event.clientX - rect.left;
+          const localY = event.clientY - rect.top;
+          card.style.setProperty('--mx', `${localX}px`);
+          card.style.setProperty('--my', `${localY}px`);
+          const nx = localX / rect.width;   // 0..1
+          const ny = localY / rect.height;  // 0..1
+          card.style.setProperty('--rx', `${(0.5 - ny) * MAX_TILT}deg`);
+          card.style.setProperty('--ry', `${(nx - 0.5) * MAX_TILT}deg`);
         },
         { passive: true }
       );
+
+      grid.querySelectorAll<HTMLElement>('.spotlight-card').forEach((card) => {
+        card.addEventListener('pointerleave', () => {
+          card.style.removeProperty('--rx');
+          card.style.removeProperty('--ry');
+        });
+      });
 
       const invalidateCache = () => {
         grid.querySelectorAll('.spotlight-card').forEach((c) => rectCache.delete(c));
