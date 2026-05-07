@@ -72,6 +72,21 @@ import Icon from './Icon.astro';
     background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 55%, #635BFF 100%);
     color: #fff;
   }
+  /* Fade Hero's bottom edge so it dissolves into Stats's blue-tinted gradient */
+  .hero::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 120px;
+    pointer-events: none;
+    background: linear-gradient(180deg,
+      rgba(30, 58, 138, 0) 0%,
+      rgba(30, 58, 138, 0.35) 100%
+    );
+    z-index: 0;
+  }
 
   .bg {
     position: absolute;
@@ -111,13 +126,23 @@ import Icon from './Icon.astro';
     to   { transform: translate(20px, -30px) scale(1.05); }
   }
 
+  /* Dots react to cursor: spotlight mask follows --mx/--my (set by mouse-glow.ts).
+     Default 50% 50% means a soft center halo when cursor is not over Hero. */
   .dots {
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.10) 1px, transparent 1px);
-    background-size: 24px 24px;
-    mask-image: radial-gradient(ellipse 60% 60% at 50% 40%, black 30%, transparent 80%);
-    -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 40%, black 30%, transparent 80%);
+    background-image: radial-gradient(rgba(255, 255, 255, 0.32) 1.5px, transparent 1.5px);
+    background-size: 22px 22px;
+    mask-image: radial-gradient(
+      circle 380px at var(--mx, 50%) var(--my, 50%),
+      black 0%,
+      rgba(0, 0, 0, 0.18) 70%
+    );
+    -webkit-mask-image: radial-gradient(
+      circle 380px at var(--mx, 50%) var(--my, 50%),
+      black 0%,
+      rgba(0, 0, 0, 0.18) 70%
+    );
   }
 
   .hero-inner {
@@ -207,9 +232,27 @@ import Icon from './Icon.astro';
     background: #F59E0B;
     color: #fff;
     box-shadow: 0 8px 22px rgba(245, 158, 11, 0.45);
+    position: relative;
+  }
+  .hero :global(.btn-primary)::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.45);
+    animation: tt-pulse-ring 2.4s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
   }
   .hero :global(.btn-primary:hover) {
     box-shadow: 0 12px 32px rgba(245, 158, 11, 0.55);
+  }
+  .hero :global(.btn-primary:hover)::after {
+    animation-play-state: paused;
+  }
+  @keyframes tt-pulse-ring {
+    0%   { box-shadow: 0 0 0 0   rgba(245, 158, 11, 0.45); }
+    70%  { box-shadow: 0 0 0 12px rgba(245, 158, 11, 0); }
+    100% { box-shadow: 0 0 0 0   rgba(245, 158, 11, 0); }
   }
 
   .hero :global(.btn-secondary) {

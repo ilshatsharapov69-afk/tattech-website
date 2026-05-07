@@ -33,16 +33,23 @@ const init = () => {
     return;
   }
 
+  // threshold + negative rootMargin: на tall screens Stats частично виден сразу
+  // в Hero-зоне; ждём, пока пользователь реально доскроллит до секции.
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          animateCounter(entry.target as CounterEl);
-          io.unobserve(entry.target);
+          const target = entry.target as CounterEl;
+          // Trigger Stats group slide-in (shared trigger with the counter).
+          const grid = target.closest('.stats-grid');
+          if (grid) grid.classList.add('is-visible');
+          // Counter spins after the longest slide finishes (1100ms for item 3).
+          setTimeout(() => animateCounter(target), 1100);
+          io.unobserve(target);
         }
       });
     },
-    { threshold: 0.2 }
+    { threshold: 0.5, rootMargin: '0px 0px -120px 0px' }
   );
 
   counters.forEach((el) => io.observe(el));

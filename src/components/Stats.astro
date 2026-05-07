@@ -9,7 +9,7 @@ const stats = [
 <section class="section stats">
   <div class="bg-glow" aria-hidden="true"></div>
   <div class="container">
-    <ul class="stats-grid reveal-stagger">
+    <ul class="stats-grid">
       {stats.map((stat) => (
         <li class="stat">
           <div class="stat-num text-gradient">
@@ -24,56 +24,98 @@ const stats = [
 </section>
 
 <style>
+  /* Stats acts as the smooth Hero→Services bridge:
+     blue tint at top (continues Hero), fades to white at bottom (meets Services). */
   .stats {
     position: relative;
     isolation: isolate;
-    background: linear-gradient(180deg, var(--color-bg-alt) 0%, #fff 100%);
-    padding-block: var(--space-12) var(--space-16);
+    background: linear-gradient(180deg,
+      rgba(30, 58, 138, 0.16) 0%,
+      rgba(37, 99, 235, 0.08) 25%,
+      var(--color-bg-alt) 65%,
+      #fff 100%
+    );
+    padding-block: var(--space-12) var(--space-12);
   }
   @media (max-width: 768px) {
     .stats {
-      padding-block: var(--space-8) var(--space-10);
+      padding-block: var(--space-8) var(--space-8);
     }
   }
   .bg-glow {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(37, 99, 235, 0.08), transparent 70%);
+    display: none; /* gradient bg replaces it */
+  }
+  /* Narrow strip — width of just the numbers, no card chrome */
+  .stats .container {
+    max-width: 480px;
   }
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-12);
+    gap: var(--space-3);
     text-align: center;
   }
   .stat {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: 2px;
     align-items: center;
   }
   .stat-num {
-    font-size: clamp(3rem, 6vw, 5rem);
+    font-size: clamp(1.5rem, 2.8vw, 2rem);
     font-weight: 800;
     line-height: 1;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
   }
   .stat-label {
-    font-size: 1.125rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     color: var(--color-text);
   }
   .stat-sub {
-    font-size: 0.9375rem;
+    font-size: 0.75rem;
     color: var(--color-text-soft);
   }
 
+  /* Group slide-in from far-left.
+     All three items start at roughly the same off-screen X (each item's
+     translateX compensates for its own grid column position).
+     They move together but stop in order: leftmost first, middle next,
+     rightmost last. Triggered by counter.ts intersection (threshold 0.5
+     + rootMargin -120px) so it doesn't fire on page load on tall screens. */
+  .stats-grid > :global(*) {
+    opacity: 0;
+    transition-property: opacity, transform;
+    transition-timing-function: ease-out, cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+  }
+  .stats-grid > :global(*:nth-child(1)) {
+    transform: translateX(-180px);
+    transition-duration: 500ms;
+  }
+  .stats-grid > :global(*:nth-child(2)) {
+    transform: translateX(-340px);
+    transition-duration: 800ms;
+  }
+  .stats-grid > :global(*:nth-child(3)) {
+    transform: translateX(-500px);
+    transition-duration: 1100ms;
+  }
+  .stats-grid.is-visible > :global(*) {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
   @media (max-width: 768px) {
-    .stats-grid {
-      grid-template-columns: 1fr;
-      gap: var(--space-8);
+    .stats .container {
+      max-width: 320px;
     }
+    .stats-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-2);
+    }
+    .stats-grid > :global(*:nth-child(1)) { transform: translateX(-90px); }
+    .stats-grid > :global(*:nth-child(2)) { transform: translateX(-180px); }
+    .stats-grid > :global(*:nth-child(3)) { transform: translateX(-270px); }
   }
 </style>

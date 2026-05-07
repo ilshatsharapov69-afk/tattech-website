@@ -114,12 +114,16 @@ const navLinks = [
     inset: 0 0 auto 0;
     z-index: 100;
     height: var(--header-h);
-    transition: background-color 240ms ease, box-shadow 240ms ease, backdrop-filter 240ms ease;
+    /* Default: light frosted-glass over Hero gradient (no jarring jump on scroll). */
+    background: linear-gradient(180deg, rgba(30, 58, 138, 0.22) 0%, rgba(37, 99, 235, 0.16) 100%);
+    backdrop-filter: saturate(160%) blur(8px);
+    -webkit-backdrop-filter: saturate(160%) blur(8px);
+    transition: background 240ms ease, box-shadow 240ms ease, backdrop-filter 240ms ease;
   }
   .header.is-scrolled {
-    background: linear-gradient(180deg, rgba(30, 58, 138, 0.95) 0%, rgba(37, 99, 235, 0.85) 100%);
-    backdrop-filter: saturate(180%) blur(12px);
-    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    background: linear-gradient(180deg, rgba(30, 58, 138, 0.92) 0%, rgba(37, 99, 235, 0.82) 100%);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
     box-shadow: 0 2px 24px rgba(30, 58, 138, 0.18);
   }
   .header-inner {

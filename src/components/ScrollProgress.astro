@@ -1,0 +1,69 @@
+---
+// Scroll progress bar (top of viewport, 3px gradient).
+// CSS-only via animation-timeline: scroll() for Chrome 115+/Safari 26+/Edge 115+.
+// JS fallback for Firefox (animation-timeline disabled by default through FF 153).
+---
+
+<div id="scroll-progress" aria-hidden="true"></div>
+
+<style>
+  #scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    z-index: 101;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      var(--color-brand-700),
+      var(--color-brand-500),
+      var(--color-brand-purple)
+    );
+    /* Anchor gradient to viewport so scaleX doesn't compress it */
+    background-size: 100vw 3px;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    animation: tt-scroll-grow linear;
+    animation-timeline: scroll(root);
+  }
+
+  @keyframes tt-scroll-grow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #scroll-progress { display: none; }
+  }
+</style>
+
+<script>
+  const el = document.getElementById('scroll-progress');
+  const supported =
+    CSS.supports('animation-timeline', 'scroll()') ||
+    CSS.supports('animation-timeline', 'scroll(root)');
+
+  if (el && !supported) {
+    el.style.animationName = 'none';
+    let ticking = false;
+    const update = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const p = max > 0 ? window.scrollY / max : 0;
+      el.style.transform = `scaleX(${p})`;
+      ticking = false;
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          requestAnimationFrame(update);
+          ticking = true;
+        }
+      },
+      { passive: true }
+    );
+    update();
+  }
+</script>
