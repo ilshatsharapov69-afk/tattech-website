@@ -1,0 +1,379 @@
+---
+import Icon from '../Icon.astro';
+
+interface Props {
+  highlight?: 'tehno' | 'prof' | 'none';
+  eyebrow?: string;
+  title?: string;
+  lead?: string;
+}
+
+const {
+  highlight = 'none',
+  eyebrow = 'Сравнение тарифов',
+  title = 'ИТС Техно или ИТС ПРОФ',
+  lead = 'Все цены — льготные при непрерывном продлении договора. Базовая цена выше на ~20%.',
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+interface Period {
+  label: string;
+  tehno: string;
+  prof: string;
+}
+
+interface Feature {
+  label: string;
+  tehno: string;
+  prof: string;
+}
+
+const periods: Period[] = [
+  { label: '1 месяц', tehno: '—', prof: '5 964 ₽' },
+  { label: '3 месяца', tehno: '—', prof: '12 892 ₽' },
+  { label: '6 месяцев', tehno: '9 834 ₽', prof: '23 283 ₽' },
+  { label: '12 месяцев', tehno: '18 600 ₽', prof: '44 064 ₽' },
+];
+
+const features: Feature[] = [
+  { label: 'Минимальный срок', tehno: '6 мес.', prof: '1 мес.' },
+  { label: 'Линия консультаций «1С»', tehno: '1 раз / мес', prof: 'Регулярно' },
+  { label: 'Обновления платформы и конфигураций', tehno: '✓', prof: '✓' },
+  { label: '1C-ЭДО (отправка комплектов / мес)', tehno: '50', prof: '100' },
+  { label: '1С:Номенклатура (карточек)', tehno: '5 000', prof: '10 000' },
+  { label: '1С:Контрагент (автозаполнений)', tehno: '—', prof: '7 200' },
+  { label: '1С-Отчётность', tehno: '—', prof: '✓' },
+  { label: '1С:Облачный архив', tehno: '—', prof: '20 ГБ' },
+  { label: '1С:Линк (удалённый доступ)', tehno: '—', prof: '2 БД' },
+  { label: '1С:Фреш (через интернет)', tehno: '—', prof: '5 сеансов / 10 БД' },
+  { label: '1С:Подпись (КЭП)', tehno: '—', prof: '1 сертификат' },
+  { label: '1С:Лекторий', tehno: '—', prof: '✓' },
+];
+
+const tehnoUrl = `${base}/1s-its-tehno`;
+const profUrl = `${base}/1s-its-prof`;
+const tgTehno = `https://t.me/CyclesOfID?text=${encodeURIComponent(
+  'Здравствуйте! Хочу оформить 1С:ИТС Техно.'
+)}`;
+const tgProf = `https://t.me/CyclesOfID?text=${encodeURIComponent(
+  'Здравствуйте! Хочу оформить 1С:ИТС ПРОФ.'
+)}`;
+
+const colTehnoClass = `its-col its-col-tehno${highlight === 'tehno' ? ' is-active' : ''}`;
+const colProfClass = `its-col its-col-prof${
+  highlight === 'prof' ? ' is-active' : highlight === 'none' ? ' is-popular' : ''
+}`;
+
+const cellClass = (val: string, col: 'tehno' | 'prof') => {
+  const cls = ['its-cell'];
+  if (highlight === col) cls.push('is-active');
+  if (val === '—') cls.push('is-na');
+  if (val === '✓') cls.push('is-check');
+  return cls.join(' ');
+};
+---
+
+<section class="section its-table-section">
+  <div class="container">
+    <header class="section-head reveal">
+      <span class="eyebrow">{eyebrow}</span>
+      <h2 class="h2">{title}</h2>
+      {lead && <p class="lead">{lead}</p>}
+    </header>
+
+    <div class="its-wrap reveal">
+      <table class="its-table">
+        <caption class="visually-hidden">Сравнение тарифов 1С:ИТС Техно и 1С:ИТС ПРОФ</caption>
+        <thead>
+          <tr>
+            <th scope="col" class="its-th-row"><span class="visually-hidden">Параметр</span></th>
+            <th scope="col" class={colTehnoClass}>
+              <div class="its-col-head">
+                <span class="its-tier-name">ИТС Техно</span>
+                <span class="its-tier-from">от 9 834 ₽ / 6 мес</span>
+                {highlight === 'tehno' && <span class="its-current-badge">Текущий тариф</span>}
+              </div>
+            </th>
+            <th scope="col" class={colProfClass}>
+              <div class="its-col-head">
+                <span class="its-tier-name">ИТС ПРОФ</span>
+                <span class="its-tier-from">от 5 964 ₽ / мес</span>
+                {highlight === 'prof' && <span class="its-current-badge">Текущий тариф</span>}
+                {highlight === 'none' && <span class="its-popular-badge">Полный пакет</span>}
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="its-section-row"><th scope="rowgroup" colspan={3}>Цены за период (льготные)</th></tr>
+          {periods.map((p) => (
+            <tr>
+              <th scope="row" class="its-row-label">{p.label}</th>
+              <td class={cellClass(p.tehno, 'tehno')}>{p.tehno}</td>
+              <td class={cellClass(p.prof, 'prof')}>{p.prof}</td>
+            </tr>
+          ))}
+
+          <tr class="its-section-row"><th scope="rowgroup" colspan={3}>Что входит</th></tr>
+          {features.map((f) => (
+            <tr>
+              <th scope="row" class="its-row-label">{f.label}</th>
+              <td class={cellClass(f.tehno, 'tehno')}>{f.tehno}</td>
+              <td class={cellClass(f.prof, 'prof')}>{f.prof}</td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td class="its-foot-label" aria-hidden="true"></td>
+            <td class={`its-foot${highlight === 'tehno' ? ' is-active' : ''}`}>
+              <a
+                href={highlight === 'tehno' ? tgTehno : tehnoUrl}
+                class={`btn ${highlight === 'tehno' ? 'btn-primary' : 'btn-secondary'} its-cta`}
+                target={highlight === 'tehno' ? '_blank' : undefined}
+                rel={highlight === 'tehno' ? 'noopener' : undefined}
+              >
+                {highlight === 'tehno' && <Icon name="telegram" size={16} />}
+                <span>{highlight === 'tehno' ? 'Оформить Техно' : 'Подробнее о Техно'}</span>
+              </a>
+            </td>
+            <td class={`its-foot${highlight === 'prof' ? ' is-active' : ''}`}>
+              <a
+                href={highlight === 'prof' ? tgProf : profUrl}
+                class={`btn ${highlight === 'prof' || highlight === 'none' ? 'btn-primary' : 'btn-secondary'} its-cta`}
+                target={highlight === 'prof' ? '_blank' : undefined}
+                rel={highlight === 'prof' ? 'noopener' : undefined}
+              >
+                {highlight === 'prof' && <Icon name="telegram" size={16} />}
+                <span>{highlight === 'prof' ? 'Оформить ПРОФ' : 'Подробнее о ПРОФ'}</span>
+              </a>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <p class="its-footnote reveal">
+      Льготная цена применяется при непрерывном продлении договора 1С:ИТС.
+      24 мес. ПРОФ — 79 315 ₽ (только льготная цена).
+    </p>
+  </div>
+</section>
+
+<style>
+  .its-table-section {
+    background: var(--color-bg-tint);
+  }
+
+  .its-wrap {
+    max-width: 980px;
+    margin-inline: auto;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    box-shadow: var(--shadow-md);
+  }
+
+  .its-table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .its-th-row {
+    width: 38%;
+    padding: var(--space-5) var(--space-5);
+    background: var(--color-bg-alt);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .its-col {
+    width: 31%;
+    padding: var(--space-5) var(--space-5);
+    background: var(--color-bg-alt);
+    border-bottom: 1px solid var(--color-border);
+    border-left: 1px solid var(--color-border);
+    text-align: center;
+    vertical-align: top;
+    font-weight: 600;
+  }
+  .its-col.is-active {
+    background: rgba(37, 99, 235, 0.08);
+    border-bottom: 2px solid var(--color-brand-500);
+  }
+  .its-col.is-popular {
+    background: rgba(37, 99, 235, 0.04);
+  }
+
+  .its-col-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .its-tier-name {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-text);
+  }
+  .its-tier-from {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .its-current-badge,
+  .its-popular-badge {
+    margin-top: 6px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: var(--radius-full);
+  }
+  .its-current-badge {
+    background: var(--gradient-text);
+    color: #fff;
+  }
+  .its-popular-badge {
+    background: rgba(37, 99, 235, 0.12);
+    color: var(--color-brand-700);
+  }
+
+  .its-section-row th {
+    padding: var(--space-3) var(--space-5);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-soft);
+    background: var(--color-bg-alt);
+    text-align: left;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .its-row-label {
+    padding: var(--space-3) var(--space-5);
+    font-weight: 500;
+    color: var(--color-text);
+    text-align: left;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  }
+
+  .its-cell {
+    padding: var(--space-3) var(--space-5);
+    text-align: center;
+    color: var(--color-text);
+    border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+    border-left: 1px solid rgba(15, 23, 42, 0.06);
+  }
+  .its-cell.is-active {
+    background: rgba(37, 99, 235, 0.05);
+  }
+  .its-cell.is-na {
+    color: var(--color-text-muted);
+    font-weight: 400;
+  }
+  .its-cell.is-check {
+    color: var(--color-success);
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  .its-foot {
+    padding: var(--space-5);
+    border-top: 1px solid var(--color-border);
+    border-left: 1px solid var(--color-border);
+    text-align: center;
+    background: #fff;
+  }
+  .its-foot.is-active {
+    background: rgba(37, 99, 235, 0.05);
+  }
+  .its-foot-label {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .its-cta {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 18px;
+    font-size: 0.875rem;
+  }
+
+  .its-footnote {
+    max-width: 720px;
+    margin: var(--space-6) auto 0;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--color-text-soft);
+    line-height: 1.6;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (max-width: 640px) {
+    .its-th-row,
+    .its-row-label {
+      display: none;
+    }
+    .its-table {
+      min-width: 0;
+    }
+    .its-col,
+    .its-cell {
+      width: 50%;
+    }
+    .its-section-row th {
+      padding-inline: var(--space-4);
+      font-size: 0.6875rem;
+    }
+    .its-cell::before {
+      content: attr(data-label);
+      display: block;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--color-text-muted);
+      margin-bottom: 2px;
+      text-transform: none;
+    }
+    .its-cell {
+      padding: var(--space-3) var(--space-4);
+    }
+  }
+</style>
+
+<script>
+  // On narrow viewports the row label column is hidden — copy the row label
+  // onto each cell as data-label so it renders inline.
+  const table = document.querySelector<HTMLTableElement>('.its-table');
+  if (table) {
+    table.querySelectorAll<HTMLTableRowElement>('tbody tr').forEach((tr) => {
+      const labelEl = tr.querySelector<HTMLTableCellElement>('.its-row-label');
+      if (!labelEl) return;
+      const label = labelEl.textContent?.trim() ?? '';
+      tr.querySelectorAll<HTMLTableCellElement>('.its-cell').forEach((cell) => {
+        cell.setAttribute('data-label', label);
+      });
+    });
+  }
+</script>

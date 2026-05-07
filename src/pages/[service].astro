@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import InnerLayout from '../layouts/InnerLayout.astro';
 import IncludedList from '../components/service/IncludedList.astro';
 import ServicePricing from '../components/service/ServicePricing.astro';
+import ItsTable from '../components/service/ItsTable.astro';
 import ServiceFAQOverlay from '../components/service/ServiceFAQ.astro';
 import Cases from '../components/Cases.astro';
 import Process from '../components/Process.astro';
@@ -36,12 +37,16 @@ const breadcrumb = [
 >
   <IncludedList items={data.included} />
 
-  <ServicePricing
-    tiers={data.pricing.tiers}
-    lead={data.pricing.lead}
-    footnote={data.pricing.footnote}
-    ctaMessage={`Здравствуйте! Хочу получить смету: ${data.title}.`}
-  />
+  {data.pricing && (
+    <ServicePricing
+      tiers={data.pricing.tiers}
+      lead={data.pricing.lead}
+      footnote={data.pricing.footnote}
+      ctaMessage={`Здравствуйте! Хочу получить смету: ${data.title}.`}
+    />
+  )}
+
+  {data.itsHighlight && <ItsTable highlight={data.itsHighlight} />}
 
   <Cases
     tags={data.caseTags}

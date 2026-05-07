@@ -21,21 +21,24 @@ const services = defineCollection({
       )
       .min(3)
       .max(6),
-    pricing: z.object({
-      lead: z.string().optional(),
-      tiers: z
-        .array(
-          z.object({
-            label: z.string(),
-            price: z.string(),
-            note: z.string().optional(),
-            primary: z.boolean().default(false),
-          })
-        )
-        .min(1)
-        .max(4),
-      footnote: z.string().optional(),
-    }),
+    pricing: z
+      .object({
+        lead: z.string().optional(),
+        tiers: z
+          .array(
+            z.object({
+              label: z.string(),
+              price: z.string(),
+              note: z.string().optional(),
+              primary: z.boolean().default(false),
+            })
+          )
+          .min(1)
+          .max(4),
+        footnote: z.string().optional(),
+      })
+      .optional(),
+    itsHighlight: z.enum(['tehno', 'prof', 'none']).optional(),
     casesEyebrow: z.string().default('Опыт в отрасли'),
     casesTitle: z.string(),
     casesLead: z.string().optional(),
