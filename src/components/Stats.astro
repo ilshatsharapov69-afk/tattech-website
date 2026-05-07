@@ -114,10 +114,12 @@ const stats = [
       grid-template-columns: repeat(3, 1fr);
       gap: var(--space-2);
     }
-    /* Smaller offsets on mobile so even if the trigger is delayed,
-       items stay within (or close to) screen bounds and the motion reads. */
-    .stats-grid > :global(*:nth-child(1)) { transform: translateX(-40px); }
-    .stats-grid > :global(*:nth-child(2)) { transform: translateX(-80px); }
-    .stats-grid > :global(*:nth-child(3)) { transform: translateX(-120px); }
+    /* Mobile: skip slide-in entirely. Items sit in their final grid spot;
+       only the counter animation (0 → target) plays via counter.ts. */
+    .stats-grid > :global(*) {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
   }
 </style>
