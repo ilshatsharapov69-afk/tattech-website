@@ -36,10 +36,17 @@ const navLinks = [
     <div class="actions">
       <a href="tel:+79520434277" class="phone">+7 952 043 4277</a>
       <a
+        href="mailto:ttech.kzn.it@gmail.com"
+        class="ic-btn ic-btn-email"
+        aria-label="Написать на email"
+      >
+        <Icon name="email" size={18} />
+      </a>
+      <a
         href="https://t.me/CyclesOfID"
         target="_blank"
         rel="noopener"
-        class="ic-btn"
+        class="ic-btn ic-btn-tg"
         aria-label="Написать в Telegram"
       >
         <Icon name="telegram" size={18} />
@@ -48,7 +55,7 @@ const navLinks = [
         href="https://wa.me/79950958536"
         target="_blank"
         rel="noopener"
-        class="ic-btn"
+        class="ic-btn ic-btn-wa"
         aria-label="Написать в WhatsApp"
       >
         <Icon name="whatsapp" size={18} />
@@ -72,10 +79,17 @@ const navLinks = [
       <a href="tel:+79520434277" class="mobile-phone">+7 952 043 4277</a>
       <div class="mobile-channels">
         <a
+          href="mailto:ttech.kzn.it@gmail.com"
+          class="ic-btn ic-btn-email-mobile"
+          aria-label="Написать на email"
+        >
+          <Icon name="email" size={18} />
+        </a>
+        <a
           href="https://t.me/CyclesOfID"
           target="_blank"
           rel="noopener"
-          class="ic-btn ic-btn-mobile"
+          class="ic-btn ic-btn-tg"
           aria-label="Написать в Telegram"
         >
           <Icon name="telegram" size={18} />
@@ -84,7 +98,7 @@ const navLinks = [
           href="https://wa.me/79950958536"
           target="_blank"
           rel="noopener"
-          class="ic-btn ic-btn-mobile"
+          class="ic-btn ic-btn-wa"
           aria-label="Написать в WhatsApp"
         >
           <Icon name="whatsapp" size={18} />
@@ -103,10 +117,10 @@ const navLinks = [
     transition: background-color 240ms ease, box-shadow 240ms ease, backdrop-filter 240ms ease;
   }
   .header.is-scrolled {
-    background: rgba(255, 255, 255, 0.85);
+    background: linear-gradient(180deg, rgba(30, 58, 138, 0.95) 0%, rgba(37, 99, 235, 0.85) 100%);
     backdrop-filter: saturate(180%) blur(12px);
     -webkit-backdrop-filter: saturate(180%) blur(12px);
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 2px 24px rgba(30, 58, 138, 0.18);
   }
   .header-inner {
     height: 100%;
@@ -120,7 +134,7 @@ const navLinks = [
     gap: 10px;
     font-weight: 700;
     font-size: 1.125rem;
-    color: var(--color-text);
+    color: #fff;
     flex-shrink: 0;
   }
   .logo img {
@@ -129,26 +143,7 @@ const navLinks = [
   }
   .logo-text {
     letter-spacing: -0.01em;
-    transition: color 240ms ease;
-  }
-
-  /* Over the dark Hero (header transparent, not yet scrolled) — light text */
-  .header:not(.is-scrolled) .logo,
-  .header:not(.is-scrolled) .logo-text,
-  .header:not(.is-scrolled) .phone {
     color: #fff;
-  }
-  .header:not(.is-scrolled) .nav a {
-    color: rgba(255, 255, 255, 0.85);
-  }
-  .header:not(.is-scrolled) .nav a:hover {
-    color: #fff;
-  }
-  .header:not(.is-scrolled) .nav a::after {
-    background: #fff;
-  }
-  .header:not(.is-scrolled) .burger span {
-    background: #fff;
   }
   .nav {
     margin-left: auto;
@@ -160,7 +155,7 @@ const navLinks = [
   .nav a {
     font-size: 0.9375rem;
     font-weight: 500;
-    color: var(--color-text-soft);
+    color: rgba(255, 255, 255, 0.85);
     transition: color 200ms ease;
     padding: 6px 2px;
     position: relative;
@@ -172,13 +167,13 @@ const navLinks = [
     right: 2px;
     bottom: 0;
     height: 2px;
-    background: var(--color-brand-500);
+    background: #fff;
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 220ms var(--ease-spring);
   }
   .nav a:hover {
-    color: var(--color-text);
+    color: #fff;
   }
   .nav a:hover::after {
     transform: scaleX(1);
@@ -192,11 +187,11 @@ const navLinks = [
   .phone {
     font-size: 0.9375rem;
     font-weight: 600;
-    color: var(--color-text);
-    transition: color 200ms;
+    color: #fff;
+    transition: opacity 200ms;
   }
   .phone:hover {
-    color: var(--color-brand-500);
+    opacity: 0.85;
   }
   .ic-btn {
     width: 40px;
@@ -205,25 +200,42 @@ const navLinks = [
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: rgba(37, 99, 235, 0.08);
-    color: var(--color-brand-500);
-    border: 1px solid transparent;
-    transition: background-color 200ms ease, color 200ms ease, transform 200ms var(--ease-spring), border-color 200ms ease;
+    color: #fff;
+    border: none;
+    transition: background-color 200ms ease, transform 200ms var(--ease-spring), box-shadow 200ms ease;
   }
-  .ic-btn:hover {
+  .ic-btn-tg {
+    background: #229ED9;
+  }
+  .ic-btn-tg:hover {
+    background: #1B8CC0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(34, 158, 217, 0.4);
+  }
+  .ic-btn-wa {
+    background: #25D366;
+  }
+  .ic-btn-wa:hover {
+    background: #1FAE57;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.4);
+  }
+  .ic-btn-email {
+    background: rgba(255, 255, 255, 0.10);
+  }
+  .ic-btn-email:hover {
+    background: rgba(255, 255, 255, 0.20);
+    transform: translateY(-2px);
+  }
+  /* Mobile menu sits on white panel — email needs brand-tinted bg there */
+  .ic-btn-email-mobile {
+    background: rgba(37, 99, 235, 0.10);
+    color: var(--color-brand-500);
+  }
+  .ic-btn-email-mobile:hover {
     background: var(--color-brand-500);
     color: #fff;
     transform: translateY(-2px);
-  }
-  /* Over the dark Hero — glassmorphic */
-  .header:not(.is-scrolled) .ic-btn {
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.28);
-  }
-  .header:not(.is-scrolled) .ic-btn:hover {
-    background: rgba(255, 255, 255, 0.22);
-    border-color: rgba(255, 255, 255, 0.6);
   }
   .burger {
     display: none;
@@ -239,7 +251,7 @@ const navLinks = [
     display: block;
     width: 22px;
     height: 2px;
-    background: var(--color-text);
+    background: #fff;
     border-radius: 2px;
     transition: transform 240ms var(--ease-spring), opacity 200ms ease;
   }
@@ -312,9 +324,6 @@ const navLinks = [
   .mobile-channels {
     display: inline-flex;
     gap: var(--space-2);
-  }
-  .ic-btn-mobile {
-    background: rgba(37, 99, 235, 0.10);
   }
 
   @media (max-width: 960px) {

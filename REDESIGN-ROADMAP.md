@@ -29,8 +29,8 @@
 
 ```
 [x] Pre-flight — Variant B rollback + ROADMAP (commit 0e44d6e, NOT pushed)
-[ ] 5.1 — Top-bar revamp + Hero CTA revert + Header blue tonal + Spacing     ← NEXT
-[ ] 6   — Анимации: pulse CTA + scroll progress + mouse-tracking glow + button hovers
+[x] 5.1 — Top-bar revamp + Header blue tonal + email btn + brand TG/WA + Hero contacts removed + Stats→Services spacing
+[ ] 6   — Анимации: pulse CTA + scroll progress + mouse-tracking glow + button hovers     ← NEXT
 [ ] 7   — Услуги: упаковка hover-reveal + border-glow
 [ ] 8   — Кейсы: B2B-формат + image zoom + 3D tilt + spotlight gradient
 [ ] 9   — Отзывы: real B2B
@@ -52,7 +52,9 @@
 
 ## Session 5.1 — Top-bar revamp + Hero CTA revert + Header blue tonal + Spacing
 
-**Status:** pending • **No research** • **No client input** • **~120 LOC**
+**Status:** ✅ done 2026-05-07 • **No research** • **No client input** • **+72 / −97 LOC**
+
+**Lighthouse 5.1:** desktop 100/100/100/100 (3×), mobile 99/100/100/100 (3×). Mobile perf +3 vs baseline (96 → 99) от удаления `.hero-contacts` блока.
 
 ### Цели
 

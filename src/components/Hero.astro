@@ -42,18 +42,6 @@ import Icon from './Icon.astro';
       </a>
     </div>
 
-    <div class="hero-contacts">
-      <a href="tel:+79520434277" class="contact-link">
-        <span class="contact-icon">📞</span>
-        <span>+7 952 043 4277</span>
-      </a>
-      <span class="contact-sep">•</span>
-      <a href="mailto:ttech.kzn.it@gmail.com" class="contact-link">
-        <span class="contact-icon">✉️</span>
-        <span>ttech.kzn.it@gmail.com</span>
-      </a>
-    </div>
-
     <div class="hero-trust">
       <div class="trust-item">
         <Icon name="check" size={18} class="trust-icon" />
@@ -190,33 +178,6 @@ import Icon from './Icon.astro';
     font-size: 1rem;
   }
 
-  .hero-contacts {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    flex-wrap: wrap;
-    justify-content: center;
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 0.9375rem;
-    animation: fadeUp 800ms var(--ease-spring) both;
-    animation-delay: 440ms;
-  }
-  .contact-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: color 200ms;
-  }
-  .contact-link:hover {
-    color: #fff;
-  }
-  .contact-icon {
-    opacity: 0.8;
-  }
-  .contact-sep {
-    opacity: 0.4;
-  }
-
   .hero-trust {
     display: flex;
     gap: var(--space-6);
@@ -294,13 +255,6 @@ import Icon from './Icon.astro';
     .hero-cta .btn {
       width: 100%;
     }
-    .hero-contacts {
-      flex-direction: column;
-      gap: var(--space-2);
-    }
-    .contact-sep {
-      display: none;
-    }
     .hero-trust {
       gap: var(--space-3);
       flex-direction: column;
@@ -316,7 +270,6 @@ import Icon from './Icon.astro';
     .hero-title,
     .hero-sub,
     .hero-cta,
-    .hero-contacts,
     .hero-trust {
       animation: none;
     }

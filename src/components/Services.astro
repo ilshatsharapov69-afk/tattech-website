@@ -78,6 +78,11 @@ const services = [
 </section>
 
 <style>
+  /* Tighten Stats → Services gap (override .section padding-block) */
+  .services {
+    padding-top: var(--space-16);
+  }
+
   .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -154,6 +159,12 @@ const services = [
   @media (max-width: 1024px) {
     .grid {
       grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .services {
+      padding-top: var(--space-12);
     }
   }
 
