@@ -1,24 +1,30 @@
-# Session 8 kickoff — T-Tech redesign
+# Session 8 kickoff — T-Tech redesign (Cases — demo-first)
 
-> Этот файл всегда содержит промт для **следующей** запланированной сессии. После завершения сессии Claude обновляет этот файл, указывая на следующий шаг.
+> Этот файл всегда содержит промт для **следующей** запланированной сессии.
 
 ---
 
 ## Что вставить в новый чат
 
 ```
-T-Tech redesign — session 8 (Кейсы). Открой D:\tattech-website\next-session-START.md и D:\tattech-website\REDESIGN-ROADMAP.md, прочитай оба полностью. Это самая большая сессия — обязательно нужен input от клиента: 2-3 реальных кейса (отрасль / клиент / боль / решение / метрика результата / срок). Если клиент ещё не дал — спроси у меня и приостанови работу до получения. Внимание: 3D tilt после mid-session pivot в session 7 уехал из Cases в Services. На Cases решить со мной — re-use 3D tilt для consistency или skip для дифференциации (рекомендуется skip: Cases использует image-zoom + spotlight gradient как signature). Параллельно сделай research ~1 час по B2B case-study паттернам (Stripe customers, Linear customers, 1С-Рарус кейсы, Vercel showcase) + spotlight gradient через CSS pointer-tracking + image hover-zoom техника. Сохрани в research/2026-MM-DD_b2b-cases-format/report.md. Покажи план и подтверди scope ДО старта работы. В конце сессии: build + ЛОКАЛЬНЫЙ commit (БЕЗ push), Lighthouse 3×3, обнови ROADMAP + next-session-START.md, дай handoff для session 9. Push в GitHub — финальный после session 11.
+T-Tech redesign — session 8 (Кейсы demo-first). Открой D:\tattech-website\next-session-START.md и D:\tattech-website\REDESIGN-ROADMAP.md, прочитай оба полностью. ВАЖНО: НЕ ждём реальные кейсы от клиента — переключились на demo-first workflow (см. memory feedback_tattech_demo_first.md). Используем существующие 8 кейсов из Cases.astro как референс, улучшаем формат до B2B (отрасль/боль/решение/метрика/срок), придумываем правдоподобные метрики. Существующие 13 фото в `D:/DeepReserch/research/2026-05-06_tattech-redesign/assets/site-images/case-photos/` — переиспользуем (или генерим новые если есть Gemini API key — спроси). 3D tilt после mid-session pivot в session 7 уже на Services — на Cases решить со мной (skip для дифференциации, рекомендуется). Signature Cases-эффект: image hover-zoom scale(1.1) + spotlight gradient mouse-tracked. Research ~1 час: B2B case-study паттерны (Stripe customers / Linear customers / 1С-Рарус кейсы / Vercel showcase) + spotlight gradient implementation + image hover-zoom техника. Сохрани в research/2026-MM-DD_b2b-cases-format/report.md. Покажи план + подтверди scope ДО старта работы. В конце: build + ЛОКАЛЬНЫЙ commit + Lighthouse 3×3 + обнови ROADMAP/next-session-START.md + handoff session 9. Push в GitHub — финальный после session 11.
 ```
 
 ---
 
 ## Контекст для Claude (читай при старте сессии)
 
+### 🎯 Workflow: demo-first
+
+**С 2026-05-07 (после session 7) — НЕ блокироваться на ожидание клиентского input'а.** См. `feedback_tattech_demo_first.md`. Делаем полную demo-версию с placeholder/generated контентом → клиент видит готовое → точечные правки → push.
+
+Применимо к sessions 8 (Cases), 9 (Reviews), 10b (About). Session 10a (AI photos) — спросить у user'а есть ли API key, иначе fallback.
+
 ### Состояние проекта
 
 - **Repo:** `D:\tattech-website` (Astro 6, plain CSS)
 - **Live:** https://ilshatsharapov69-afk.github.io/tattech-website/ (отстаёт — push заморожен до session 11)
-- **Last local commit:** `e95ce8c` (NOT pushed) — Services 3D tilt + compact reveal + border-glow
+- **Last local commit:** `0727c55` (NOT pushed) — docs follow-up. Основная работа — `e95ce8c` (session 7: Services 3D tilt + compact reveal + border-glow)
 - **Live на GitHub Pages соответствует:** `368c809` (5.1 + roadmap freeze)
 
 ### Что закрыто (НЕ ТРОГАТЬ без явной просьбы клиента)
@@ -27,123 +33,129 @@ T-Tech redesign — session 8 (Кейсы). Открой D:\tattech-website\next
 - ✅ 6 — Все анимации (pulse, scroll progress, mouse-glow, Hero dots spotlight, Stats redesign, counter timing)
 - ✅ 7 — Services (3D tilt mouse-tracked / compact reveal price+TG button с стабильной высотой / border-glow conic-gradient / hybrid pricing «от X ₽»)
 
-### ⚠️ ВАЖНО: 3D tilt уехал в Services после mid-session pivot в session 7
+### Владелец T-Tech
 
-Изначальный план session 8 включал 3D tilt на Cases cards (decision #5). После клиентского фидбека в session 7 («сделайте как в barbershop, чтобы 3D были») — 3D tilt был перенесён на Services. **Cases теперь должен решить:**
+**Ленар Гильмутдинов** — основатель/владелец. Используется в session 10b (About-блок). Не упоминать в session 8 (Cases — это про клиентов T-Tech, не про Ленара). См. `project_tattech_owner.md`.
+
+### ⚠️ ВАЖНО: 3D tilt уехал в Services после mid-session pivot
+
+Изначальный план session 8 включал 3D tilt на Cases cards (decision #5 ROADMAP). После клиентского фидбека в session 7 — 3D tilt был перенесён на Services. **Cases теперь должен решить:**
 
 **Вариант A (consistency)** — переиспользовать 3D tilt и на Cases (одинаковый паттерн на всех cards). Минус: повторяется, может надоесть.
 
-**Вариант B (differentiation, рекомендуется)** — Cases дифференцируется через **image hover-zoom + spotlight gradient + другой формат** (B2B метрики). Без 3D tilt — Services и Cases визуально различаются, каждая секция имеет свой signature эффект.
+**Вариант B (differentiation, рекомендуется)** — Cases дифференцируется через **image hover-zoom + spotlight gradient + B2B-формат**. Без 3D tilt — Services и Cases визуально различаются, каждая секция имеет свой signature эффект.
 
-Спросить у user'а в начале session 8 какой вариант предпочтителен.
-
-### Финальные решения по дизайну (одобрены клиентом 2026-05-07)
-
-См. таблицу в начале REDESIGN-ROADMAP.md. Для session 8 актуальны решения:
-- **#5** — 3D tilt (УЖЕ применён на Services в session 7) — re-use или skip на Cases?
-- **#6** — Spotlight gradient (mouse-tracked внутренний glow на Cases cards) — обязательно
-- **#7** — Image hover-zoom scale(1.1) на Cases cards (как barbershop demo) — обязательно если идём с фото-обложками
+Спросить у user'а в начале session 8.
 
 ---
 
-## Session 8 — детальные шаги
+## Session 8 — детальные шаги (demo-first)
 
-### 0. Input от клиента (BLOCKER, спросить ДО кода)
+### 0. Прочитать Cases.astro и контекст (~5 мин)
 
-**Нужно от клиента:**
-- 2-3 реальных кейса T-Tech, для каждого:
-  - **Отрасль** (например: «Пищевое производство», «Розничная торговля», «Строительство»)
-  - **Клиент** (название или общее описание, если NDA — «Региональный дистрибьютор Х»)
-  - **Боль** (1-2 предложения — что было до)
-  - **Решение** (1-2 предложения — что внедрили)
-  - **Метрика результата** (часы / дни / % / ₽; конкретная цифра)
-  - **Срок реализации** (1-3 месяца обычно)
+- Открыть `src/components/Cases.astro` — посмотреть текущую структуру (8 кейсов: ЖКХ, Пищевое произ-во, Строительство, Шины, Инжен.оборудование, Одежда, Аптека, Памятники).
+- Открыть `D:/DeepReserch/research/2026-05-06_tattech-redesign/assets/site-images/case-photos/` — 13 фото с именами `case-01-zhkh-...` до `case-08-monuments-...` (AI-stock из Tilda).
+- Решить: оставляем 8 кейсов или сокращаем до 6 (проще для скана) / 4 (focused).
 
-**Если клиент не предоставил:** приостанови работу, попроси меня ping'нуть его. Альтернатива (опасная) — generated шаблоны на основе типовых сценариев 1С-внедрения, помеченные как placeholder, для ОДОБРЕНИЯ клиентом до commit.
-
-### 1. Research (~1 час, обязательно ДО кода)
+### 1. Research (~1 час, параллельно с шагом 0)
 
 Темы:
-- **B2B case-study паттерны** — Stripe customers, Linear customers, Vercel showcase, 1С-Рарус кейсы. Что показывают? (отрасль / метрика / лого vs аватар / срок / quote от клиента?)
-- **3D tilt** — vanilla-tilt.js (~3KB gzip) vs CSS-only (perspective + rotateX/Y через CSS variables). Performance comparison (paint, GPU compositing, mobile CPU). Что используют Stripe/Linear?
-- **Spotlight gradient через CSS pointer-tracking** — single-component (`<MouseGlow />` уже сделан в session 6) или новый per-card listener? Реюз `mouse-glow.ts` паттерна. Как в barbershop demo сделано.
-- **Image hover-zoom** — простой `transform: scale(1.1)` + `overflow: hidden` на parent или image filter эффекты? Transition timing (500ms = barbershop reference).
-- **Иконки отрасли** — Phosphor / Tabler icons. Сравнить со stock-фото подходом — что сильнее в B2B (subjective + a11y/perf).
+- **B2B case-study форматы:** Stripe customers, Linear customers, Vercel showcase, 1С-Рарус кейсы — что показывают (отрасль / метрика / лого vs аватар / срок / quote клиента?)
+- **Spotlight gradient через CSS pointer-tracking** — реюз `mouse-glow.ts` подхода (sections-level) или новый per-card listener? Реализация через `radial-gradient(... at var(--mx) var(--my) ...)` + JS обновляет CSS variables. Performance per-card vs per-section.
+- **Image hover-zoom scale(1.1)** transition 500ms — техника + overflow:hidden обвязка. Барбершоп-демо как референс.
+- **B2B placeholder copywriting** — как правдоподобно выдумать метрики, не выглядя как marketing-bullshit. Числа должны быть конкретные (не «увеличили продажи в Y раз»).
 
 Сохранить в `research/2026-MM-DD_b2b-cases-format/report.md` (frontmatter, ≥5 источников).
 
-### 2. Cases.astro — полный rewrite
+### 2. Cases.astro rewrite — B2B формат
 
-**Файл:** `src/components/Cases.astro` (текущая структура — посмотреть до старта)
+**Файл:** `src/components/Cases.astro`
 
-**Цель:** B2B-формат карточки кейса. Структура:
-- Иконка отрасли (Phosphor/Tabler) ИЛИ stock-фото с image-zoom (зависит от решения — спроси клиента «иконки или фото?»)
-- Заголовок: отрасль + клиент
-- Боль (1-2 строки)
-- Решение (1-2 строки)
-- **Метрика результата** (большая, с gradient-text, по типу Stats counter)
-- Срок реализации (small text)
-- Optional: short quote от клиента (1 строка, если предоставлен)
+**Новая структура карточки кейса:**
 
-### 3. Эффекты на hover (Cases-only)
+```
+[image / icon at top]                  ← либо фото-обложка с hover-zoom, либо industry-иконка (Phosphor)
+[ОТРАСЛЬ — pill / eyebrow]              ← «Пищевое производство»
+[h3: «Региональный дистрибьютор Х»]     ← клиент anonymized или реальный
+[боль — 1-2 строки]                     ← «Учёт партий вёлся в Excel...»
+[решение — 1-2 строки]                  ← «Внедрили 1С:Управление торговлей...»
+─────── divider ───────
+[МЕТРИКА — большая, gradient-text]      ← «-65% времени на отчётность» / «×3 точность приёмки»
+[срок реализации — small text]          ← «Внедрено за 2 месяца»
+[опц: quote клиента — 1 строка]         ← «Раньше тратили день, теперь час» — Главбух
+```
 
-1. **Image hover-zoom scale(1.1)** transition 500ms ease-out (если идём через фото). Если иконки — пропустить.
-2. **3D tilt** — ⚠️ перенесён в Services в session 7. На Cases решить с user'ом: re-use паттерн (consistency) или skip (differentiation). Если re-use — взять готовый код из Services.astro: pointermove handler обновляющий `--rx`/`--ry` + CSS `transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))`. Параметризировать MAX_TILT (10° на Services — может быть 6° на Cases для меньшей агрессии). На mobile/touch отключить (gated `matchMedia('(hover: hover)')`). prefers-reduced-motion → transform: none.
-3. **Spotlight gradient** mouse-tracked внутри карточки (radial 400px, opacity ~0.15, color brand). **ОБЯЗАТЕЛЬНО** — это signature эффект для Cases. Реюз `mouse-glow.ts` подхода или новый per-card listener. Опционально через CSS-only `radial-gradient(... at var(--mx) var(--my) ...)` + JS обновляет CSS variables. Border-glow conic уже на Services — на Cases НЕ дублировать (используем spotlight как differentiator).
+**8 кейсов из tat-tech.ru** (placeholder улучшения, можно переписать):
 
-### 4. Запреты session 8
+| # | Отрасль | Текущее | Placeholder улучшения (придумываем правдоподобно) |
+|---|---|---|---|
+| 1 | ЖКХ | Управляющая компания | Боль: «учёт начислений в Excel»; Решение: «1С:УК»; Метрика: «−70% ошибок в платёжках»; Срок: «3 мес» |
+| 2 | Пищевое произ-во | Меркурий + Честный знак | Боль: «маркировка вручную»; Решение: «УТ + Меркурий + ЧЗ интеграция»; Метрика: «−85% времени на маркировку»; Срок: «2 мес» |
+| 3 | Строительство | Учёт материалов | Боль: «расход не отслеживался»; Решение: «1С:Стройка»; Метрика: «−40% перерасход»; Срок: «4 мес» |
+| 4 | Шины (розница) | Чек-лента | Боль: «...»; Решение: «1С:Розница»; Метрика: «...»; Срок: «1 мес» |
+| 5 | Инженерное оборудование | B2B продажи | Боль: «...»; Решение: «УТ»; Метрика: «...»; Срок: «3 мес» |
+| 6 | Одежда (розница) | Маркировка | Боль: «...»; Решение: «Розница + Честный знак»; Метрика: «...»; Срок: «2 мес» |
+| 7 | Аптека | Лицензированный учёт | Боль: «...»; Решение: «1С:Аптека»; Метрика: «...»; Срок: «1 мес» |
+| 8 | Памятники | B2C услуги | Боль: «...»; Решение: «...»; Метрика: «...»; Срок: «1 мес» |
+
+Заполнить через research индустриальной типовой боли + правдоподобных метрик. **Пометить в commit message:** «PLACEHOLDER METRICS — клиент подтверждает в session 11».
+
+### 3. Эффекты на Cases (signature для дифференциации с Services)
+
+1. **Image hover-zoom** scale(1.1) transition 500ms ease-out — на фото-обложке. `overflow: hidden` на parent. Если выбираем industry-иконки вместо фото — пропустить.
+2. **Spotlight gradient** mouse-tracked — radial-gradient(400px circle at var(--mx) var(--my), rgba(brand,0.15), transparent 70%) — следует за курсором ВНУТРИ карточки. JS-handler обновляет CSS variables (можно расширить mouse-glow.ts или отдельный per-card listener). Это signature эффект Cases (border-glow — signature Services).
+3. **3D tilt** — DECISION POINT с user'ом в начале session. Skip (рекомендуется) или re-use из Services.
+
+### 4. Картинки
+
+**Вариант A (по умолчанию):** копировать 8 существующих фото из `research/2026-05-06_tattech-redesign/assets/site-images/case-photos/` в `public/images/cases/` (если ещё не там), оптимизировать через sharp (640/960/1200w WebP srcset как в session 3 паттерне). Использовать как фото-обложки кейсов.
+
+**Вариант B:** Phosphor / Tabler industry icons вместо фото. Чище B2B-вайб, нет stock-photo проблем, но менее «живо».
+
+**Вариант C (требует API key):** AI-генерация через Gemini Nano Banana 2 / Imagen 4 в едином B2B-стиле. Спросить user'а есть ли ключ (free $200 кредит на новых аккаунтах AI Studio). Если есть — sprint этого как **session 8 stretch goal** или defer на session 10a.
+
+### 5. Запреты session 8
 
 - ❌ НЕ трогать Hero / Header / Stats / Services / ScrollProgress / mouse-glow (5.1 + 6 + 7 закрыты)
 - ❌ НЕ начинать Reviews (session 9)
 - ❌ НЕ менять palette tokens / spacing scale
-- ❌ НЕ ломать существующий .reveal-stagger на Cases cards
-- ❌ НЕ устанавливать vanilla-tilt без явного approval (CSS-only предпочтительнее)
+- ❌ НЕ ждать клиента — placeholder + commit, клиент правит позже (см. `feedback_tattech_demo_first.md`)
+- ❌ НЕ устанавливать vanilla-tilt / Framer без явного approval (CSS-only предпочтительнее)
 
 ---
 
 ## Чек-лист в конце session 8
 
 1. Research отчёт сохранён в `research/2026-MM-DD_b2b-cases-format/report.md` + INDEX обновлён
-2. Реальные кейсы (или approved generated placeholders) встроены в Cases.astro
-3. `npm run build` зелёный
-4. `npm run preview` + Chrome desktop + mobile (DevTools 360w) — image-zoom + 3D tilt + spotlight работают
-5. Mobile: 3D tilt отключён, hover-эффекты отсутствуют (touch ux чистый)
-6. Lighthouse 3 прогона desktop + 3 mobile — без регрессии vs session 7 baseline (desktop 100/100/100/100, mobile 95-98/100/100/100)
-7. Visual diff: Cases стали B2B-форматом с метриками, исчезла стоковая Tilda-эстетика
-8. Спросить «всё ОК?» с показом локального превью (open Chrome at #cases anchor)
-9. После OK: **ЛОКАЛЬНЫЙ** `git commit` с детальным message (БЕЗ `git push`, БЕЗ `gh run watch`)
-10. Обновить `REDESIGN-ROADMAP.md`: `[x] 8` + `[ ] 9 ← NEXT`
-11. Перезаписать `next-session-START.md` промтом для session 9 (Reviews — input от клиента ОБЯЗАТЕЛЕН: 2-3 реальных отзыва)
-12. Обновить memory `project_tattech_client.md` (статус session 8) + `project_tattech_redesign_roadmap.md`
-13. Вставить в финальный ответ handoff-промт для копирования
+2. 8 (или 6/4) кейсов в B2B-формате с placeholder метриками
+3. Картинки (фото / иконки / generated) на месте, оптимизированы
+4. `npm run build` зелёный
+5. `npm run preview` + Chrome desktop + mobile (DevTools 360w) — image-zoom + spotlight работают на desktop, отключены на mobile
+6. Lighthouse 3 прогона desktop + 3 mobile — без регрессии vs session 7 baseline (desktop 100/100/100/100, mobile 97-98/100/100/100)
+7. Открыть Chrome на [http://localhost:4321/tattech-website/#cases](http://localhost:4321/tattech-website/#cases) для визуальной проверки
+8. После OK: **ЛОКАЛЬНЫЙ** `git commit` (БЕЗ `git push`)
+9. Обновить `REDESIGN-ROADMAP.md`: `[x] 8` + `[ ] 9 ← NEXT`
+10. Перезаписать `next-session-START.md` промтом для session 9 (Reviews — также demo-first, 3 placeholder отзыва)
+11. Обновить memory `project_tattech_client.md` (статус session 8)
+12. Вставить в финальный ответ handoff-промт для копирования
 
 ---
 
 ## Что унаследовали из session 7 (полезный контекст)
 
-- **TG pre-fill helper** `const tgUrl = (msg: string) => \`https://t.me/CyclesOfID?text=\${encodeURIComponent(msg)}\`;` уже используется в Programs.astro И Services.astro — стандарт для CTA. Cases должен использовать тот же паттерн (сообщения вида «Здравствуйте! Хочу обсудить кейс [отрасль]»).
-- **3D tilt JS pattern** (Services.astro): pointermove handler читает positon относительно карточки, обновляет `--rx` / `--ry` CSS переменные. CSS трансформирует через `transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))` + `transform-style: preserve-3d`. На pointerleave property removed → eased возврат через `transition: transform 320ms var(--ease-spring)`. Gated `matchMedia('(hover: hover) and (pointer: fine)')` — JS вообще не вешается на touch. Готовый код для копи-паста.
-- **Border-glow `@property --bg-angle` + conic-gradient** реализована в Services. На Cases НЕ дублировать (signature эффект Services) — использовать spotlight gradient как differentiator.
-- **`@media (hover: hover) and (pointer: fine)` wrapper** для всех hover-only фич — стандарт. На mobile heavy effects выключены полностью.
-- **`prefers-reduced-motion`** — глобальный обработчик в global.css уже занулит animation/transition durations, но локальные `transform`-based эффекты нужно явно отключать (см. Services.astro pattern: `transform: none !important`).
-- **Compact reveal pattern** (Services.astro): reveal-блок занимает место всегда (фиксированная высота карточки), на default `opacity: 0` + `translateY(6px)`, на hover `opacity: 1` + `translateY(0)`. Без max-height транзиций — нет скачков. На mobile `(hover: none), (pointer: coarse)` — всегда visible. Если на Cases карточке нужен похожий reveal (например, дополнительная информация на hover) — переиспользовать.
-- **mouse-glow.ts** уже трекает курсор на `.has-glow` секциях. Для Cases card-уровневый spotlight: либо доработать mouse-glow.ts (добавить таргет `.spotlight-card`), либо отдельный листенер per-card. Альтернатива — расширить тот же 3D-tilt handler из Services чтобы он ещё обновлял `--mx`/`--my` для radial-gradient в карточке.
+- **TG pre-fill helper** `const tgUrl = (msg: string) => \`https://t.me/CyclesOfID?text=\${encodeURIComponent(msg)}\`;` уже используется в Programs.astro И Services.astro — стандарт для CTA. Cases должен использовать тот же паттерн.
+- **3D tilt JS pattern** (Services.astro): pointermove handler читает positon относительно карточки, обновляет `--rx` / `--ry` CSS переменные. CSS трансформирует через `transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))`. Готовый код для копи-паста если решим re-use.
+- **Border-glow `@property --bg-angle` + conic-gradient** реализована в Services. На Cases НЕ дублировать — использовать spotlight gradient как differentiator.
+- **`@media (hover: hover) and (pointer: fine)` wrapper** для всех hover-only фич — стандарт.
+- **`prefers-reduced-motion`** — глобальный обработчик в global.css + локальные `transform: none !important` overrides (см. Services.astro pattern).
+- **Compact reveal pattern** (Services.astro): reveal-блок занимает место всегда (фиксированная высота карточки), `opacity` + `translateY` transitions, без max-height скачков. Применимо если на Cases карточке нужен похожий reveal элемент.
+- **mouse-glow.ts** уже трекает курсор на `.has-glow` секциях. Для Cases card-уровневый spotlight: либо доработать (добавить таргет `.spotlight-card`), либо отдельный листенер per-card. Альтернатива — расширить тот же 3D-tilt handler (если выберем вариант A) чтобы он ещё обновлял `--mx`/`--my` для radial-gradient в карточке.
 
 ---
 
-## Если клиент НЕ предоставил кейсы
+## Открытые вопросы для user'а в начале session 8
 
-**Вариант A (предпочтительный):** приостановить session 8, ping клиенту через user'а, дождаться. Не делать placeholder без approval — может пойти на лендинг.
-
-**Вариант B (если клиент далеко и нужно двигаться):** генерация placeholder-кейсов на основе типовых сценариев (например, «Пищевое производство — внедрение УТ + ускорение отчётности 5×»), helmет «PLACEHOLDER — требует подтверждения T-Tech» в commit message + handoff для замены до push session 11. Не делать это без user'а explicit ОК.
-
----
-
-## Открытые вопросы для клиента (спросить через user'а)
-
-1. **Кейсы:** какие 2-3 реальных проекта показать на лендинге? (отрасль / клиент / боль / решение / метрика / срок)
-2. **Иконки или фото?** Phosphor industry icons (clean B2B, экономит на стоке) или фото-обложки кейсов с image-zoom (живее, но нужны качественные фото клиентов)?
-3. **NDA:** можно показывать клиента поименно или anonymized («Региональный дистрибьютор Х»)?
-4. **Quote от клиента:** есть короткие отзывы клиентов, которые можно встроить в карточку кейса? (1 строка, для усиления доверия)
-
-Если что-то непонятно после прочтения — спросить ДО старта.
+1. **3D tilt на Cases:** re-use из Services (consistency) или skip (differentiation)? Рекомендую skip.
+2. **Картинки:** существующие scraped фото / Phosphor industry-иконки / AI-generated через Gemini? Если AI — есть ли API key Google AI Studio?
+3. **8 кейсов или сократить?** 8 — много для скана, 4-6 — фокусированнее. Какие отрасли важнее (ЖКХ / пищевка / строительство / розница / etc.)?
+4. **Quote от клиента (1 строка) на карточке** — да/нет? Усиливает доверие, но это уже placeholder text не про Ленара (выдуманные слова реального клиента T-Tech).

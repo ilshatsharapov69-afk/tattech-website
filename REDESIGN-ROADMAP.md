@@ -8,6 +8,8 @@
 
 **Кэп контекста на сессию:** ≤200K tokens (≤20% от 1M).
 
+**Demo-first (с 2026-05-07, после session 7):** sessions 8-11 НЕ блокируются на ожидании клиентского input'а. Используем placeholder/generated контент → клиент видит готовое демо → точечные правки → push. Применимо к кейсам (8), отзывам (9), About (10b). Session 10a (AI photos) — спросить про API key, иначе fallback. См. `feedback_tattech_demo_first.md`.
+
 ---
 
 ## Финальные решения по дизайну (2026-05-07)
@@ -258,58 +260,56 @@ Defer на возможный future-pass (если клиент попроси�
 
 ---
 
-## Session 8 — Кейсы: B2B-формат + image zoom + 3D tilt + spotlight gradient
+## Session 8 — Кейсы: B2B-формат + image zoom + spotlight gradient (demo-first)
 
-**Status:** pending • **Research:** ~1 час • **Input от клиента ОБЯЗАТЕЛЕН** • **~200 LOC**
+**Status:** pending • **Research:** ~1 час • **Demo-first** (placeholder content, клиент правит позже) • **~200 LOC**
 
 ### Research
 
 - B2B case-study patterns (Stripe customers, Linear customers, 1С-Рарус кейсы)
-- Vanilla-tilt vs CSS-only 3D tilt (perf comparison)
-- Spotlight gradient implementation (CSS pointer-tracking via JS, single component)
+- Spotlight gradient implementation (CSS pointer-tracking via JS, реюз `mouse-glow.ts` или per-card)
+- Image hover-zoom scale(1.1) transition 500ms (барбершоп reference)
+- B2B placeholder copywriting — правдоподобные метрики без marketing-bullshit
 
-### Input от клиента
+### Input (demo-first)
 
-- 2-3 реальных кейса:
-  - Отрасль (например: Пищевое производство)
-  - Клиент или общее описание
-  - Боль (1-2 предложения)
-  - Решение (1-2 предложения)
-  - **Метрика результата** (часы / дни / % / ₽)
-  - Срок реализации
-- Если реальных нет → согласовать generated шаблоны
+- НЕ ждём реальные кейсы от клиента — используем существующие 8 из текущего Cases.astro (ЖКХ, Пищевое произ-во, Строительство, Шины, Инжен.оборудование, Одежда, Аптека, Памятники) как референс
+- Улучшаем формат до B2B (отрасль/боль/решение/метрика/срок) с placeholder метриками
+- Картинки: existing scraped photos в `D:/DeepReserch/research/2026-05-06_tattech-redesign/assets/site-images/case-photos/` (13 файлов) ИЛИ Phosphor industry-иконки ИЛИ AI-generated если есть Gemini API key
+- Клиент даст реальные правки после demo
 
 ### Цели
 
-1. B2B-формат карточки (отрасль/боль/метрика/срок)
-2. **Image hover-zoom scale(1.1)** transition 500ms (Q7=A)
-3. **3D tilt** на mousemove внутри карточки (Q5=A) — perspective(1000px) + rotateX/Y до ±8deg, ease-out на mouseleave
-4. **Spotlight gradient** mouse-tracked внутри карточки (Q6=A) — радужный/синий glow следует за курсором, opacity ~0.15
-5. Иконка отрасли вместо stock-фото (если client согласен на этот подход) — Phosphor/Tabler icons
+1. B2B-формат карточки (отрасль/боль/решение/метрика/срок + опц. quote)
+2. **Image hover-zoom scale(1.1)** transition 500ms (Q7=A) — если идём с фото-обложками
+3. **Spotlight gradient** mouse-tracked внутри карточки (Q6=A) — radial 400px glow следует за курсором, opacity ~0.15
+4. **3D tilt** — DECISION: skip (рекомендуется, для дифференциации с Services где уже 3D tilt) или re-use из Services.astro для consistency
+5. Иконки отрасли (Phosphor/Tabler) как опция вместо фото — clean B2B вайб
 
 ### Deliverables
 
 - 1 commit, ≤ 4 файла, ≤ 200 LOC delta
 - `research/2026-MM-DD_b2b-cases-format/report.md`
+- Оптимизированные картинки в `public/images/cases/` (sharp, WebP srcset 640/960/1200w)
 
 ---
 
-## Session 9 — Отзывы: real B2B
+## Session 9 — Отзывы: B2B (demo-first)
 
-**Status:** pending • **Research:** ~30 мин • **Input от клиента ОБЯЗАТЕЛЕН** • **~80 LOC**
+**Status:** pending • **Research:** ~30 мин • **Demo-first** (placeholder отзывы, клиент правит позже) • **~80 LOC**
 
 ### Research
 
 - Linear / Vercel / Stripe testimonials — формат: должность + компания + 1 строка боль + 1 строка результат
 - Avatar handling без stock-photos: инициалы в круге / abstract pattern / лого компании
+- B2B placeholder testimonials — правдоподобный tone, региональный контекст (Казань / 1С / отрасли клиентов T-Tech)
 
-### Input от клиента
+### Input (demo-first)
 
-- 2-3 реальных отзыва:
-  - Должность (Главбух / Финдиректор / Собственник)
-  - Компания (или анонимно)
-  - Боль которую решил T-Tech (1 строка)
-  - Результат с метрикой (1 строка)
+- НЕ ждём реальные отзывы — пишем 2-3 placeholder'а в B2B-формате (должность + отрасль + боль + результат с метрикой)
+- Связать с кейсами session 8 (один отзыв ↔ один кейс) для целостности
+- Аватары: инициалы в круге с brand-color (избегаем stock-фото)
+- Клиент заменит на реальные перед push session 11
 
 ### Deliverables
 
@@ -350,26 +350,27 @@ Defer на возможный future-pass (если клиент попроси�
 
 ---
 
-## Session 10b — About-блок с фото владельца
+## Session 10b — About-блок с фото владельца (demo-first)
 
-**Status:** pending • **Research:** ~30 мин • **Input от клиента ОБЯЗАТЕЛЕН** • **~120 LOC**
+**Status:** pending • **Research:** ~30 мин • **Demo-first** (placeholder фото + bio, клиент даст реальное позже) • **~120 LOC**
 
 ### Research
 
 - B2B about-section patterns: личное лицо vs «команда» vs «миссия». Trust-driving элементы
+- Placeholder portrait варианты: silhouette / initials в круге / generated portrait / icon-illustration
 
-### Input от клиента
+### Input (demo-first)
 
-- Фото владельца компании (через Telegram)
-- Имя + должность владельца
-- 1-2 предложения «почему мы» от первого лица
-- Опционально: 1-2 ключевых сотрудника
+- Владелец = **Ленар Гильмутдинов** (см. memory `project_tattech_owner.md`)
+- Фото — placeholder (silhouette / initials / generated). Клиент даст реальное до push session 11.
+- Bio — 1-2 предложения placeholder от первого лица в B2B-tone. Клиент редактирует.
+- Должность — placeholder «Основатель T-Tech» или «CEO». Клиент уточнит.
 
 ### Цели
 
 - Новый компонент `src/components/About.astro`
 - Размещение: между Reviews и Programs (или TBD)
-- Использует фото владельца + сгенерированные office/team фото из 10a
+- Использует placeholder фото + сгенерированные office/team фото из 10a (или fallback scraped)
 
 ### Deliverables
 
