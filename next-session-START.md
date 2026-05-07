@@ -1,133 +1,133 @@
-# T-Tech Phase C Session C5 — SEO + polish (final session)
+# T-Tech — Phase C закрыта, далее Phase A / B / D (client-driven)
 
-> Этот файл всегда содержит промт для **следующей** запланированной сессии. Сейчас = Phase C Session C5 — финальная.
+> Этот файл всегда содержит промт для **следующей** запланированной сессии. Phase C полностью DONE 2026-05-09 — 13 inner pages + SEO baseline live.
 >
-> Полный план фазы: `D:\tattech-website\PHASE-C-ROADMAP.md`
->
-> Завершено: C1 (foundation + /contacts + /privacy + 404 + nav) + C2 (services collection + 3 detail pages) + C3 (5 service-detail pages: ITS family + оборудование + Битрикс24 + ItsTable.astro) + C4 (3 aggregator pages /uslugi /programmy-1s /nashi-kejsi + ServiceCrossLinks). Live: https://ilshatsharapov69-afk.github.io/tattech-website/. Last commit: `590dbb6`.
+> Следующая сессия зависит от клиента: revision-loop по контенту (A), CMS (B) или перенос на свой домен (D).
 
-## Что сделать в C5
+## Phase C — DONE summary
 
-1. **Sitemap через `@astrojs/sitemap`:**
-   - `npm install @astrojs/sitemap` (единственный add-on, разрешено)
-   - `astro.config.mjs` — добавить integration с `site` URL уже настроенным
-   - Build генерирует `dist/sitemap-index.xml` + `dist/sitemap-0.xml`
-   - Verify: после build все 14 страниц в sitemap
+5 сессий, ~12h работы Claude. Live: https://ilshatsharapov69-afk.github.io/tattech-website/
 
-2. **robots.txt** — статический в `public/robots.txt`:
-   ```
-   User-agent: *
-   Allow: /
-   Sitemap: https://ilshatsharapov69-afk.github.io/tattech-website/sitemap-index.xml
-   ```
+| Session | Что задеплоено | Commit |
+|---|---|---|
+| C1 | /contacts + /privacy + 404 + InnerLayout + Header nav | (см. git log) |
+| C2 | services Collection + [service].astro + 3 service-detail pages + 3 subcomponents | `5c3f34b` |
+| C3 | 5 service-detail pages (ITS family + оборудование + Битрикс24) + ItsTable.astro | `2c103a2` |
+| C4 | 3 aggregator pages (/uslugi /programmy-1s /nashi-kejsi) + ServiceCrossLinks | `590dbb6` |
+| C5 | sitemap.xml + robots.txt + Schema.org JSON-LD (Org/LocalBusiness/Service/FAQPage) + meta audit + footer fix | `8dcd57e` |
 
-3. **Schema.org JSON-LD:**
+**Lighthouse C5 (3 pages × 3+3 = 18 прогонов локально):**
+- Desktop 9/9: 100/100/100/100, LCP 0.4-0.7s
+- Mobile 9/9: home 93-94, /uslugi 99, /1s-razrabotka 94-95 perf; все a11y/bp/seo 100; LCP 2.0-2.7s
 
-   ⚠ **Важно:** в `src/layouts/Base.astro` (lines 60-79) УЖЕ ЕСТЬ глобальный `LocalBusiness` JSON-LD. Это неправильно — `LocalBusiness` должен быть только на `/contacts`. **План:** заменить глобальный на `Organization`, добавить `LocalBusiness` only on /contacts.astro inline.
+**Live URLs:**
+- https://ilshatsharapov69-afk.github.io/tattech-website/sitemap-index.xml (200 ✓)
+- https://ilshatsharapov69-afk.github.io/tattech-website/robots.txt (200 ✓)
 
-   - **Organization** (заменить текущий LocalBusiness в Base.astro): name, url, logo, address, telephone, contactPoint (multiple: phone/email/Telegram/WhatsApp), sameAs.
-   - **Service** (на каждой service-detail page): name, description, provider, areaServed, offers (price из first pricing tier or itsHighlight pricing). Сделать через [service].astro inline JSON-LD.
-   - **FAQPage** (главная + 8 service pages): mainEntity[] из faq array. На главной — добавить в FAQ.astro inline. На service-pages — в [service].astro.
-   - **LocalBusiness** (только на /contacts): inline JSON-LD на странице с geo coords (lat 55.821 / lng 49.150 для Дубравной 43а), openingHoursSpecification, telephone, всё что было в Base.
-   - **BreadcrumbList** уже есть из C1 (Breadcrumb.astro inline JSON-LD).
+## ⏳ ПЕРЕД следующей сессией — единый Telegram-message Ленару
 
-4. **Per-page meta polish:**
-   - Audit: все 14 страниц имеют unique `<title>` и `metaDescription`. Проверить что нет дублей.
-   - `og:image` — main OG (из session 11) применяется ко всем. Per-service custom OG = nice-to-have, defer (или скрипт `build-og-page.mjs`).
+См. `memory project_tattech_client_confirmations.md`. Собрать в один DM:
 
-5. **Internal linking audit:**
-   - Каждая страница достижима из главной за ≤2 клика — проверить ручным crawl.
-   - Footer должен ссылаться на /contacts, /privacy.
-   - Crosslinks в /uslugi → 6 service-detail; /1s-its → /1s-its-tehno + /1s-its-prof; service-detail → ServiceCrossLinks (3 related).
-   - Если orphans → добавить ссылки.
+**Цены (placeholder подтвердить):**
+- 1С:ИТС Техно/ПРОФ — все суммы со scraped tat-tech.ru (5 964 / 12 892 / 23 283 / 44 064 / 79 315 ПРОФ; 9 834 / 18 600 Техно). Это льготные на 2026 — свежие?
+- Почасовка 3 500 / 3 200 / 3 000 ₽/час
+- Абонентский «от 4 990 ₽/мес» на /obsluzhivanie-1s
+- Лендинг «от 50 000 ₽» + корпсайт «от 150 000 ₽» на /razrabotka-sajtov
+- Bitrix24 «от 25 000 ₽ под ключ»
+- Цены 1С-программ (Бухгалтерия от 4 000, УТ от 8 200, ДО 48 500, Розница от 4 400, ЗУП от 9 100)
 
-6. **Lighthouse 3×3 на 3 random pages:**
-   - 1 aggregator (например /uslugi)
-   - 1 service-detail (например /razrabotka-sajtov или /1s-its-prof)
-   - 1 главная (compare с session 11 baseline — no regression!)
-   - Все desktop ≥95, mobile ≥90.
+**Контент (placeholder → реальный):**
+- About Ленара (38 слов биографии)
+- About trust pills (Казань / Партнёр 1С / 8 лет)
+- Cases (8 штук) pain/deadline — метрики реальные, остальное мы написали
+- Reviews (3 testimonials) — полностью placeholder
+- Cases AI-photos (8 штук через Gemini Nano Banana 2)
 
-7. **Memory final update:** `project_tattech_client.md` — Phase C полностью DONE.
+**Технические:**
+- email `ttech.kzn.it@gmail.com` — рабочий?
+- Yandex Maps на /contacts vs 2GIS?
+- Privacy policy юристом проверить
+- Domain tat-tech.ru + перенос с GitHub Pages — Phase D
+- Decap CMS (+3 000 ₽) — Phase B
 
-## Финал
+**Логотипы клиентов** — 6-8 SVG/PNG для будущей полосы доверия.
 
-- `npm run build` green
-- 1 локальный commit: `phase-c-5: sitemap + robots + schema.org + final audit`
-- Push отдельным шагом → `gh run watch` → smoke test
-- Memory final update + `feedback_tattech_phase_c_done.md` (если уместно)
-- Update `next-session-START.md` → Phase D или Phase B (см. ниже)
+## Phase A — Revision-loop (если клиент пришлёт правки)
+
+Когда клиент вернёт фидбек — заменить placeholder в:
+- `src/components/About.astro` (bio, trust pills)
+- `src/data/cases.ts` (pain/deadline для 8 кейсов)
+- `src/components/Reviews.astro` (3 testimonials)
+- Ценники в `src/components/Services.astro`, `src/data/programs.ts`, и 8 service.md frontmatter (`pricing.tiers[].price`)
+
+**Workflow:** 1 commit `phase-a-1: client revision pass 1` (или несколько мелких если несколько раундов). Lighthouse spot-check после правок (text-only changes — perf не должна меняться).
+
+## Phase B — Decap CMS (+3 000 ₽ к договору)
+
+Изначальная клиентская задача — клиент сам редактирует контент через CMS UI без правок кода.
+
+**Шаги:**
+1. `npm install -D decap-cms-app` (или standalone admin/index.html подключение)
+2. `public/admin/index.html` — Decap entry point
+3. `public/admin/config.yml` — backend (git-gateway или GitHub direct), collections (services, cases, programs, reviews)
+4. Map Astro Content Collection schema → Decap `fields` (zod schema → yaml)
+5. Edit-сценарии: услуги (pricing tiers, FAQ), кейсы, программы, отзывы, About bio, цены
+6. Auth: GitHub OAuth (через Netlify Identity или git-gateway proxy) — клиент логинится своим gh аккаунтом
+7. Test: клиент открывает `/admin`, меняет цену, сохраняет → commit в main → 27s deploy → live
+
+**Workflow:** 2-3 сессии. ~3-4h работы Claude. Документация для клиента (русский how-to PDF / Loom).
+
+## Phase D — Перенос на свой сервер + tat-tech.ru + SSL
+
+1. Регистрация / уже зарегистрирован домен tat-tech.ru — DNS settings
+2. Сервер клиента (VPS / shared hosting?) — узнать конфигурацию
+3. Build → SCP / rsync → SSL (Let's Encrypt через certbot или Cloudflare proxy)
+4. `astro.config.mjs`: `base: '/'`, `site: 'https://tat-tech.ru'` — рекомпиляция
+5. Redirect от старого GitHub Pages URL → tat-tech.ru (либо просто отключить gh-pages workflow)
+6. Обновить sitemap.xml + Yandex Webmaster + Search Console под новый домен
+
+**Workflow:** 1-2 сессии. Зависит от инфраструктуры клиента.
+
+## Phase E — Optional perf polish (mobile SI 4.2-4.6s)
+
+Defer пока не попросит. Quality 80→75 на webp, smaller fallback изображения, lazy iframe (уже есть на /contacts).
+
+## Phase F — Node 20 → 24 в GitHub Actions (до 2026-06-02)
+
+`.github/workflows/deploy.yml` — обновить `setup-node@v4` `node-version: 20` → 24. Простой PR (1 файл). Проверить build green.
 
 ## Stack reminder
 
 - Astro 6, plain CSS, branch `main`
-- **Один разрешённый add-on:** `@astrojs/sitemap` (стандартная Astro integration, не community plugin)
-- Karpathy guidelines всегда (auto-loaded)
-
-## Что после Phase C
-
-После C5 фаза C закрыта (13 inner pages + SEO done). Дальше клиент-driven choice:
-- **Phase A** — revision-loop по placeholder контенту (если клиент пришлёт правки)
-- **Phase B** — Decap CMS (+3 000 ₽ к договору, изначальная задача)
-- **Phase D** — перенос с GitHub Pages на свой сервер клиента + домен tat-tech.ru + SSL
-- **Phase E** — optional perf polish (mobile SI 4.2-4.6s → quality 80→75)
-- **Phase F** — Node 20 → 24 в GitHub Actions (до 2026-06-02 deprecation)
-
-## C4 итоги (что уже задеплоено)
-
-**Done:** 3 aggregator pages (/uslugi с 6 services из Content Collection, /programmy-1s с 5 programs из extracted data file, /nashi-kejsi с 8 кейсами + JS-фильтр по 8 отраслям) + ServiceCrossLinks.astro подцеплен к [service].astro перед CTABanner. Schema добавлен `relatedSlugs`, все 8 .md заполнены related slugs.
-
-**Lighthouse C4 (/uslugi):** desktop 100/100/100/100 (3×), mobile 99/100/100/100 (3×). LCP desktop 0.4s, mobile 1.9-2.0s, CLS 0, TBT 0.
-
-**Header nav теперь работает:** все 4 top-level ссылки (/uslugi, /programmy-1s, /nashi-kejsi, /contacts) резолвятся в 200.
+- Один add-on: `@astrojs/sitemap` (добавлен в C5)
+- Karpathy guidelines (auto-loaded через ~/.claude/CLAUDE.md)
+- Workflow: 1 commit + push отдельным шагом + `gh run watch` smoke test
 
 ## Live preview
 
 ```bash
 cd D:\tattech-website
 npm run dev
-# открыть http://localhost:4321/tattech-website/uslugi
+# открыть http://localhost:4321/tattech-website/
 ```
-
-Если порт 4321 занят (zombie astro/vite): `netstat -ano | grep ':4321 ' | grep LISTENING | awk '{print $5}' | xargs -I {} taskkill //PID {} //F`
-
-## Параллельно (Phase A revision-loop по главной)
-
-Phase A (placeholder swap на главной) идёт отдельным commit'ом между сессиями C1-C5, не блокирует Phase C.
-
-## Что попросить клиента ПЕРЕД C5 push (или сразу после)
-
-См. `memory project_tattech_client_confirmations.md` — собрать в один Telegram message Ленару:
-- Цены (ИТС / почасовка / абонентский / Bitrix24 25k / 1С-программ)
-- Контент (About bio, Cases pain/deadline, 3 Reviews)
-- Тех вопросы (email, Yandex Maps vs 2GIS, домен)
-
-C5 deliverable не блокирует на этом — sitemap/schema/robots можно сделать с placeholder-данными, после правок клиента ничего не сломается.
-
----
 
 ## Что вставить в новый чат
 
 ```
-T-Tech Phase C Session C5 — SEO + polish (финальная сессия фазы C).
+T-Tech [Phase A/B/D — выбрать что начать первым].
+
+Phase C полностью DONE — 13 inner pages + sitemap + robots + Schema.org JSON-LD live на https://ilshatsharapov69-afk.github.io/tattech-website/.
 
 Прочитай:
-- D:\tattech-website\PHASE-C-ROADMAP.md (план 5 сессий — C5 последняя)
-- D:\tattech-website\next-session-START.md (детали C5)
-- memory project_tattech_client.md (см. блок 2026-05-09 C4 DONE для контекста ServiceCrossLinks и aggregator pages)
+- D:\tattech-website\next-session-START.md (этот файл — план A/B/D)
+- memory project_tattech_client.md (полная история всех 5 C-сессий)
 - memory project_tattech_client_confirmations.md (что попросить клиента)
 
-Задачи C5:
-1. @astrojs/sitemap integration (единственный разрешённый add-on)
-2. public/robots.txt
-3. Schema.org JSON-LD: Organization (везде), Service (8 service-detail), FAQPage (главная + 8 service), LocalBusiness (/contacts)
-4. Per-page meta audit (14 страниц — unique title + description)
-5. Internal linking audit (orphan pages?)
-6. Lighthouse 3×3 на 3 random pages (1 aggregator + 1 service-detail + главная — no regression vs session 11 baseline)
+Какую phase начать:
+- Phase A — revision-loop по placeholder контенту (если клиент прислал правки)
+- Phase B — Decap CMS (+3 000 ₽ к договору)
+- Phase D — перенос на tat-tech.ru + свой сервер + SSL
 
-Финал: build green → 1 commit "phase-c-5: sitemap + robots + schema.org + final audit" → push → memory final update.
-
-Stack: Astro 6 + plain CSS, branch main. Один add-on (@astrojs/sitemap). Karpathy guidelines.
-
-Live: https://ilshatsharapov69-afk.github.io/tattech-website/
 Repo: D:\tattech-website
+Last commit: 8dcd57e (phase-c-5 done)
 ```
