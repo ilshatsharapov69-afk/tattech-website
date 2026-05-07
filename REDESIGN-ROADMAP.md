@@ -34,8 +34,8 @@
 [x] 5.1 — Top-bar revamp + Header blue tonal + email btn + brand TG/WA + Hero contacts removed + Stats→Services spacing
 [x] 6   — Анимации: pulse CTA + scroll progress + mouse-tracking glow + Hero dots spotlight + Header glass + Stats redesign (commit d104c45, NOT pushed)
 [x] 7   — Услуги: упаковка hover-reveal/accordion + border-glow + benefit-bullets + цены + TG-CTA (NOT pushed)
-[ ] 8   — Кейсы: B2B-формат + image zoom + 3D tilt + spotlight gradient     ← NEXT
-[ ] 9   — Отзывы: real B2B
+[x] 8   — Кейсы: grid 4×2 + B2B-формат + image hover-zoom + per-card spotlight gradient + footer-strip метрика (NOT pushed)
+[ ] 9   — Отзывы: real B2B (demo-first)     ← NEXT
 [ ] 10a — AI photo generation (Gemini Nano Banana 2 / Imagen 4)
 [ ] 10b — About-блок с фото владельца
 [ ] 11  — Финальный copywriting pass (benefit headlines)
@@ -260,37 +260,41 @@ Defer на возможный future-pass (если клиент попроси�
 
 ---
 
-## Session 8 — Кейсы: B2B-формат + image zoom + spotlight gradient (demo-first)
+## Session 8 — Кейсы: grid 4×2 + B2B-формат + image hover-zoom + spotlight gradient (demo-first)
 
-**Status:** pending • **Research:** ~1 час • **Demo-first** (placeholder content, клиент правит позже) • **~200 LOC**
+**Status:** ✅ done 2026-05-07 • **NOT pushed** • **+~120 / −~95 LOC** (Cases.astro полный rewrite)
+
+### What shipped
+
+- ✅ **Layout:** Grid 4×2 (drop embla-carousel), responsive 4→2→1 col на ≤1024/≤640px
+- ✅ **B2B card структура:** photo (16:10 hover-zoom) + industry badge + h3 + pain (placeholder, past-tense) + solution (✓ + 1С-конфиг) + footer-strip (gradient-text метрика + deadline)
+- ✅ **Footer-strip** — узкая полоска внизу карточки (~52px), tinted bg `rgba(37,99,235,0.06)`, border-top, vertical stack `metric` (gradient-text 0.9375rem 700) + `deadline` (0.7rem muted). Premium B2B-pattern (Stripe/Vercel ref).
+- ✅ **Image hover-zoom** `scale(1.08)` 500ms `cubic-bezier(0.25, 0.46, 0.45, 0.94)` — на `:hover` + `:focus-within`. `will-change: transform` только в hover state. Gradient overlay `::after` снизу для читаемости badge.
+- ✅ **Per-card spotlight gradient** — `::before` pseudo с `radial-gradient(420px circle at var(--mx) var(--my), rgba(37,99,235,0.18), transparent 65%)`, opacity 0→1 на hover, mouse-tracked.
+- ✅ **JS:** delegated pointermove на `#cases-grid` + `e.target.closest('.spotlight-card')` filter + cached `getBoundingClientRect()` через `WeakMap`, invalidate на scroll + ResizeObserver. Listener attach gated `(hover: hover) and (pointer: fine)` + `prefers-reduced-motion: no-preference` — zero JS cost на mobile.
+- ✅ **3D tilt skipped** — для дифференциации с Services (decision Q1 ROADMAP). Services = border-glow + 3D tilt; Cases = spotlight gradient + image zoom.
+- ✅ **Метрики РЕАЛЬНЫЕ** с tat-tech.ru (240 зданий, 65k позиций, 1 млрд оборот, 8 лет с нами) — НЕ переписаны на синтетические «−65%».
+- ✅ **PLACEHOLDER**: pain + deadline (помечены в commit, клиент уточняет к session 11)
 
 ### Research
 
-- B2B case-study patterns (Stripe customers, Linear customers, 1С-Рарус кейсы)
-- Spotlight gradient implementation (CSS pointer-tracking via JS, реюз `mouse-glow.ts` или per-card)
-- Image hover-zoom scale(1.1) transition 500ms (барбершоп reference)
-- B2B placeholder copywriting — правдоподобные метрики без marketing-bullshit
+[research/2026-05-07_b2b-cases-format/report.md](../DeepReserch/research/2026-05-07_b2b-cases-format/report.md) — 18 источников. Категория A (стабильные web-стандарты — W3C, CSS-Tricks) + Категория B (2025-2026 implementation patterns — freefrontend Jan/Mar 2026, copyprogramming 2026, stan.vision 2026, saasui 2026) + Категория C (конкурентный референс — Stripe, Linear, Vercel, Корус, 1eska.ru, 1ab.ru).
 
-### Input (demo-first)
+### Файлы изменены
 
-- НЕ ждём реальные кейсы от клиента — используем существующие 8 из текущего Cases.astro (ЖКХ, Пищевое произ-во, Строительство, Шины, Инжен.оборудование, Одежда, Аптека, Памятники) как референс
-- Улучшаем формат до B2B (отрасль/боль/решение/метрика/срок) с placeholder метриками
-- Картинки: existing scraped photos в `D:/DeepReserch/research/2026-05-06_tattech-redesign/assets/site-images/case-photos/` (13 файлов) ИЛИ Phosphor industry-иконки ИЛИ AI-generated если есть Gemini API key
-- Клиент даст реальные правки после demo
+- `src/components/Cases.astro` — полный rewrite (drop embla, grid 4×2, B2B-формат, hover-zoom, spotlight)
+- `REDESIGN-ROADMAP.md` — статус session 8
+- `next-session-START.md` — handoff для session 9
+- `.lighthouse/lh-8-*` — session 8 результаты (gitignored)
+- `D:/DeepReserch/research/2026-05-07_b2b-cases-format/report.md` — research отчёт
+- `D:/DeepReserch/research/INDEX.md` — обновлён
 
-### Цели
+### Возможные доработки (defer на session 11 client-feedback)
 
-1. B2B-формат карточки (отрасль/боль/решение/метрика/срок + опц. quote)
-2. **Image hover-zoom scale(1.1)** transition 500ms (Q7=A) — если идём с фото-обложками
-3. **Spotlight gradient** mouse-tracked внутри карточки (Q6=A) — radial 400px glow следует за курсором, opacity ~0.15
-4. **3D tilt** — DECISION: skip (рекомендуется, для дифференциации с Services где уже 3D tilt) или re-use из Services.astro для consistency
-5. Иконки отрасли (Phosphor/Tabler) как опция вместо фото — clean B2B вайб
-
-### Deliverables
-
-- 1 commit, ≤ 4 файла, ≤ 200 LOC delta
-- `research/2026-MM-DD_b2b-cases-format/report.md`
-- Оптимизированные картинки в `public/images/cases/` (sharp, WebP srcset 640/960/1200w)
+- Конкретные pain-описания (T-Tech подтверждает в session 11) — сейчас placeholder
+- Точные сроки внедрения per-кейс — placeholder
+- Замена 8 фото на AI-generated через Gemini — defer на session 10a (там единый стиль для всего сайта)
+- Quote от клиента — сознательно skipped (репутационный риск); уйдут в Reviews session 9 с обезличенными должностями
 
 ---
 
