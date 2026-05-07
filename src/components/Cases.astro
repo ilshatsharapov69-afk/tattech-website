@@ -40,7 +40,7 @@ const gridId = `${sectionId}-grid`;
           .map((w) => `${base}/images/cases/${slug}-${w}.webp ${w}w`)
           .join(', ');
         return (
-          <article class="case-card spotlight-card">
+          <article class="case-card spotlight-card" data-tag={c.industry}>
             <div class="case-media">
               <img
                 src={`${base}/images/cases/${slug}-960.webp`}

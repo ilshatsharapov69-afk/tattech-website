@@ -5,6 +5,7 @@ import IncludedList from '../components/service/IncludedList.astro';
 import ServicePricing from '../components/service/ServicePricing.astro';
 import ItsTable from '../components/service/ItsTable.astro';
 import ServiceFAQOverlay from '../components/service/ServiceFAQ.astro';
+import ServiceCrossLinks from '../components/service/ServiceCrossLinks.astro';
 import Cases from '../components/Cases.astro';
 import Process from '../components/Process.astro';
 
@@ -63,4 +64,8 @@ const breadcrumb = [
     eyebrow={data.faqEyebrow}
     title={data.faqTitle}
   />
+
+  {data.relatedSlugs.length > 0 && (
+    <ServiceCrossLinks currentSlug={data.slug} slugs={data.relatedSlugs} />
+  )}
 </InnerLayout>

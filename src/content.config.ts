@@ -39,6 +39,7 @@ const services = defineCollection({
       })
       .optional(),
     itsHighlight: z.enum(['tehno', 'prof', 'none']).optional(),
+    relatedSlugs: z.array(z.string()).max(4).default([]),
     casesEyebrow: z.string().default('Опыт в отрасли'),
     casesTitle: z.string(),
     casesLead: z.string().optional(),

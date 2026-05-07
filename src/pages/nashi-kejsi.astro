@@ -1,0 +1,107 @@
+---
+import InnerLayout from '../layouts/InnerLayout.astro';
+import Cases from '../components/Cases.astro';
+import { cases } from '../data/cases.ts';
+
+const breadcrumb = [{ label: 'Наши кейсы' }];
+
+// Уникальные отрасли для фильтра. Сохраняем порядок появления в массиве.
+const industries: string[] = [];
+for (const c of cases) {
+  if (!industries.includes(c.industry)) industries.push(c.industry);
+}
+---
+
+<InnerLayout
+  title="Наши кейсы — внедрения 1С в Казани и по РФ | T-Tech"
+  description="8 кейсов автоматизации на 1С: ЖКХ, пищевое производство, строительство, шины, инжиниринг, одежда, аптеки, памятники. Метрики, сроки, использованные конфигурации."
+  heroTitle="Наши кейсы"
+  heroLead="9 лет, 420 проектов, 300+ клиентов. Здесь — 8 показательных внедрений: что было, что сделали, какой результат и за какой срок."
+  heroPills={['8 отраслей', '420 проектов с 2017 года', 'Казань и удалённо по РФ']}
+  breadcrumb={breadcrumb}
+>
+  <section class="section cases-filter-section">
+    <div class="container">
+      <div class="cases-filter reveal" role="group" aria-label="Фильтр кейсов по отрасли">
+        <button type="button" class="case-chip is-active" data-tag="">Все отрасли</button>
+        {industries.map((ind) => (
+          <button type="button" class="case-chip" data-tag={ind}>{ind}</button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Cases
+    eyebrow="Кейсы"
+    title="Что меняется после внедрения"
+    lead="9 лет, 420 проектов — у каждого конкретная задача, фиксированный срок и измеримый результат."
+    sectionId="cases-all"
+  />
+</InnerLayout>
+
+<style>
+  .cases-filter-section {
+    background: var(--color-bg);
+    padding-block: var(--space-12);
+  }
+
+  .cases-filter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    max-width: 980px;
+    margin-inline: auto;
+  }
+
+  .case-chip {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 9px 16px;
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease,
+      transform 180ms var(--ease-spring);
+  }
+  .case-chip:hover {
+    border-color: var(--color-brand-500);
+    color: var(--color-brand-500);
+    transform: translateY(-1px);
+  }
+  .case-chip.is-active {
+    background: var(--color-brand-500);
+    border-color: var(--color-brand-500);
+    color: #fff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .case-chip,
+    .case-chip:hover {
+      transform: none;
+      transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease;
+    }
+  }
+</style>
+
+<script>
+  // Filter cases via data-tag. Toggling chip sets visibility on each card.
+  const chips = document.querySelectorAll<HTMLButtonElement>('.case-chip');
+  const grid = document.getElementById('cases-all-grid');
+  if (chips.length && grid) {
+    const cards = grid.querySelectorAll<HTMLElement>('.case-card[data-tag]');
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        chips.forEach((c) => c.classList.remove('is-active'));
+        chip.classList.add('is-active');
+        const tag = chip.dataset.tag ?? '';
+        cards.forEach((card) => {
+          const match = !tag || card.dataset.tag === tag;
+          card.style.display = match ? '' : 'none';
+        });
+      });
+    });
+  }
+</script>

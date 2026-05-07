@@ -1,0 +1,215 @@
+---
+import InnerLayout from '../layouts/InnerLayout.astro';
+import Icon from '../components/Icon.astro';
+import { programs, tgUrlForProgram } from '../data/programs.ts';
+
+const breadcrumb = [{ label: 'Программы 1С' }];
+---
+
+<InnerLayout
+  title="Программы 1С — лицензии Бухгалтерия, УТ, ДО, Розница, ЗУП | T-Tech Казань"
+  description="Купить лицензии 1С: Бухгалтерия, Управление торговлей, Документооборот, Розница, ЗУП. Цены от производителя, настройка по проекту, обмен с 1С:ИТС."
+  heroTitle="Программы 1С под вашу задачу"
+  heroLead="Лицензии от 4 000 ₽. Настройку и обучение делаем по проекту, обмен с 1С:ИТС включён в каждую конфигурацию."
+  heroPills={['Официальный партнёр «1С»', 'Доставка лицензий за день', 'Настройка по проекту']}
+  breadcrumb={breadcrumb}
+>
+  <section class="section programs-grid-section">
+    <div class="container">
+      <ul class="programs-grid reveal-stagger">
+        {programs.map((p) => (
+          <li class="programs-card">
+            <div class="programs-emoji" aria-hidden="true">{p.emoji}</div>
+            <h2 class="h3 programs-title">{p.title}</h2>
+            <div class="programs-price">
+              <span class="price-prefix">{p.price.startsWith('от ') ? 'от' : ''}</span>
+              <span class="price-value text-gradient">{p.price.replace(/^от\s*/, '')}</span>
+            </div>
+            <p class="programs-price-note">{p.priceNote}</p>
+            <p class="programs-desc">{p.desc}</p>
+            <ul class="programs-bullets">
+              {p.bullets.map((b) => (
+                <li>
+                  <Icon name="check" size={14} class="bullet-check" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+            <a
+              href={tgUrlForProgram(p.msg)}
+              target="_blank"
+              rel="noopener"
+              class="programs-cta"
+            >
+              <Icon name="telegram" size={16} />
+              <span>Заказать в Telegram</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <p class="programs-footnote reveal">
+        «От X ₽» — цена лицензии «1С». Настройка, перенос данных и обучение —
+        отдельным проектом или в составе договора 1С:ИТС.
+      </p>
+    </div>
+  </section>
+</InnerLayout>
+
+<style>
+  .programs-grid-section {
+    background: var(--color-bg-alt);
+  }
+
+  .programs-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+    max-width: 1200px;
+    margin-inline: auto;
+  }
+
+  .programs-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-7) var(--space-6);
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    transition: transform 250ms var(--ease-spring), box-shadow 250ms var(--ease-spring),
+      border-color 250ms ease;
+  }
+  .programs-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-brand-500);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .programs-emoji {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(99, 91, 255, 0.07));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
+
+  .programs-title {
+    margin: var(--space-2) 0 0;
+    font-size: 1.25rem;
+    line-height: 1.25;
+  }
+
+  .programs-price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .price-prefix {
+    font-size: 0.875rem;
+    color: var(--color-text-soft);
+    font-weight: 500;
+  }
+  .price-value {
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .programs-price-note {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    margin: -4px 0 0;
+    line-height: 1.4;
+  }
+
+  .programs-desc {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--color-text-soft);
+    margin: 0;
+  }
+
+  .programs-bullets {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+  }
+  .programs-bullets li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: var(--color-text-soft);
+    line-height: 1.45;
+  }
+  .bullet-check {
+    color: var(--color-success);
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .programs-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    margin-top: var(--space-2);
+    border-radius: var(--radius-md);
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--color-brand-500);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    transition: background-color 200ms ease, color 200ms ease, transform 200ms var(--ease-spring);
+  }
+  .programs-cta:hover {
+    background: var(--color-brand-500);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  .programs-footnote {
+    max-width: 720px;
+    margin: var(--space-8) auto 0;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--color-text-soft);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 1024px) {
+    .programs-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 640px) {
+    .programs-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+    .programs-card {
+      padding: var(--space-6) var(--space-5);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .programs-card,
+    .programs-card:hover,
+    .programs-cta:hover {
+      transform: none;
+      transition: border-color 220ms ease, background-color 200ms ease, color 200ms ease;
+    }
+  }
+</style>

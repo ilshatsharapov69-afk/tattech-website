@@ -1,0 +1,137 @@
+---
+import { getCollection } from 'astro:content';
+import Icon from '../Icon.astro';
+
+interface Props {
+  currentSlug: string;
+  slugs: string[];
+  eyebrow?: string;
+  title?: string;
+}
+
+const { currentSlug, slugs, eyebrow = 'Смежные услуги', title = 'Что ещё может пригодиться' } =
+  Astro.props;
+
+const all = await getCollection('services');
+const lookup = new Map(all.map((s) => [s.data.slug, s.data]));
+const items = slugs
+  .filter((s) => s !== currentSlug && lookup.has(s))
+  .map((s) => lookup.get(s)!);
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+{items.length > 0 && (
+  <section class="section service-crosslinks">
+    <div class="container">
+      <header class="section-head reveal">
+        <span class="eyebrow">{eyebrow}</span>
+        <h2 class="h2">{title}</h2>
+      </header>
+
+      <ul class="crosslinks-grid reveal-stagger">
+        {items.map((item) => (
+          <li>
+            <a href={`${base}/${item.slug}`} class="crosslink-card">
+              <div class="crosslink-icon" aria-hidden="true">
+                <Icon name={item.icon} size={24} />
+              </div>
+              <h3 class="h3 crosslink-title">{item.title}</h3>
+              <p class="crosslink-lead">{item.heroLead}</p>
+              <span class="crosslink-arrow">
+                <span>Подробнее</span>
+                <Icon name="arrow-right" size={14} />
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+<style>
+  .service-crosslinks {
+    background: var(--color-bg);
+  }
+
+  .crosslinks-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-5);
+    max-width: 1200px;
+    margin-inline: auto;
+  }
+
+  .crosslink-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    color: var(--color-text);
+    height: 100%;
+    transition: transform 220ms var(--ease-spring), box-shadow 220ms var(--ease-spring),
+      border-color 220ms ease;
+  }
+  .crosslink-card:hover {
+    border-color: var(--color-brand-500);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .crosslink-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--color-brand-500);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .crosslink-title {
+    font-size: 1.0625rem;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .crosslink-lead {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: var(--color-text-soft);
+    flex: 1;
+  }
+
+  .crosslink-arrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-brand-500);
+    margin-top: var(--space-2);
+    transition: gap 200ms var(--ease-spring);
+  }
+  .crosslink-card:hover .crosslink-arrow {
+    gap: 10px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .crosslink-card,
+    .crosslink-card:hover {
+      transform: none;
+    }
+    .crosslink-arrow,
+    .crosslink-card:hover .crosslink-arrow {
+      transition: none;
+    }
+  }
+</style>
