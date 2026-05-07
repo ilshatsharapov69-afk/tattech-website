@@ -18,7 +18,7 @@ T-Tech redesign — session 8 (Кейсы). Открой D:\tattech-website\next
 
 - **Repo:** `D:\tattech-website` (Astro 6, plain CSS)
 - **Live:** https://ilshatsharapov69-afk.github.io/tattech-website/ (отстаёт — push заморожен до session 11)
-- **Last local commit:** `<session-7-commit>` (NOT pushed) — Services hover-reveal + accordion + border-glow
+- **Last local commit:** `e95ce8c` (NOT pushed) — Services 3D tilt + compact reveal + border-glow
 - **Live на GitHub Pages соответствует:** `368c809` (5.1 + roadmap freeze)
 
 ### Что закрыто (НЕ ТРОГАТЬ без явной просьбы клиента)
