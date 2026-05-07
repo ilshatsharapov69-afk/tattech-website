@@ -23,36 +23,35 @@ const animateCounter = (el: CounterEl) => {
 
 const init = () => {
   const counters = document.querySelectorAll<CounterEl>('[data-counter]');
-  if (counters.length === 0) return;
+  const grid = document.querySelector<HTMLElement>('.stats-grid');
+  if (counters.length === 0 || !grid) return;
+
+  const finalize = () => {
+    grid.classList.add('is-visible');
+    counters.forEach((el) => setTimeout(() => animateCounter(el), 1100));
+  };
 
   if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    counters.forEach((el) => {
-      const target = parseInt(el.dataset.target, 10);
-      el.textContent = target.toString() + (el.dataset.suffix ?? '');
-    });
+    finalize();
     return;
   }
 
-  // threshold + negative rootMargin: на tall screens Stats частично виден сразу
-  // в Hero-зоне; ждём, пока пользователь реально доскроллит до секции.
+  // Observe the grid itself (large target) instead of small counter spans,
+  // so the trigger reliably fires on mobile viewports too. Modest threshold
+  // + tiny negative rootMargin keeps it from firing while still in Hero.
   const io = new IntersectionObserver(
     (entries) => {
-      entries.forEach((entry) => {
+      for (const entry of entries) {
         if (entry.isIntersecting) {
-          const target = entry.target as CounterEl;
-          // Trigger Stats group slide-in (shared trigger with the counter).
-          const grid = target.closest('.stats-grid');
-          if (grid) grid.classList.add('is-visible');
-          // Counter spins after the longest slide finishes (1100ms for item 3).
-          setTimeout(() => animateCounter(target), 1100);
-          io.unobserve(target);
+          finalize();
+          io.unobserve(entry.target);
         }
-      });
+      }
     },
-    { threshold: 0.5, rootMargin: '0px 0px -120px 0px' }
+    { threshold: 0.2, rootMargin: '0px 0px -40px 0px' }
   );
 
-  counters.forEach((el) => io.observe(el));
+  io.observe(grid);
 };
 
 if (document.readyState === 'loading') {

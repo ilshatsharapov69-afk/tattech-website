@@ -114,8 +114,10 @@ const stats = [
       grid-template-columns: repeat(3, 1fr);
       gap: var(--space-2);
     }
-    .stats-grid > :global(*:nth-child(1)) { transform: translateX(-90px); }
-    .stats-grid > :global(*:nth-child(2)) { transform: translateX(-180px); }
-    .stats-grid > :global(*:nth-child(3)) { transform: translateX(-270px); }
+    /* Smaller offsets on mobile so even if the trigger is delayed,
+       items stay within (or close to) screen bounds and the motion reads. */
+    .stats-grid > :global(*:nth-child(1)) { transform: translateX(-40px); }
+    .stats-grid > :global(*:nth-child(2)) { transform: translateX(-80px); }
+    .stats-grid > :global(*:nth-child(3)) { transform: translateX(-120px); }
   }
 </style>
