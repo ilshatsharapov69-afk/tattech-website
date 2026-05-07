@@ -1,134 +1,135 @@
-# Session 11 kickoff — T-Tech redesign (финальный copywriting pass + push)
+# Post-redesign kickoff — T-Tech (next session prompt)
 
 > Этот файл всегда содержит промт для **следующей** запланированной сессии.
 
+## Status: ✅ Redesign DONE 2026-05-07
+
+8 сессий + pre-flight завершены. Live: https://ilshatsharapov69-afk.github.io/tattech-website/
+
+Финальный bundle 10 коммитов запушен в origin/main (commit `9edac15`). Deploy зелёный (28s build+deploy).
+
+**Lighthouse final на LIVE:** Desktop perf 97-99 / a11y 100 / bp 100 / seo 100; Mobile perf 95-96 / a11y 100 / bp 100 / seo 100 (LCP mobile 2.02-2.24s, CLS ~0, TBT 22-30ms). Все ROADMAP-таргеты перевыполнены.
+
 ---
 
-## Что вставить в новый чат
+## Что вставить в новый чат (default — апгрейд placeholder'ов после client input)
 
 ```
-T-Tech redesign — session 11 (финальный copywriting pass + ПЕРВЫЙ push на GitHub Pages). Открой D:\tattech-website\next-session-START.md и D:\tattech-website\REDESIGN-ROADMAP.md, прочитай оба полностью. Цель: бизнес-текст ВСЕХ H2/H3/lead-параграфов = benefit-driven (что получит читатель), not feature-driven. Также: real bio + role от клиента (если получили) для About.astro. После — финальный bundle push на GitHub Pages, gh run watch, smoke-test live URL. Lighthouse финальный 3×3 desktop + 3×3 mobile. Baseline session 10b: desktop 100/100/100/100, mobile 96-98/100/100/100 (LCP 2.18-2.26s, CLS 0).
+T-Tech post-redesign (Phase A: client revision loop). Открой D:\tattech-website\next-session-START.md и REDESIGN-ROADMAP.md (раздел "Post-redesign defer"), прочитай оба полностью + memory project_tattech_client.md.
+
+Задача: применить client-input на placeholder'ы которые остались после session 11. List:
+1. About.astro — real bio (1-2 предложения от первого лица, formula Credibility Hook → Pain Mirror → Operational Promise)
+2. About.astro — real role (если не "Основатель T-Tech")
+3. About.astro — real founder-tenure (текущее "8 лет на рынке" — placeholder, не company-age)
+4. Cases.astro — real pain-описания на 8 кейсов (текущий placeholder past-tense, нужен реальный из проектной истории)
+5. Cases.astro — real deadline на 8 кейсов
+6. Reviews.astro — real имена / метрики (3 testimonials, сейчас Ольга К./Расул А./Ильнур М. — placeholder)
+7. Services.astro / Programs.astro — клиент подтверждает цены (placeholder)
+
+Если клиент пришлёт subset — применить только то что есть. text-only changes, ≤30 LOC, 1 commit, push отдельным шагом (НЕ bundle).
+
+После: build green → git push origin main → gh run watch → smoke-test live → Lighthouse 3×3 desktop+mobile (compare против session 11 baseline). Memory + ROADMAP update.
 ```
 
 ---
 
-## Контекст для Claude (читай при старте)
+## Альтернативные следующие фазы (по приоритету клиента)
 
-### Состояние проекта (после session 10b)
+### Phase A — Client revision loop (рекомендованный default)
+**Триггер:** клиент видит live, присылает текстовые правки. 1-2 раунда.
+**Scope:** swap placeholder'ов на real content. Text-only.
+**LOC:** ≤30 per round.
+**Lighthouse:** проверять что нет регрессии vs session 11 baseline.
+
+### Phase B — Decap CMS подключение
+**Триггер:** клиент хочет сам редактировать контент.
+**Scope:** изначальная клиентская задача (+3 000 ₽ к договору). Wire Decap CMS на GitHub Pages, настроить collections для services/programs/cases/reviews/about.
+**Effort:** 1-2 сессии.
+**Stack:** Decap CMS на GitHub Pages, Astro content collections, OAuth через GitHub.
+
+### Phase C — 13 внутренних страниц
+**Триггер:** клиент даёт зелёный после Phase A/B.
+**Scope:** /uslugi, /programmy-1s, /nashi-kejsi, /contacts, /privacy, /1s-razrabotka, /obsluzhivanie-1s, /razrabotka-sajtov, /1s-its, /1s-its-tehno, /1s-its-prof, /podbor-i-ustanovka-oborudovaniya, /vnedrenie-bitriks-24
+**Effort:** 4-6 сессий.
+**Контент:** только главная и /nashi-kejsi отсканированы (см. report.md из session 1). Остальные 11 страниц — догнать через WebFetch tat-tech.ru.
+
+### Phase D — Перенос с GitHub Pages на собственный сервер клиента
+**Триггер:** клиент готов оплатить хостинг + домен tat-tech.ru.
+**Scope:** miграция dist/ на VPS, настройка SSL, DNS (tat-tech.ru → новый сервер), 301-редирект со старой Тильды.
+**Effort:** 1-2 сессии (зависит от провайдера).
+
+### Phase E — Performance polish (опционально)
+**Триггер:** если клиент захочет mobile perf >96 на live.
+**Scope:** quality webp 80→75 или smaller fallback (текущий mobile SI 4.2-4.6s — тяжёлый webp payload). LCP уже < 2.5s — над таргетом.
+**Effort:** 1 сессия.
+
+### Phase F — GitHub Actions Node 20 → 24
+**Триггер:** до 2026-06-02 (deprecation deadline).
+**Scope:** обновить `.github/workflows/*.yml` — actions/checkout@v4, actions/setup-node@v4, actions/upload-pages-artifact@v3, actions/deploy-pages@v4 на новые версии или добавить FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true.
+**Effort:** 15 минут.
+
+---
+
+## Контекст для Claude (читай при старте post-redesign)
+
+### Состояние проекта (после session 11 + push)
 
 - **Repo:** `D:\tattech-website` (Astro 6, plain CSS, no Tailwind)
-- **Live:** https://ilshatsharapov69-afk.github.io/tattech-website/ (отстаёт на 7 локальных коммитов: pre-flight + 5.1 + 6 + 7 + 8 + 9 + 10a + 10b — push frozen с 2026-05-07 до session 11)
-- **Last local commit:** session 10b (About.astro founder-spotlight + Ленар selfie + bio placeholder)
-- **Lighthouse session 10b baseline:** desktop 100/100/100/100, mobile 96-98/100/100/100 (LCP 2.18-2.26s, CLS 0, TBT 0)
+- **Branch:** `main` (10 коммитов от pre-flight до 9edac15 запушены в origin)
+- **Live:** https://ilshatsharapov69-afk.github.io/tattech-website/ (актуальная версия = session 11)
+- **Last commit:** `9edac15` (session 11: benefit-driven copy pass)
+- **Lighthouse final live:** desktop 97-99 perf / mobile 95-96 perf / a11y bp seo 100 на обоих
 
-### Что закрыто (НЕ ТРОГАТЬ без явной просьбы клиента)
+### Что закрыто финально (НЕ ТРОГАТЬ без explicit client request)
 
-- ✅ 5.1 — Header (blue tonal + glass-morphism + 3 icon-buttons)
-- ✅ 6 — Анимации (pulse, scroll progress, mouse-glow, Hero spotlight, Stats redesign)
-- ✅ 7 — Services (3D tilt + compact reveal + border-glow + цены + TG-CTA)
-- ✅ 8 — Cases (grid 4×2 + B2B-формат + image hover-zoom + spotlight gradient + footer-strip)
-- ✅ 9 — Reviews (B2B + per-industry avatar-initials + quote-mark hover)
-- ✅ 10a — AI photo generation: 8 case-photos B2B-publication style
-- ✅ 10b — About: Ленар selfie 1:1 sq 180×180 + 38-word bio (PLACEHOLDER) + 3 trust pills, between FAQ↔CTA
+- ✅ Pre-flight — Variant B rollback
+- ✅ 5.1 — Header blue tonal + glass-morphism + 3 icon-buttons + email
+- ✅ 6 — Animations: pulse, scroll progress, mouse-glow, Hero spotlight, Stats redesign, Header glass
+- ✅ 7 — Services: 3D tilt + compact reveal + border-glow + цены + TG-CTA
+- ✅ 8 — Cases: grid 4×2 + B2B-формат + image hover-zoom + spotlight gradient + footer-strip
+- ✅ 9 — Reviews: B2B + per-industry avatar-initials + quote-mark hover
+- ✅ 10a — AI photo generation: 8 case-photos B2B-publication style (Gemini Nano Banana 2)
+- ✅ 10b — About: founder-spotlight с реальной Ленар-selfie 180×180 sq + bio placeholder + 3 trust pills
+- ✅ 11 — Benefit-driven copy: 4 H2/eyebrow pivot (Services / Cases / Programs / About)
 
-### Open client-input items (если user прислал ответы — применить, иначе оставить placeholder)
+### Open client-input items (placeholder'ы ждут revision-loop)
 
-1. **Real bio для About.astro** — клиент должен был дать 1-2 предложения от первого лица. Текущий placeholder: «За 8 лет в автоматизации 1С я понял: главная боль клиентов — не в программе, а в подрядчиках, которые пропадают после сдачи. Команда у нас небольшая — значит, за каждым проектом стоит конкретный человек, который остаётся на связи и после запуска.»
-2. **Real role** — текущее «Основатель T-Tech». Если клиент скажет «руководитель/директор/CEO/etc.» — заменить.
-3. **Trust pill «8 лет на рынке»** — личная founder-tenure Ленара (НЕ company-age). Клиент должен подтвердить число.
-4. **Real pain-описания в Cases** — placeholder, клиент уточняет (см. session 8 «Возможные доработки»)
-5. **Real deadline в Cases** — placeholder, клиент уточняет
-6. **Реальные имена/метрики Reviews** — placeholder, клиент уточняет
-7. **Точные цены Services + Programs** — placeholder, клиент подтверждает (4 990 ₽/мес обслуживание, 50 000 ₽ сайты, etc.)
+См. список выше в основном промте.
 
 ---
 
-## Session 11 — детальные шаги
+## Запреты post-redesign (без явной client-просьбы)
 
-### 0. Открыть с user'а (~3 мин)
-
-- Спросить про **client input** на 7 пунктов выше. Если приходит — применить точечно. Если ничего — оставить placeholder, помечено в commit.
-- Решение по push (default = да, после copy-pass): «гонять `git push origin master` финальным bundle, gh run watch deploy, smoke-test live URL»? Если клиент хочет review перед push — пауза.
-
-### 1. Research (~30 мин)
-
-- B2B benefit-headlines формулы: PAS, AIDA, JTBD adaptated for landing H2
-- Tone-references: tat-tech.ru конкуренты (Рарус, БИТ, WiseAdvice) + Stripe/Linear (EN B2B эталоны для structure)
-- RU B2B copywriting checklist: проверить наши H2 на «многолетний опыт / индивидуальный подход / команда профессионалов» (banned phrases от petr-panda + Котов)
-
-### 2. Copywriting pass — все H2/H3/leads
-
-| Component | Текущий H2/H3 | Проверить |
-|---|---|---|
-| Hero | (TBD — посмотреть Hero.astro) | benefit-headline, не feature |
-| Stats | TBD | конкретика, не вода |
-| Services | «Услуги» / «Что делаем для бизнеса» | benefit, что получит клиент |
-| Process | TBD | пропустить если уже benefit-driven |
-| Cases | «Реальные внедрения» | подзаголовок-lead |
-| Reviews | «Что говорят клиенты» | OK как есть, lead проверить |
-| Programs | «Популярные программы 1С» | benefit-driven? |
-| FAQ | «Часто задают» (TBD) | leading question, не feature |
-| About | «О компании» (eyebrow) — Ленар без H2 | оставить minimal |
-| CTABanner | (final CTA) | benefit close |
-| Footer | n/a | n/a |
-
-### 3. Final bundle push
-
-```bash
-git push origin master  # ВСЕ локальные коммиты от pre-flight до session 11
-gh run watch              # дождаться GitHub Pages deploy
-# Smoke test: https://ilshatsharapov69-afk.github.io/tattech-website/
-```
-
-### 4. Lighthouse финальный 3×3 на LIVE URL (не localhost)
-
-- 3 desktop + 3 mobile через `npx lighthouse <live-url>`
-- Сохранить `.lighthouse/lh-final-*` (gitignored)
-- Compare vs session 10b baseline
-
-### 5. Запреты session 11
-
-- ❌ НЕ менять структуру компонентов (только text)
+- ❌ НЕ менять структуру компонентов (text-only edits)
 - ❌ НЕ добавлять новые компоненты / секции
 - ❌ НЕ трогать палитру / spacing tokens
-- ❌ НЕ переписывать css-классы — только innerText / props
-- ❌ НЕ амендить ранее сделанные коммиты (создать новый, push bundle)
+- ❌ НЕ переписывать css-классы
+- ❌ НЕ добавлять Tailwind / GSAP / Framer / React (стек заморожен)
+- ❌ НЕ запускать `gh run watch` per-trivial-edit (только когда есть push)
+- ❌ НЕ делать backend-формы (все channels через external links)
 
 ---
 
-## Чек-лист в конце session 11
+## История redesign'a (8 сессий, ~9 ч работы Claude)
 
-1. Research отчёт сохранён в `research/2026-MM-DD_b2b-benefit-headlines/report.md` (≥5 источников 2025-2026) + INDEX обновлён
-2. Все H2/H3/lead-параграфы прошли benefit-driven audit
-3. About.astro bio/role/trust обновлены если клиент дал input (иначе placeholder помечен)
-4. `npm run build` зелёный
-5. **`git push origin master`** — финальный bundle (7-8 локальных коммитов)
-6. `gh run watch` — deploy зелёный
-7. Smoke test: live URL открыт, About-секция видна, фото 180×180 квадрат, нет broken-images
-8. Lighthouse 3×3 на LIVE — без регрессии vs 10b baseline
-9. Обновить `REDESIGN-ROADMAP.md`: `[x] 11` + `[x] DONE redesign`
-10. Перезаписать `next-session-START.md` промтом для post-redesign следующей фазы (что-то по client-feedback, или другой проект)
-11. Обновить memory `project_tattech_client.md` — финальный статус «redesign DONE, pushed»
+См. `REDESIGN-ROADMAP.md` — каждая сессия документирована: цели, what shipped, Lighthouse, research, файлы.
 
----
+Research отчёты в `D:/DeepReserch/research/2026-05-{06,07}_*`:
+- 2026-05-06_tattech-redesign — initial research (1С франчайзи + B2B SaaS эталоны)
+- 2026-05-07_tattech-color-research — color refresh (Variant B sandwich)
+- 2026-05-07_b2b-animation-patterns — session 6 (25 src)
+- 2026-05-07_b2b-services-packaging — session 7 (11 src)
+- 2026-05-07_b2b-cases-format — session 8 (18 src)
+- 2026-05-07_b2b-testimonials-format — session 9 (24 src)
+- 2026-05-07_gemini-image-gen — session 10a (28 src)
+- 2026-05-07_b2b-about-section — session 10b (31 src)
+- 2026-05-07_b2b-benefit-headlines — session 11 (14 src)
 
-## LOC и budgets
-
-- LOC delta ≤ 30 (text-only changes mostly)
-- Может потребовать ревью-чекпоинт перед push
-- ≤ 8 файлов компонентов (text-only changes)
+Total research depth: **~196 источников** на 8 сессий.
 
 ---
 
-## Mid-session lessons learned (важно для будущих text-pass'ов)
+## Memory update после post-redesign session
 
-1. **Browser cache на mid-session aspect-changes** — если меняется image aspect-ratio в одной сессии, делать filename rename + explicit pixel dimensions сразу. CSS `aspect-ratio` + browser cache = час времени на debug. См. `feedback_browser_cache_aspect.md` (создать в session 11 если ещё актуально, или drop).
-2. **Demo-first работает** — все 4 placeholder-сессии (8/9/10a/10b) шипались без ожидания client input'а. Bio/photo Ленара пришли в session 10b прямо в чате через Telegram-папку (`C:\Users\GigaByte\Downloads\Telegram Desktop\photo_2026-05-07_*.jpg`). Паттерн «спроси про путь к файлу через Telegram Desktop downloads» работает быстрее чем drop в проектную папку.
-
----
-
-## После session 11 (post-redesign)
-
-- Возможна client revision-loop (1-2 раунда мелких правок) — допустимо
-- Опциональная followup-фаза: оптимизация LCP < 2.0s mobile (текущее 2.20s) — defer по client-приоритету
-- Decap CMS подключение (изначальная клиентская задача — wire CMS для самостоятельного контент-управления) — отдельная phase, не в redesign-roadmap
+- `project_tattech_client.md` — статус «redesign DONE + pushed», текущая phase
+- `feedback_*.md` — новые learnings если будут (например про CMS интеграцию или revision-loop pattern)

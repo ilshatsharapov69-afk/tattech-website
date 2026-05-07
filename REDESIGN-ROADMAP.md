@@ -38,7 +38,8 @@
 [x] 9   — Отзывы: B2B + per-industry avatar-initials + quote-mark hover (commit e4838d7, NOT pushed)
 [x] 10a — AI photo generation (Gemini Nano Banana 2): 8 case-photos в B2B-publication style + per-industry focus (NOT pushed)
 [x] 10b — About-блок с фото владельца Ленара (real Telegram selfie 1:1 sq, compact 180×180 + bio + 3 trust pills, between FAQ↔CTA) (NOT pushed)
-[ ] 11  — Финальный copywriting pass (benefit headlines)  ← NEXT
+[x] 11  — Финальный copywriting pass (benefit headlines на 4 секциях, commit 9edac15) + ПЕРВЫЙ push bundle 10 коммитов 8c4960e..9edac15 (deploy зелёный)
+[x] DONE redesign — 8 сессий + pre-flight, live https://ilshatsharapov69-afk.github.io/tattech-website/
 ```
 
 8 сессий total после pre-flight.
@@ -476,27 +477,88 @@ Nano Banana 2 хорошо handle русский текст в кадре: вы�
 
 ---
 
-## Session 11 — Финальный copywriting pass
+## Session 11 — Финальный copywriting pass + ПЕРВЫЙ push
 
-**Status:** pending • **Research:** ~30 мин • **Может потребовать ревью** • **text-heavy, ~30 LOC**
+**Status:** ✅ done 2026-05-07 • **commit 9edac15** • **+7 / −7 LOC, 4 файла** • **bundle push 10 коммитов 8c4960e..9edac15 → main, deploy 28s green**
+
+### What shipped
+
+- ✅ **Services H2:** «Что мы делаем» → **«Один подрядчик на всю 1С»** (JTBD: job=stop juggling vendors). Lead дополнен бенефитом «без сборки команды из подрядчиков под каждую задачу».
+- ✅ **Cases H2:** «Реальные внедрения» → **«Что меняется после внедрения»** (Transformation Statement, убрана defensive формулировка «реальные» — implies others fake). Lead уточнён measurable triplet: «конкретная задача / фиксированный срок / измеримый результат».
+- ✅ **Programs H2:** «Популярные программы 1С» → **«Готовая 1С под вашу задачу»** (JTBD outcome). Lead акцент на one-stop process «в одной заявке».
+- ✅ **About eyebrow:** «О компании» → **«Кто за этим стоит»** (transparency benefit, signals founder accountability перед CTA).
+- ✅ **Не тронуты** (passes «So What?» test): Hero H1 (transformation уже идеален: «без хаоса, в срок, под ключ»), Hero lead, Hero trust pills, Stats numbers, Process H2/lead, Reviews H2/lead, FAQ H2/lead, CTABanner H2/lead.
+
+### PLACEHOLDER preserved (no client input received)
+
+- About bio (38 слов, formula Credibility Hook → Pain Mirror → Operational Promise)
+- About role «Основатель T-Tech»
+- About trust pills «Казань / Партнёр 1С / 8 лет на рынке»
+- Cases pain/deadline тексты
+- Reviews имена/метрики
+- Services / Programs цены
+
+Apply later когда клиент пришлёт real bio/role/numbers/pain/deadline/цены.
+
+### Lighthouse session 11 на LIVE (3×3) — финальный baseline post-redesign
+
+**Desktop 3×:** **97/98/99** perf, **100/100/100** a11y/bp/seo (LCP 0.65-0.98s, CLS ~0, SI 0.96-1.51s)
+**Mobile 3×:** **96/96/95** perf, **100/100/100** a11y/bp/seo (LCP 2.02-2.24s, TBT 22-30ms, SI 4.21-4.61s)
+
+**Δ vs session 10b localhost baseline** (desktop 100/100/100/100, mobile 96-98/100/100/100): desktop -1..-3 perf, mobile -1..-2 perf. В пределах ожидаемой вариативности (live = реальный network latency к GitHub Pages CDN + cold cache; localhost = идеальные условия). **Все ROADMAP-таргеты перевыполнены:**
+- Desktop ≥95 perf ✓, ≥95 a11y ✓, =100 bp ✓, ≥95 seo ✓
+- Mobile ≥90 perf ✓, ≥95 a11y ✓, =100 bp ✓, ≥95 seo ✓
+- LCP mobile <2.5s ✓ (2.02-2.24s), CLS <0.05 ✓ (~0), INP/TBT <200ms ✓ (22-30ms)
+
+### Deploy
+
+- Bundle push **8c4960e..9edac15** (10 коммитов: pre-flight + 5.1 + 6 + 7 + 8 + 9 + 10a + 10b + 11 + docs commits) → origin/main
+- `gh run watch` 25493864923: build 16s + deploy 12s = 28s total ✓
+- Smoke test: live URL загружается, все 4 новых H2 на месте, Ленар-фото `lenar-v2-400.webp` на месте
+- ⚠️ GitHub Actions annotation: Node 20 deprecated (will be forced to Node 24 после 2026-06-02). Defer на post-redesign cleanup pass
 
 ### Research
 
-- B2B benefit-driven headlines — формулы: PAS, AIDA адаптированные для landing
-- Tone-references: tat-tech.ru конкуренты + примеры экспертного без воды
+[research/2026-05-07_b2b-benefit-headlines/report.md](../DeepReserch/research/2026-05-07_b2b-benefit-headlines/report.md) — **14 источников**, 2 параллельных subagents:
+- **Cat. A** (B2B benefit-headline формулы EN+RU): Genesys Growth, SaaSFunnelLab, Position Digital, RocketAgents, DataDab, Эчпочмак Ильяхова, Sellty, vc.ru, TinyCoast, CXL, CrazyEgg
+- **Cat. B** (RU banned phrases 2025-26): petr-panda, 1ps, Ильяхов, Бюро Горбунова, vc.ru ChatGPT-клише, audit конкурентов 1С-Рарус + WiseAdvice-IT
 
-### Цели
+Доминирующий 2026 SaaS pattern — **Transformation Statement «[outcome] without [pain]»** (Linear, Vanta, ButterDocs). Verb-led + outcome-led конвертирует в 2.7-3.5× лучше feature-noun по A/B-тестам. РФ B2B специфики: process transparency expected, loss > gain framing, anchored numbers. 20-фразовый blacklist + 8 AI-маркеров audited — в текущей копии не найдены ✓.
 
-1. Все H2/H3 на странице → benefit-focused (что получит читатель), не feature-focused
-2. Lead-параграфы (Stats subtitle, Services lead, Cases lead, FAQ lead) — конкретика вместо воды
-3. Trust pills и FAQ — короче, точнее
-4. Final tone audit — экспертный, конкретный, B2B
+### Файлы изменены
 
-### Deliverables
+- `src/components/Services.astro` — H2 + lead (text-only, 2 строки)
+- `src/components/Cases.astro` — H2 + lead (text-only, 2 строки)
+- `src/components/Programs.astro` — H2 + lead (text-only, 2 строки)
+- `src/components/About.astro` — eyebrow (text-only, 1 строка)
+- `REDESIGN-ROADMAP.md` — статус 11 + DONE redesign
+- `next-session-START.md` — handoff для post-redesign фазы
+- `.lighthouse/lh-final-{desktop,mobile}-{1,2,3}.json` — финальный live baseline (gitignored)
+- `D:/DeepReserch/research/2026-05-07_b2b-benefit-headlines/report.md` — research отчёт
+- `D:/DeepReserch/research/INDEX.md` — обновлён
+- `C:/Users/.../memory/project_tattech_client.md` — финальный статус «redesign DONE, pushed»
 
-- 1 commit, ≤ 8 файлов компонентов (text-only changes mostly)
-- ≤ 30 LOC delta (но много текстовых правок)
-- Возможен ревью-чекпоинт перед commit
+### Возможные доработки (post-redesign defer)
+
+- Real bio / role / trust numbers от Ленара → swap About.astro placeholder когда придёт client input
+- Real pain/deadline в Cases (8 кейсов) — placeholder pending
+- Real имена/метрики Reviews (3 testimonials) — placeholder pending
+- Real цены Services / Programs — клиент подтверждает
+- Decap CMS подключение (изначальная клиентская задача — wire CMS для самостоятельного контент-управления) — отдельная phase
+- 13 внутренних страниц (/uslugi, /programmy-1s, /nashi-kejsi, …) — отдельная phase
+- Mobile SI 4.2-4.6s optimization (если хочется ниже) — quality webp 80→75 или smaller fallback
+- Node 20 → 24 в GitHub Actions workflow (deprecation warning)
+- Перенос с GitHub Pages на собственный сервер клиента (домен tat-tech.ru, SSL)
+
+---
+
+## ✅ DONE — Redesign closed 2026-05-07
+
+8 сессий + pre-flight, ~9 ч работы Claude. Live: https://ilshatsharapov69-afk.github.io/tattech-website/
+
+**Выполнено** — лендинг пересобран с шаблонного state'а в premium B2B-демо: blue tonal Header + glass-morphism, magnetic CTA + pulse, scroll progress, mouse-tracking glow, Hero dots cursor-spotlight, Services 3D tilt + border-glow + compact reveal, Cases grid 4×2 + image hover-zoom + spotlight gradient + footer-strip, Reviews B2B + per-industry avatars + quote-mark hover, AI-generated 8 case-photos в B2B-publication style (Gemini Nano Banana 2), About founder-spotlight с реальной Ленар-selfie, benefit-driven copy на section H2s.
+
+**Lighthouse финальные на LIVE:** Desktop perf 97-99, Mobile perf 95-96 — все ROADMAP-таргеты перевыполнены.
 
 ---
 
