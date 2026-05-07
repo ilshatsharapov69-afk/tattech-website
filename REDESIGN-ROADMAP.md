@@ -4,7 +4,7 @@
 **Trigger:** UX/CRO-аудит другой нейронкой + правки клиента + reference от barbershop demo
 **Цель:** превратить шаблонный лендинг в самый сильный кейс портфолио. B2B-конверсия из посетителя в квалифицированный лид (Казань, 1С-внедрение).
 
-**Workflow:** одна сессия = один шаг = один commit. В конце каждой сессии Claude генерирует короткий handoff-промт. Между сессиями — review клиента.
+**Workflow:** одна сессия = один шаг = один **локальный** commit. Push на GitHub Pages — НЕ после каждой сессии, а финальным bundle после session 11. До этого — только local preview. В конце каждой сессии Claude генерирует короткий handoff-промт.
 
 **Кэп контекста на сессию:** ≤200K tokens (≤20% от 1M).
 
@@ -337,9 +337,10 @@
 
 - ❌ Не вводить Tailwind / GSAP / Framer / React — остаёмся на Astro 6 + plain CSS
 - ❌ Не делать backend-формы — все channels через external links
-- ❌ Не пушить без визуальной проверки на mobile breakpoint
-- ✅ Каждая сессия → один commit с детальным message
-- ✅ Lighthouse 3 прогона desktop + 3 mobile после каждой сессии
+- ❌ Не пушить per-session (push только финальный после session 11)
+- ❌ Не запускать `gh run watch` per-session
+- ✅ Каждая сессия → один **локальный** commit с детальным message (без push)
+- ✅ Lighthouse 3 прогона desktop + 3 mobile после каждой сессии (локально, gitignored)
 - ✅ Memory update после каждой сессии (project_tattech_client.md status + новые feedback)
 - ✅ Karpathy guidelines всегда (auto-loaded из ~/.claude/CLAUDE.md)
 - ✅ Всё что использует JS/анимации — gated через `prefers-reduced-motion`

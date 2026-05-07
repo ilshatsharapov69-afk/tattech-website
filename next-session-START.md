@@ -7,7 +7,7 @@
 ## Что вставить в новый чат
 
 ```
-T-Tech redesign — session 6. Открой D:\tattech-website\next-session-START.md и D:\tattech-website\REDESIGN-ROADMAP.md, прочитай оба полностью. Сделай research ~30 мин по B2B-анимациям (Stripe/Vercel/Linear pulse, mouse-tracking glow CSS-only, prefers-reduced-motion patterns) и сохрани отчёт в research/2026-MM-DD_b2b-animation-patterns/report.md. Потом покажи план шагов и подтверди scope ДО старта работы. В конце сессии: build + Lighthouse + commit + push, обнови ROADMAP и next-session-START.md, дай handoff-промт для session 7.
+T-Tech redesign — session 6. Открой D:\tattech-website\next-session-START.md и D:\tattech-website\REDESIGN-ROADMAP.md, прочитай оба полностью. Сделай research ~30 мин по B2B-анимациям (Stripe/Vercel/Linear pulse, mouse-tracking glow CSS-only, prefers-reduced-motion patterns) и сохрани отчёт в research/2026-MM-DD_b2b-animation-patterns/report.md. Потом покажи план шагов и подтверди scope ДО старта работы. В конце сессии: build + Lighthouse + ЛОКАЛЬНЫЙ commit (БЕЗ push), обнови ROADMAP и next-session-START.md, дай handoff-промт для session 7. Push в GitHub — только финальный после session 11.
 ```
 
 ---
@@ -122,8 +122,8 @@ JS (mouse-tracking, throttled через rAF):
 4. Проверить `prefers-reduced-motion` (DevTools → Rendering → Emulate CSS prefers-reduced-motion: reduce) — анимации должны выключиться
 5. Lighthouse: 3 прогона desktop, 3 mobile, без регрессии (target ≥ 5.1 baseline: desktop 100/100/100/100, mobile ≥ 95/100/100/100)
 6. DevTools Performance tab — на скролле pulse + scroll progress не должны жрать CPU (>5%)
-7. Спросить пользователя «всё ОК?» с показом скринов или ссылки превью
-8. После OK: `git push origin main`, проверить `gh run watch`
+7. Спросить пользователя «всё ОК?» с показом локального превью (открыть в Chrome)
+8. После OK: **ЛОКАЛЬНЫЙ** `git commit` с детальным message (БЕЗ `git push`, БЕЗ `gh run watch` — push только финальный после session 11)
 9. Обновить `REDESIGN-ROADMAP.md`: `[x] 6` + `[ ] 7 ← NEXT`
 10. Перезаписать `next-session-START.md` промтом для session 7
 11. Обновить memory `project_tattech_client.md` (статус session 6)
