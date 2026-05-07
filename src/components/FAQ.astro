@@ -21,7 +21,22 @@ const faqs = [
     a: 'Регулярные обновления конфигураций, регламентные бэкапы, консультации по телефону и удалённое подключение, мелкие доработки по запросу. Тариф фиксированный — заранее знаете, сколько платите в месяц.',
   },
 ];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
 ---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
 
 <section class="section faq has-glow" id="faq">
   <div class="container">

@@ -57,25 +57,40 @@ const ogUrl = ogPath.startsWith('http') ? ogPath : new URL(ogPath, Astro.site).t
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogUrl} />
 
-    <!-- LocalBusiness JSON-LD -->
+    <!-- Organization JSON-LD (global — на всех страницах) -->
     <script type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
-      '@type': 'LocalBusiness',
+      '@type': 'Organization',
       name: 'T-Tech',
-      description,
-      image: ogUrl,
-      url: canonical,
-      telephone: '+7 952 043 4277',
-      email: 'ttech.kzn.it@gmail.com',
+      url: new URL(`${base}/`, Astro.site).toString(),
+      logo: new URL(`${base}/images/logo-circle.webp`, Astro.site).toString(),
+      description:
+        'Автоматизация бизнеса на 1С с 2016 года в Казани и по всей России. Внедрение, обслуживание, разработка, ИТС, оборудование, Битрикс24.',
       address: {
         '@type': 'PostalAddress',
         streetAddress: 'ул. Дубравная, 43а',
         addressLocality: 'Казань',
         addressRegion: 'Республика Татарстан',
+        postalCode: '420138',
         addressCountry: 'RU',
       },
-      openingHours: 'Mo-Fr 09:00-18:00',
-      priceRange: '₽₽',
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          telephone: '+7 952 043 4277',
+          contactType: 'customer support',
+          areaServed: 'RU',
+          availableLanguage: ['Russian'],
+        },
+        {
+          '@type': 'ContactPoint',
+          email: 'ttech.kzn.it@gmail.com',
+          contactType: 'customer support',
+          areaServed: 'RU',
+          availableLanguage: ['Russian'],
+        },
+      ],
+      sameAs: ['https://t.me/CyclesOfID', 'https://wa.me/79950958536'],
     })} />
   </head>
   <body>

@@ -48,6 +48,43 @@ const office = {
 };
 
 const breadcrumb = [{ label: 'Контакты' }];
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const localBusinessJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': new URL(`${base}/contacts#localbusiness`, Astro.site).toString(),
+  name: 'T-Tech',
+  description:
+    'Внедрение и обслуживание 1С, разработка сайтов, договор ИТС, оборудование, Битрикс24. Казань, Дубравная 43а.',
+  url: new URL(`${base}/contacts`, Astro.site).toString(),
+  image: new URL(`${base}/images/logo-circle.webp`, Astro.site).toString(),
+  telephone: '+7 952 043 4277',
+  email: 'ttech.kzn.it@gmail.com',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'ул. Дубравная, 43а',
+    addressLocality: 'Казань',
+    addressRegion: 'Республика Татарстан',
+    postalCode: '420138',
+    addressCountry: 'RU',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 55.821,
+    longitude: 49.150,
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '09:00',
+      closes: '18:00',
+    },
+  ],
+  priceRange: '₽₽',
+  sameAs: ['https://t.me/CyclesOfID', 'https://wa.me/79950958536'],
+};
 ---
 
 <InnerLayout
@@ -57,6 +94,7 @@ const breadcrumb = [{ label: 'Контакты' }];
   heroLead="Никаких форм и менеджеров на колл-центре. Пишете в любой удобный канал — отвечает специалист, который ведёт ваш проект."
   breadcrumb={breadcrumb}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(localBusinessJsonLd)} />
   <section class="section channels-section">
     <div class="container">
       <div class="channels-grid">

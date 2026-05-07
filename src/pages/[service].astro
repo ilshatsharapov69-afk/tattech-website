@@ -26,6 +26,75 @@ const breadcrumb = [
   { label: 'Услуги', href: `${base}/uslugi` },
   { label: data.title },
 ];
+
+const pageUrl = new URL(`${base}/${data.slug}`, Astro.site).toString();
+const orgUrl = new URL(`${base}/`, Astro.site).toString();
+
+// Service JSON-LD — provider = T-Tech, areaServed = РФ, offers из pricing tiers либо ItsTable.
+const offers = (() => {
+  if (data.pricing) {
+    return data.pricing.tiers.map((t) => ({
+      '@type': 'Offer',
+      name: t.label,
+      description: t.note,
+      priceCurrency: 'RUB',
+      price: t.price,
+    }));
+  }
+  if (data.itsHighlight) {
+    // 1С:ИТС — pricing внутри ItsTable, primary tier зависит от тарифа.
+    if (data.itsHighlight === 'tehno') {
+      return [
+        { '@type': 'Offer', name: '1С:ИТС Техно — 6 мес', priceCurrency: 'RUB', price: '9 834 ₽' },
+        { '@type': 'Offer', name: '1С:ИТС Техно — 12 мес', priceCurrency: 'RUB', price: '18 600 ₽' },
+      ];
+    }
+    if (data.itsHighlight === 'prof') {
+      return [
+        { '@type': 'Offer', name: '1С:ИТС ПРОФ — 3 мес', priceCurrency: 'RUB', price: '5 964 ₽' },
+        { '@type': 'Offer', name: '1С:ИТС ПРОФ — 6 мес', priceCurrency: 'RUB', price: '12 892 ₽' },
+        { '@type': 'Offer', name: '1С:ИТС ПРОФ — 12 мес', priceCurrency: 'RUB', price: '23 283 ₽' },
+      ];
+    }
+    return [
+      { '@type': 'Offer', name: '1С:ИТС Техно — от 6 мес', priceCurrency: 'RUB', price: '9 834 ₽' },
+      { '@type': 'Offer', name: '1С:ИТС ПРОФ — от 3 мес', priceCurrency: 'RUB', price: '5 964 ₽' },
+    ];
+  }
+  return undefined;
+})();
+
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: data.title,
+  description: data.metaDescription,
+  url: pageUrl,
+  serviceType: data.title,
+  provider: {
+    '@type': 'Organization',
+    name: 'T-Tech',
+    url: orgUrl,
+  },
+  areaServed: {
+    '@type': 'Country',
+    name: 'Россия',
+  },
+  ...(offers && { offers }),
+};
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: data.faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
 ---
 
 <InnerLayout
@@ -36,6 +105,9 @@ const breadcrumb = [
   heroPills={data.heroPills}
   breadcrumb={breadcrumb}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(serviceJsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+
   <IncludedList items={data.included} />
 
   {data.pricing && (

@@ -27,6 +27,7 @@ pnpm-debug.log*
 
 # lighthouse audits + preview log
 .lighthouse/
+lighthouse-c5/
 preview.log
 preview-*.log
 
