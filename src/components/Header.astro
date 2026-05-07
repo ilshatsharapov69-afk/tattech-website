@@ -39,11 +39,19 @@ const navLinks = [
         href="https://t.me/CyclesOfID"
         target="_blank"
         rel="noopener"
-        class="btn btn-primary btn-sm"
+        class="ic-btn"
         aria-label="Написать в Telegram"
       >
-        <Icon name="telegram" size={16} />
-        <span>Telegram</span>
+        <Icon name="telegram" size={18} />
+      </a>
+      <a
+        href="https://wa.me/79950958536"
+        target="_blank"
+        rel="noopener"
+        class="ic-btn"
+        aria-label="Написать в WhatsApp"
+      >
+        <Icon name="whatsapp" size={18} />
       </a>
     </div>
 
@@ -62,15 +70,26 @@ const navLinks = [
     </nav>
     <div class="mobile-actions">
       <a href="tel:+79520434277" class="mobile-phone">+7 952 043 4277</a>
-      <a
-        href="https://t.me/CyclesOfID"
-        target="_blank"
-        rel="noopener"
-        class="btn btn-primary"
-      >
-        <Icon name="telegram" size={18} />
-        <span>Написать в Telegram</span>
-      </a>
+      <div class="mobile-channels">
+        <a
+          href="https://t.me/CyclesOfID"
+          target="_blank"
+          rel="noopener"
+          class="ic-btn ic-btn-mobile"
+          aria-label="Написать в Telegram"
+        >
+          <Icon name="telegram" size={18} />
+        </a>
+        <a
+          href="https://wa.me/79950958536"
+          target="_blank"
+          rel="noopener"
+          class="ic-btn ic-btn-mobile"
+          aria-label="Написать в WhatsApp"
+        >
+          <Icon name="whatsapp" size={18} />
+        </a>
+      </div>
     </div>
   </div>
 </header>
@@ -179,9 +198,32 @@ const navLinks = [
   .phone:hover {
     color: var(--color-brand-500);
   }
-  .btn-sm {
-    padding: 10px 16px;
-    font-size: 0.875rem;
+  .ic-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--color-brand-500);
+    border: 1px solid transparent;
+    transition: background-color 200ms ease, color 200ms ease, transform 200ms var(--ease-spring), border-color 200ms ease;
+  }
+  .ic-btn:hover {
+    background: var(--color-brand-500);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+  /* Over the dark Hero — glassmorphic */
+  .header:not(.is-scrolled) .ic-btn {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+  .header:not(.is-scrolled) .ic-btn:hover {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.6);
   }
   .burger {
     display: none;
@@ -266,6 +308,13 @@ const navLinks = [
     font-weight: 600;
     color: var(--color-brand-500);
     margin-right: auto;
+  }
+  .mobile-channels {
+    display: inline-flex;
+    gap: var(--space-2);
+  }
+  .ic-btn-mobile {
+    background: rgba(37, 99, 235, 0.10);
   }
 
   @media (max-width: 960px) {
