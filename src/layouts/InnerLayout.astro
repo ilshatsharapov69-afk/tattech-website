@@ -1,0 +1,49 @@
+---
+import Base from './Base.astro';
+import Header from '../components/Header.astro';
+import ScrollProgress from '../components/ScrollProgress.astro';
+import PageHero from '../components/PageHero.astro';
+import CTABanner from '../components/CTABanner.astro';
+import Footer from '../components/Footer.astro';
+
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  heroTitle: string;
+  heroLead?: string;
+  breadcrumb: BreadcrumbItem[];
+  heroPills?: string[];
+  showCtaBanner?: boolean;
+}
+
+const {
+  title,
+  description,
+  heroTitle,
+  heroLead,
+  breadcrumb,
+  heroPills = [],
+  showCtaBanner = true,
+} = Astro.props;
+---
+
+<Base title={title} description={description}>
+  <ScrollProgress />
+  <Header />
+  <main class="inner-main">
+    <PageHero
+      title={heroTitle}
+      lead={heroLead}
+      breadcrumb={breadcrumb}
+      pills={heroPills}
+    />
+    <slot />
+    {showCtaBanner && <CTABanner />}
+  </main>
+  <Footer />
+</Base>

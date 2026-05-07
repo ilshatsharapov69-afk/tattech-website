@@ -1,197 +1,104 @@
-# Polish session — T-Tech (next session prompt)
+# T-Tech Phase C Session C2 — Service detail pages part 1 + Content Collection
 
-> Этот файл всегда содержит промт для **следующей** запланированной сессии.
+> Этот файл всегда содержит промт для **следующей** запланированной сессии. Сейчас = Phase C Session 2.
+>
+> Полный план фазы: `D:\tattech-website\PHASE-C-ROADMAP.md`
+>
+> Завершено: C1 (foundation + /contacts + /privacy + 404 + nav update + lazy-map). См. `git log` `phase-c-1: foundation + contacts + privacy`.
 
-## Polish session — режим работы
+## Что сделать в C2
 
-**User даёт маленькие задачи по одной** («это поправь / подвинь / перепиши / поменяй цвет / увеличь / убери»). Claude **делает быстро, без research**, без новых компонентов, без больших переписываний.
+1. **Mini-research (1 subagent, 8-10 sources, ~20 мин)** — B2B service-detail page patterns 2026:
+   - Stripe Atlas docs, Vercel Functions, Linear marketing, Attio
+   - RU 1С-франчайзи: 1С-Рарус, WiseAdvice-IT, БИТ
+   - Что показывать в hero / "что входит" / "сколько стоит" / "кейсы по отрасли" / process / faq
+   - Output: `research/2026-05-09_b2b-service-detail-patterns/report.md`
 
-Workflow:
-1. User: «вот это поправь так-то»
-2. Claude: читает нужный файл → правит → коротко подтверждает what изменилось → ждёт следующую задачу
-3. Локальный коммит после каждой логической группы правок (или один общий в конце — по решению user'а)
-4. Live preview через `npm run dev` (порт 4321) — user смотрит в браузере
-5. Когда user скажет **«всё, коммитим»** → `git push origin main` + `gh run watch` + smoke-test live URL
+2. **Astro Content Collection `services`** — `src/content/config.ts`:
+   - Frontmatter schema: slug, title, lead, included[], pricing[], faq[], relatedCases[], heroIcon, ogImage
+   - 1 service = 1 .md в `src/content/services/`
+   - Уже scraped в `D:\DeepReserch\research\2026-05-08_tattech-inner-content\` — использовать как контент-базу
 
-### Запреты polish-режима
+3. **Dynamic route `src/pages/[service].astro`** — рендерит из коллекции через getStaticPaths
 
-- ❌ НЕ запускать research subagents (полный rewrite пока не нужен)
-- ❌ НЕ менять структуру компонентов без явной просьбы
-- ❌ НЕ добавлять новые секции
-- ❌ НЕ запускать Lighthouse per-tweak (только в конце если user попросит)
-- ❌ НЕ переустанавливать зависимости
-- ❌ НЕ трогать палитру / spacing tokens без explicit запроса
+4. **Контент 3 service pages** (template-driven, использовать InnerLayout):
+   - `/1s-razrabotka` (от 3 000 ₽/час)
+   - `/obsluzhivanie-1s` (от 4 990 ₽/мес ИЛИ 3 000 ₽/час)
+   - `/razrabotka-sajtov` (от 50 000 ₽ фикс ИЛИ 3 000 ₽/час)
 
-### Что МОЖНО
+5. **Layout каждой service page:**
+   - PageHero (breadcrumb + H1 + lead + 1 TG CTA + 3 trust pills)
+   - "Что входит" — буллеты с чек-иконками
+   - "Сколько стоит" — pricing-table (фикс + почасовая где применимо)
+   - "Кейсы в этой отрасли" — re-use Cases.astro grid фильтр по `tag`
+   - Process (re-use существующий)
+   - ServiceFAQ — custom 4-5 Q (не общий FAQ)
+   - CTABanner
 
-- ✅ Text-edits (любая копия)
-- ✅ Mini CSS-правки (cursor, padding, font-size — узкие)
-- ✅ Swap placeholder'ов на real content (см. список ниже если user принёс)
-- ✅ Image-replace (если user даёт новое фото)
-- ✅ Mini layout-правки (gap, max-width, alignment)
+6. **Lighthouse 3×3 на 1 random service page** (например /razrabotka-sajtov)
 
----
+## Финал
 
-## Quick reference
+- `npm run build` green
+- 1 локальный commit: `phase-c-2: services collection + 3 detail pages`
+- Push отдельным шагом → `gh run watch` → smoke test live
+- Memory update: `project_tattech_client.md`
+- Update `next-session-START.md` → Phase C Session C3 (ITS family)
 
-- **Repo:** `D:\tattech-website` (Astro 6, plain CSS)
-- **Branch:** `main` (last commit `b5ea9ef` pushed 2026-05-07)
-- **Live:** https://ilshatsharapov69-afk.github.io/tattech-website/
-- **Components:** `src/components/{Hero,Stats,Services,Process,Cases,Reviews,Programs,FAQ,About,CTABanner,Header,Footer,Icon,ScrollProgress}.astro`
-- **Page:** `src/pages/index.astro` (orchestrates components in order: Hero → Stats → Services → Process → Cases → Reviews → Programs → FAQ → About → CTABanner)
+## Stack reminder
 
-### Placeholder'ы которые ждут client input (если user принесёт — точечный swap)
+- Astro 6, plain CSS, branch `main`
+- Никаких новых deps
+- Karpathy guidelines всегда (auto-loaded)
+- Бонус-фичи / refactoring **запрещены** — только то что в скоупе C2
 
-1. About bio (38 слов в `About.astro`, formula Credibility Hook → Pain Mirror → Operational Promise)
-2. About role («Основатель T-Tech»)
-3. About trust pills («Казань / Партнёр 1С / 8 лет на рынке»)
-4. Cases pain/deadline (8 кейсов)
-5. Reviews имена/метрики (3 testimonials)
-6. Services / Programs точные цены
+## Live preview
+
+```bash
+cd D:\tattech-website
+npm run dev
+# открыть http://localhost:4321/tattech-website/1s-razrabotka
+```
+
+## C1 итоги (что задеплоено)
+
+**Done:** scraping 11 страниц, InnerLayout + Breadcrumb + PageHero, /contacts, /privacy, /404, Header nav update.
+
+**Lighthouse C1 финал:** desktop 100/100/100/100 (6×), mobile 98+ perf / 100 a11y/bp/seo (6×). LCP desktop 350-400ms, mobile 1.6s, CLS 0, TBT 0-91ms.
+
+**Lazy-load карты Яндекс:** заменил inline iframe на click-to-load placeholder — best-practices 77→100 (Яндекс ставит third-party cookies). Best practice + GDPR-friendly паттерн.
+
+**Контент scraping:** 11 .md в `D:\DeepReserch\research\2026-05-08_tattech-inner-content\` + INDEX.md. Готовая база для C2-C4.
+
+## Параллельно (Phase A revision-loop по главной)
+
+Phase A (placeholder swap на главной) идёт отдельным commit'ом между сессиями C1-C5, не блокирует Phase C.
 
 ---
 
 ## Что вставить в новый чат
 
 ```
-T-Tech polish session. Открой D:\tattech-website\next-session-START.md (раздел "Polish session") + memory project_tattech_client.md (текущий статус: redesign DONE, last commit b5ea9ef pushed).
+T-Tech Phase C Session C2 — service-detail pages part 1.
 
-Режим: я даю маленькие задачи по одной ("это поправь / тут подвинь / вот тут перепиши") — ты делаешь быстро, локальный коммит после каждой логической группы или один в конце. Без research, без новых компонентов, без bundle freeze. Live preview через npm run dev (порт 4321). Когда я скажу "всё, коммитим" — git push origin main + gh run watch.
+Прочитай:
+- D:\tattech-website\PHASE-C-ROADMAP.md (план 5 сессий)
+- D:\tattech-website\next-session-START.md (детали C2)
+- memory project_tattech_client.md
+- D:\DeepReserch\research\2026-05-08_tattech-inner-content\ (scraped контент 11 страниц)
+
+Задачи C2:
+1. Mini-research: B2B service-detail page patterns 2026 (8-10 sources, 1 subagent)
+2. Astro Content Collection `services` (src/content/config.ts schema)
+3. Dynamic route src/pages/[service].astro
+4. 3 service pages: /1s-razrabotka, /obsluzhivanie-1s, /razrabotka-sajtov
+5. Layout per page: PageHero → Что входит → Сколько стоит → Кейсы → Process → ServiceFAQ → CTABanner
+6. Lighthouse 3×3 на 1 random service page
+
+Финал: build green → 1 commit "phase-c-2: services collection + 3 detail pages" → push → memory update → next-session-START.md → C3.
+
+Stack: Astro 6 + plain CSS, branch main. Никаких новых deps. Karpathy guidelines.
 
 Live: https://ilshatsharapov69-afk.github.io/tattech-website/
-Stack: Astro 6 + plain CSS (no Tailwind), branch main.
+Repo: D:\tattech-website
 ```
-
----
-
-## Status: ✅ Redesign DONE 2026-05-07
-
-8 сессий + pre-flight завершены. Live: https://ilshatsharapov69-afk.github.io/tattech-website/
-
-Финальный bundle 10 коммитов запушен в origin/main (commit `9edac15`). Deploy зелёный (28s build+deploy).
-
-**Lighthouse final на LIVE:** Desktop perf 97-99 / a11y 100 / bp 100 / seo 100; Mobile perf 95-96 / a11y 100 / bp 100 / seo 100 (LCP mobile 2.02-2.24s, CLS ~0, TBT 22-30ms). Все ROADMAP-таргеты перевыполнены.
-
----
-
-## Что вставить в новый чат (default — апгрейд placeholder'ов после client input)
-
-```
-T-Tech post-redesign (Phase A: client revision loop). Открой D:\tattech-website\next-session-START.md и REDESIGN-ROADMAP.md (раздел "Post-redesign defer"), прочитай оба полностью + memory project_tattech_client.md.
-
-Задача: применить client-input на placeholder'ы которые остались после session 11. List:
-1. About.astro — real bio (1-2 предложения от первого лица, formula Credibility Hook → Pain Mirror → Operational Promise)
-2. About.astro — real role (если не "Основатель T-Tech")
-3. About.astro — real founder-tenure (текущее "8 лет на рынке" — placeholder, не company-age)
-4. Cases.astro — real pain-описания на 8 кейсов (текущий placeholder past-tense, нужен реальный из проектной истории)
-5. Cases.astro — real deadline на 8 кейсов
-6. Reviews.astro — real имена / метрики (3 testimonials, сейчас Ольга К./Расул А./Ильнур М. — placeholder)
-7. Services.astro / Programs.astro — клиент подтверждает цены (placeholder)
-
-Если клиент пришлёт subset — применить только то что есть. text-only changes, ≤30 LOC, 1 commit, push отдельным шагом (НЕ bundle).
-
-После: build green → git push origin main → gh run watch → smoke-test live → Lighthouse 3×3 desktop+mobile (compare против session 11 baseline). Memory + ROADMAP update.
-```
-
----
-
-## Альтернативные следующие фазы (по приоритету клиента)
-
-### Phase A — Client revision loop (рекомендованный default)
-**Триггер:** клиент видит live, присылает текстовые правки. 1-2 раунда.
-**Scope:** swap placeholder'ов на real content. Text-only.
-**LOC:** ≤30 per round.
-**Lighthouse:** проверять что нет регрессии vs session 11 baseline.
-
-### Phase B — Decap CMS подключение
-**Триггер:** клиент хочет сам редактировать контент.
-**Scope:** изначальная клиентская задача (+3 000 ₽ к договору). Wire Decap CMS на GitHub Pages, настроить collections для services/programs/cases/reviews/about.
-**Effort:** 1-2 сессии.
-**Stack:** Decap CMS на GitHub Pages, Astro content collections, OAuth через GitHub.
-
-### Phase C — 13 внутренних страниц
-**Триггер:** клиент даёт зелёный после Phase A/B.
-**Scope:** /uslugi, /programmy-1s, /nashi-kejsi, /contacts, /privacy, /1s-razrabotka, /obsluzhivanie-1s, /razrabotka-sajtov, /1s-its, /1s-its-tehno, /1s-its-prof, /podbor-i-ustanovka-oborudovaniya, /vnedrenie-bitriks-24
-**Effort:** 4-6 сессий.
-**Контент:** только главная и /nashi-kejsi отсканированы (см. report.md из session 1). Остальные 11 страниц — догнать через WebFetch tat-tech.ru.
-
-### Phase D — Перенос с GitHub Pages на собственный сервер клиента
-**Триггер:** клиент готов оплатить хостинг + домен tat-tech.ru.
-**Scope:** miграция dist/ на VPS, настройка SSL, DNS (tat-tech.ru → новый сервер), 301-редирект со старой Тильды.
-**Effort:** 1-2 сессии (зависит от провайдера).
-
-### Phase E — Performance polish (опционально)
-**Триггер:** если клиент захочет mobile perf >96 на live.
-**Scope:** quality webp 80→75 или smaller fallback (текущий mobile SI 4.2-4.6s — тяжёлый webp payload). LCP уже < 2.5s — над таргетом.
-**Effort:** 1 сессия.
-
-### Phase F — GitHub Actions Node 20 → 24
-**Триггер:** до 2026-06-02 (deprecation deadline).
-**Scope:** обновить `.github/workflows/*.yml` — actions/checkout@v4, actions/setup-node@v4, actions/upload-pages-artifact@v3, actions/deploy-pages@v4 на новые версии или добавить FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true.
-**Effort:** 15 минут.
-
----
-
-## Контекст для Claude (читай при старте post-redesign)
-
-### Состояние проекта (после session 11 + push)
-
-- **Repo:** `D:\tattech-website` (Astro 6, plain CSS, no Tailwind)
-- **Branch:** `main` (10 коммитов от pre-flight до 9edac15 запушены в origin)
-- **Live:** https://ilshatsharapov69-afk.github.io/tattech-website/ (актуальная версия = session 11)
-- **Last commit:** `9edac15` (session 11: benefit-driven copy pass)
-- **Lighthouse final live:** desktop 97-99 perf / mobile 95-96 perf / a11y bp seo 100 на обоих
-
-### Что закрыто финально (НЕ ТРОГАТЬ без explicit client request)
-
-- ✅ Pre-flight — Variant B rollback
-- ✅ 5.1 — Header blue tonal + glass-morphism + 3 icon-buttons + email
-- ✅ 6 — Animations: pulse, scroll progress, mouse-glow, Hero spotlight, Stats redesign, Header glass
-- ✅ 7 — Services: 3D tilt + compact reveal + border-glow + цены + TG-CTA
-- ✅ 8 — Cases: grid 4×2 + B2B-формат + image hover-zoom + spotlight gradient + footer-strip
-- ✅ 9 — Reviews: B2B + per-industry avatar-initials + quote-mark hover
-- ✅ 10a — AI photo generation: 8 case-photos B2B-publication style (Gemini Nano Banana 2)
-- ✅ 10b — About: founder-spotlight с реальной Ленар-selfie 180×180 sq + bio placeholder + 3 trust pills
-- ✅ 11 — Benefit-driven copy: 4 H2/eyebrow pivot (Services / Cases / Programs / About)
-
-### Open client-input items (placeholder'ы ждут revision-loop)
-
-См. список выше в основном промте.
-
----
-
-## Запреты post-redesign (без явной client-просьбы)
-
-- ❌ НЕ менять структуру компонентов (text-only edits)
-- ❌ НЕ добавлять новые компоненты / секции
-- ❌ НЕ трогать палитру / spacing tokens
-- ❌ НЕ переписывать css-классы
-- ❌ НЕ добавлять Tailwind / GSAP / Framer / React (стек заморожен)
-- ❌ НЕ запускать `gh run watch` per-trivial-edit (только когда есть push)
-- ❌ НЕ делать backend-формы (все channels через external links)
-
----
-
-## История redesign'a (8 сессий, ~9 ч работы Claude)
-
-См. `REDESIGN-ROADMAP.md` — каждая сессия документирована: цели, what shipped, Lighthouse, research, файлы.
-
-Research отчёты в `D:/DeepReserch/research/2026-05-{06,07}_*`:
-- 2026-05-06_tattech-redesign — initial research (1С франчайзи + B2B SaaS эталоны)
-- 2026-05-07_tattech-color-research — color refresh (Variant B sandwich)
-- 2026-05-07_b2b-animation-patterns — session 6 (25 src)
-- 2026-05-07_b2b-services-packaging — session 7 (11 src)
-- 2026-05-07_b2b-cases-format — session 8 (18 src)
-- 2026-05-07_b2b-testimonials-format — session 9 (24 src)
-- 2026-05-07_gemini-image-gen — session 10a (28 src)
-- 2026-05-07_b2b-about-section — session 10b (31 src)
-- 2026-05-07_b2b-benefit-headlines — session 11 (14 src)
-
-Total research depth: **~196 источников** на 8 сессий.
-
----
-
-## Memory update после post-redesign session
-
-- `project_tattech_client.md` — статус «redesign DONE + pushed», текущая phase
-- `feedback_*.md` — новые learnings если будут (например про CMS интеграцию или revision-loop pattern)

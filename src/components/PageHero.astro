@@ -1,0 +1,129 @@
+---
+import Icon from './Icon.astro';
+import Breadcrumb from './Breadcrumb.astro';
+
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  title: string;
+  lead?: string;
+  breadcrumb: BreadcrumbItem[];
+  ctaLabel?: string;
+  ctaHref?: string;
+  pills?: string[];
+}
+
+const {
+  title,
+  lead,
+  breadcrumb,
+  ctaLabel = 'Написать в Telegram',
+  ctaHref = 'https://t.me/CyclesOfID',
+  pills = [],
+} = Astro.props;
+---
+
+<section class="page-hero">
+  <div class="page-hero-bg" aria-hidden="true"></div>
+  <div class="container page-hero-inner">
+    <Breadcrumb items={breadcrumb} />
+
+    <h1 class="h1 page-hero-title">{title}</h1>
+
+    {lead && <p class="lead page-hero-lead">{lead}</p>}
+
+    <div class="page-hero-actions">
+      <a
+        href={ctaHref}
+        target={ctaHref.startsWith('http') ? '_blank' : undefined}
+        rel={ctaHref.startsWith('http') ? 'noopener' : undefined}
+        class="btn btn-primary"
+        data-magnetic
+      >
+        <Icon name="telegram" size={18} />
+        <span>{ctaLabel}</span>
+      </a>
+    </div>
+
+    {pills.length > 0 && (
+      <ul class="page-hero-pills">
+        {pills.map((p) => (
+          <li class="pill page-hero-pill">{p}</li>
+        ))}
+      </ul>
+    )}
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    position: relative;
+    isolation: isolate;
+    padding-top: calc(var(--header-h) + var(--space-12));
+    padding-bottom: var(--space-16);
+    color: #fff;
+    overflow: hidden;
+  }
+  .page-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: var(--gradient-hero);
+  }
+  .page-hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.10) 1px, transparent 1px);
+    background-size: 26px 26px;
+    opacity: 0.6;
+  }
+
+  .page-hero-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 880px;
+  }
+
+  .page-hero-title {
+    color: #fff;
+    margin-top: var(--space-3);
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    line-height: 1.1;
+  }
+
+  .page-hero-lead {
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 1.0625rem;
+    max-width: 720px;
+  }
+
+  .page-hero-actions {
+    margin-top: var(--space-3);
+  }
+
+  .page-hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+  .page-hero-pill {
+    border-color: rgba(255, 255, 255, 0.45);
+    color: #fff;
+    background: rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(4px);
+  }
+
+  @media (max-width: 768px) {
+    .page-hero {
+      padding-top: calc(var(--header-h) + var(--space-8));
+      padding-bottom: var(--space-12);
+    }
+  }
+</style>
