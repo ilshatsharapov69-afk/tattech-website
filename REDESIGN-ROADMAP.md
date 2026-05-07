@@ -30,9 +30,9 @@
 ```
 [x] Pre-flight — Variant B rollback + ROADMAP (commit 0e44d6e, NOT pushed)
 [x] 5.1 — Top-bar revamp + Header blue tonal + email btn + brand TG/WA + Hero contacts removed + Stats→Services spacing
-[ ] 6   — Анимации: pulse CTA + scroll progress + mouse-tracking glow + button hovers     ← NEXT
-[ ] 7   — Услуги: упаковка hover-reveal + border-glow
-[ ] 8   — Кейсы: B2B-формат + image zoom + 3D tilt + spotlight gradient
+[x] 6   — Анимации: pulse CTA + scroll progress + mouse-tracking glow + Hero dots spotlight + Header glass + Stats redesign (commit d104c45, NOT pushed)
+[x] 7   — Услуги: упаковка hover-reveal/accordion + border-glow + benefit-bullets + цены + TG-CTA (NOT pushed)
+[ ] 8   — Кейсы: B2B-формат + image zoom + 3D tilt + spotlight gradient     ← NEXT
 [ ] 9   — Отзывы: real B2B
 [ ] 10a — AI photo generation (Gemini Nano Banana 2 / Imagen 4)
 [ ] 10b — About-блок с фото владельца
@@ -122,6 +122,27 @@
 
 ## Session 6 — Анимации: pulse CTA + scroll progress + mouse-tracking glow + button hovers
 
+**Status:** ✅ done 2026-05-07 • **commit d104c45 (NOT pushed)** • **+225 / −31 LOC** (out-of-roadmap polish bumped LOC over the planned ≤120 budget — client-driven additions: Hero dots spotlight, Header glass, Stats redesign)
+
+**What shipped vs plan:**
+- Pulse CTA on Hero btn-primary (Tobias Ahlin pseudo-element ring pattern)
+- ScrollProgress.astro component (CSS animation-timeline: scroll() + Firefox JS fallback)
+- Mouse-tracking glow on .has-glow sections (Services/Programs/FAQ)
+- Hero dots — replaced static pattern with cursor-tracked mask spotlight (NOT in original plan; client request after preview)
+- Header — glass-morphism from page load (NOT in original plan, 5.1 fixup; client noticed jarring scroll jump)
+- Stats — full redesign as Hero→Services gradient bridge (NOT in original plan; client wanted it narrower + group slide-in animation)
+- Counter timing fix — IntersectionObserver threshold 0.5 + rootMargin -120px so it doesn't fire on tall-screen page load
+
+**Skipped:** btn micro-interactions polish (Karpathy: btn-primary already had translateY+scale+filter from earlier work, surgical principle).
+
+**Deferred:** Lighthouse 3×3 (run at start of session 7).
+
+**Research:** [research/2026-05-07_b2b-animation-patterns/report.md](../DeepReserch/research/2026-05-07_b2b-animation-patterns/report.md) — 25 sources
+
+---
+
+## Session 6 — original plan (kept for context)
+
 **Status:** pending • **Research:** ~30 мин • **No client input** • **~120 LOC**
 
 ### Research
@@ -162,30 +183,78 @@
 
 ---
 
-## Session 7 — Услуги: упаковка вместо пустых ссылок + border-glow
+## Session 7 — Услуги: 3D tilt + compact hover-reveal + border-glow
 
-**Status:** pending • **Research:** ~1 час • **Возможен input от клиента** • **~140 LOC**
+**Status:** ✅ done 2026-05-07 • **NOT pushed** • **+105 / −12 LOC**
+
+### Mid-session pivot (важно для контекста)
+
+Изначально по плану было: accordion на mobile + 3 benefit-bullets + большой expanded state. Реализовано в первой итерации (см. research отчёт). После визуальной проверки клиент-сёрфер (user) дал фидбек: «карточки сильно расширяются, кнопка обсудить в Telegram уезжает за экран на меньших viewport, нужно компактнее + сделайте 3D-tilt как в barbershop».
+
+Pivot: **3D tilt был перенесён из плана session 8 (Cases) в session 7 (Services)**. Дроп: benefit-bullets, accordion JS, max-height expansion. Замена: компактный reveal с фиксированной высотой карточки.
+
+### What shipped (final)
+
+- ✅ Удалена пустая ссылка «Узнать подробнее → #contacts»
+- ✅ **3D tilt на pointermove** (perspective(1000px) + rotateX/Y до ±10°), CSS-only через `--rx` / `--ry` custom properties, обновляются JS-handler'ом. На mouseleave — eased-out возврат через `var(--ease-spring)` 320ms. (ref: barbershop reference + decision #5 ROADMAP, originally planned for Cases)
+- ✅ Compact reveal block в каждой карточке: «от X ₽» (4 из 6) + кнопка «Обсудить в Telegram». **Высота карточки СТАБИЛЬНА** — reveal-блок занимает место всегда, на default `opacity: 0` + `translateY(6px)`, на hover `opacity: 1` + `translateY(0)`. Нет `max-height` транзиций → нет скачков высоты row'а.
+- ✅ Border-glow `::after` через conic-gradient + `@property --bg-angle` + `padding-box`/`border-box` техника (ref: CodeTV.dev Animated CSS gradient border 2026). Animation `paused` по default, `running` на hover.
+- ✅ Border-glow + 3D tilt + reveal hover scoped в `@media (hover: hover) and (pointer: fine)` — на mobile/touch не парсятся (perf optimization)
+- ✅ **На mobile:** 3D tilt off (нет hover), border-glow off, reveal-block ВСЕГДА видимый (price + TG button, layout `flex-direction: column` чтобы кнопка была full-width). Нет аккордеона, нет JS-toggle.
+- ✅ `:focus-within` дублирует hover для клавиатурной a11y
+- ✅ `prefers-reduced-motion` отключает 3D tilt + reveal анимацию + border-glow rotation
+- ✅ pre-fill TG-сообщений per-service через `tgUrl(msg)` helper (паттерн из Programs.astro)
+- ✅ Цены: 4 из 6 услуг показывают «от X ₽» (Обслуживание / Сайты / 1С:ИТС / Б24); 2 scope-зависимых без цены (1С Разработка / Подбор оборудования) — hybrid pricing pattern (1С-Рарус показывает / Корус прячет)
+
+### Что было реализовано но дропнуто после фидбека
+
+- ❌ **3 benefit-bullets** (КАК решает боль клиента) — занимали слишком много места в expanded state, дропнуты
+- ❌ **Accordion JS-toggle на mobile** (data-expanded + multi-open) — заменён на статичную видимость reveal-блока
+- ❌ **Chevron-индикатор «Подробнее ›»** — удалён вместе с accordion
+- ❌ **max-height transition expanded state** — заменён на opacity-only fade, fixed height
+
+Defer на возможный future-pass (если клиент попросит): benefit-bullets через tooltip/popover (не expansion).
+
+### Pricing values (placeholder, ТРЕБУЕТ подтверждения клиента до session 11 финального copy-pass)
+
+| Услуга | «от X ₽» |
+|---|---|
+| Обслуживание 1С | 4 990 ₽/мес |
+| Разработка сайтов | 50 000 ₽ |
+| 1С:ИТС | 16 200 ₽/год |
+| Битрикс-24 | 25 000 ₽ |
+
+Базис: рыночные ставки российского 1С-сегмента 2026 (rarus.ru evidence, типовые пороги партнёров 1С).
+
+### Lighthouse session 7 (final)
+
+**Desktop 3×:** 100/100/100/100 ✓ (matches 5.1 baseline)
+**Mobile 3×:** perf 98/97/97 (median 97), a11y/bp/seo 100, LCP 2.2s, SI 1.7-2.7s
+- Δ vs 5.1 baseline (99): −1..−2 perf — в пределах 5-pt threshold ✓
+- Compact rewrite (drop accordion JS + simpler CSS) дал лучшие mobile-метрики чем первая итерация (была 95-98 с SI 1.7-4.2s)
+
+**Lighthouse session 6 догон выполнен:** desktop 100/100/100/100, mobile 98/100/100/100 (LCP 2.2s, CLS 0). Регрессия mobile −1 perf vs 5.1 — в пределах допуска.
 
 ### Research
 
-- Топ-5 1С-внедренцев РФ (1С-Рарус, BIA Technologies, ITAdvice, Корус Консалтинг, ВЦ Раздолье) — что в expanded view: bullets / pricing / case-link / form?
-- Раскрытие: accordion vs hover-reveal vs card-flip vs modal? Best practice для B2B desktop + mobile
+[research/2026-05-07_b2b-services-packaging/report.md](../DeepReserch/research/2026-05-07_b2b-services-packaging/report.md) — 11 источников. Конкурентный анализ топ-5 1С франчайзи РФ + Stripe/Linear/Vercel + accordion/hover UX best practices + conic-gradient техника. Финальная реализация частично дроп'нула рекомендации (benefit-bullets + accordion) на основе клиентского визуального фидбека — ROI accordion и benefit-bullets не оправдал UX-стоимость на small viewport.
 
-### Цели
+### Файлы изменены
 
-1. Убрать пустые «Узнать подробнее»
-2. Каждая услуга → expanded состояние (hover desktop, tap mobile) с 3 benefit-bullets и optional «от X ₽» price hint
-3. **Border-glow на hover** (Q6=B для Services) — мягкий gradient ring snake вокруг карточки
-4. Single-page UX — никаких переходов
+- `src/components/Services.astro` — полный rewrite (+105/-12 LOC final)
+- `REDESIGN-ROADMAP.md` — статус session 7
+- `next-session-START.md` — handoff для session 8
+- `.lighthouse/lh-6-*` — session 6 догон (gitignored)
+- `.lighthouse/lh-7-*` — session 7 результаты (gitignored)
+- `D:/DeepReserch/research/2026-05-07_b2b-services-packaging/report.md` — research отчёт (вне tattech-website репо)
+- `D:/DeepReserch/research/INDEX.md` — обновлён
 
-### Возможный input
+### Возможные доработки (defer на session 11 или client-feedback)
 
-- Согласовать тексты bullets (можем сначала сгенерировать → ты редактируешь)
-
-### Deliverables
-
-- 1 commit, ≤ 3 файла, ≤ 140 LOC delta
-- `research/2026-MM-DD_b2b-services-packaging/report.md`
+- Точные цены (T-Tech подтверждает в session 11 финальном copy-pass)
+- 3D-tilt MAX_TILT (сейчас 10°) — увеличить если клиент скажет «слишком слабо», уменьшить если «перебор»
+- Border-glow «всегда вращается» вместо hover-only (если клиент захочет более заметный disco-вайб)
+- Benefit-bullets через tooltip/popover (если клиент захочет вернуть «КАК это решает боль»)
 
 ---
 
