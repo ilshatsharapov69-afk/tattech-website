@@ -65,12 +65,6 @@ const steps = [
     background: var(--color-bg-tint);
   }
 
-  @property --progress {
-    syntax: '<percentage>';
-    inherits: false;
-    initial-value: 0%;
-  }
-
   .process-list {
     position: relative;
     display: grid;
@@ -78,30 +72,13 @@ const steps = [
     gap: var(--space-6);
     max-width: 880px;
     margin-inline: auto;
-    counter-reset: step;
   }
 
-  .process-list::before {
-    content: '';
-    position: absolute;
-    left: 54px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: linear-gradient(
-      180deg,
-      var(--color-brand-500) var(--progress),
-      var(--color-border) var(--progress)
-    );
-    transition: --progress 1400ms var(--ease-spring);
-    pointer-events: none;
-  }
-
-  .process-list.is-visible::before {
-    --progress: 100%;
-  }
-
+  /* Per-step accent color — drives number, pill, glow, pulse-ring */
   .process-step {
+    --step-color: var(--color-brand-500);
+    --step-color-soft: rgba(37, 99, 235, 0.14);
+    --step-color-glow: rgba(37, 99, 235, 0.30);
     position: relative;
     z-index: 1;
     display: grid;
@@ -114,9 +91,42 @@ const steps = [
     padding: var(--space-6) var(--space-8);
     transition: border-color 220ms ease, box-shadow 220ms var(--ease-spring),
       transform 220ms var(--ease-spring);
+    animation: stepPulse 4.5s ease-in-out infinite;
+    animation-delay: calc(var(--step-i, 0) * 480ms);
   }
+  .process-step:nth-child(1) {
+    --step-i: 0;
+    --step-color: #0EA5E9;
+    --step-color-soft: rgba(14, 165, 233, 0.13);
+    --step-color-glow: rgba(14, 165, 233, 0.32);
+  }
+  .process-step:nth-child(2) {
+    --step-i: 1;
+    --step-color: #2563EB;
+    --step-color-soft: rgba(37, 99, 235, 0.14);
+    --step-color-glow: rgba(37, 99, 235, 0.32);
+  }
+  .process-step:nth-child(3) {
+    --step-i: 2;
+    --step-color: #635BFF;
+    --step-color-soft: rgba(99, 91, 255, 0.16);
+    --step-color-glow: rgba(99, 91, 255, 0.34);
+  }
+  .process-step:nth-child(4) {
+    --step-i: 3;
+    --step-color: #F59E0B;
+    --step-color-soft: rgba(245, 158, 11, 0.18);
+    --step-color-glow: rgba(245, 158, 11, 0.36);
+  }
+  .process-step:nth-child(5) {
+    --step-i: 4;
+    --step-color: #10B981;
+    --step-color-soft: rgba(16, 185, 129, 0.16);
+    --step-color-glow: rgba(16, 185, 129, 0.34);
+  }
+
   .process-step:hover {
-    border-color: var(--color-brand-500);
+    border-color: var(--step-color);
     transform: translateY(-2px);
     box-shadow: var(--shadow-card-hover);
   }
@@ -126,10 +136,11 @@ const steps = [
     font-weight: 800;
     line-height: 1;
     letter-spacing: -0.02em;
-    background: var(--gradient-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--step-color);
+    transition: transform 320ms var(--ease-spring);
+    animation: numPulse 4.5s ease-in-out infinite;
+    animation-delay: calc(var(--step-i, 0) * 480ms);
+    transform-origin: left center;
   }
 
   .step-body {
@@ -150,8 +161,8 @@ const steps = [
   .step-duration {
     font-size: 0.8125rem;
     font-weight: 600;
-    color: var(--color-brand-500);
-    background: rgba(37, 99, 235, 0.08);
+    color: var(--step-color);
+    background: var(--step-color-soft);
     padding: 4px 10px;
     border-radius: var(--radius-full);
   }
@@ -162,10 +173,31 @@ const steps = [
     line-height: 1.55;
   }
 
-  @media (max-width: 640px) {
-    .process-list::before {
-      display: none;
+  /* Sequential wave: card briefly glows in its own colour, then settles */
+  @keyframes stepPulse {
+    0%, 80%, 100% {
+      border-color: var(--color-border);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
     }
+    8% {
+      border-color: var(--step-color);
+      box-shadow:
+        0 0 0 4px var(--step-color-glow),
+        0 12px 28px var(--step-color-soft);
+    }
+    22% {
+      border-color: var(--step-color);
+      box-shadow:
+        0 0 0 0 transparent,
+        0 6px 18px var(--step-color-soft);
+    }
+  }
+  @keyframes numPulse {
+    0%, 80%, 100% { transform: scale(1); }
+    10% { transform: scale(1.22); }
+  }
+
+  @media (max-width: 640px) {
     .process-step {
       grid-template-columns: 1fr;
       gap: var(--space-3);
@@ -173,6 +205,13 @@ const steps = [
     }
     .step-num {
       font-size: 1.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .process-step,
+    .step-num {
+      animation: none !important;
     }
   }
 </style>

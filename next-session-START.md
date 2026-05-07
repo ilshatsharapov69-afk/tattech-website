@@ -1,6 +1,68 @@
-# Post-redesign kickoff — T-Tech (next session prompt)
+# Polish session — T-Tech (next session prompt)
 
 > Этот файл всегда содержит промт для **следующей** запланированной сессии.
+
+## Polish session — режим работы
+
+**User даёт маленькие задачи по одной** («это поправь / подвинь / перепиши / поменяй цвет / увеличь / убери»). Claude **делает быстро, без research**, без новых компонентов, без больших переписываний.
+
+Workflow:
+1. User: «вот это поправь так-то»
+2. Claude: читает нужный файл → правит → коротко подтверждает what изменилось → ждёт следующую задачу
+3. Локальный коммит после каждой логической группы правок (или один общий в конце — по решению user'а)
+4. Live preview через `npm run dev` (порт 4321) — user смотрит в браузере
+5. Когда user скажет **«всё, коммитим»** → `git push origin main` + `gh run watch` + smoke-test live URL
+
+### Запреты polish-режима
+
+- ❌ НЕ запускать research subagents (полный rewrite пока не нужен)
+- ❌ НЕ менять структуру компонентов без явной просьбы
+- ❌ НЕ добавлять новые секции
+- ❌ НЕ запускать Lighthouse per-tweak (только в конце если user попросит)
+- ❌ НЕ переустанавливать зависимости
+- ❌ НЕ трогать палитру / spacing tokens без explicit запроса
+
+### Что МОЖНО
+
+- ✅ Text-edits (любая копия)
+- ✅ Mini CSS-правки (cursor, padding, font-size — узкие)
+- ✅ Swap placeholder'ов на real content (см. список ниже если user принёс)
+- ✅ Image-replace (если user даёт новое фото)
+- ✅ Mini layout-правки (gap, max-width, alignment)
+
+---
+
+## Quick reference
+
+- **Repo:** `D:\tattech-website` (Astro 6, plain CSS)
+- **Branch:** `main` (last commit `b5ea9ef` pushed 2026-05-07)
+- **Live:** https://ilshatsharapov69-afk.github.io/tattech-website/
+- **Components:** `src/components/{Hero,Stats,Services,Process,Cases,Reviews,Programs,FAQ,About,CTABanner,Header,Footer,Icon,ScrollProgress}.astro`
+- **Page:** `src/pages/index.astro` (orchestrates components in order: Hero → Stats → Services → Process → Cases → Reviews → Programs → FAQ → About → CTABanner)
+
+### Placeholder'ы которые ждут client input (если user принесёт — точечный swap)
+
+1. About bio (38 слов в `About.astro`, formula Credibility Hook → Pain Mirror → Operational Promise)
+2. About role («Основатель T-Tech»)
+3. About trust pills («Казань / Партнёр 1С / 8 лет на рынке»)
+4. Cases pain/deadline (8 кейсов)
+5. Reviews имена/метрики (3 testimonials)
+6. Services / Programs точные цены
+
+---
+
+## Что вставить в новый чат
+
+```
+T-Tech polish session. Открой D:\tattech-website\next-session-START.md (раздел "Polish session") + memory project_tattech_client.md (текущий статус: redesign DONE, last commit b5ea9ef pushed).
+
+Режим: я даю маленькие задачи по одной ("это поправь / тут подвинь / вот тут перепиши") — ты делаешь быстро, локальный коммит после каждой логической группы или один в конце. Без research, без новых компонентов, без bundle freeze. Live preview через npm run dev (порт 4321). Когда я скажу "всё, коммитим" — git push origin main + gh run watch.
+
+Live: https://ilshatsharapov69-afk.github.io/tattech-website/
+Stack: Astro 6 + plain CSS (no Tailwind), branch main.
+```
+
+---
 
 ## Status: ✅ Redesign DONE 2026-05-07
 

@@ -1,5 +1,7 @@
 ---
 import Icon from './Icon.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <section class="hero">
@@ -17,7 +19,9 @@ import Icon from './Icon.astro';
 
     <h1 class="h1 hero-title">
       Автоматизация бизнеса <br class="d-desk" />
-      <span class="text-gradient">на 1С</span> — без хаоса,<br class="d-desk" />
+      на <span class="hero-1c-mark">
+        <img src={`${base}/images/services/1c-logo.svg`} alt="1С" width="200" height="98" />
+      </span> — без хаоса,<br class="d-desk" />
       в срок, под ключ.
     </h1>
 
@@ -43,19 +47,23 @@ import Icon from './Icon.astro';
     </div>
 
     <div class="hero-trust">
-      <div class="trust-item">
+      <div class="trust-item trust-item--left">
         <Icon name="check" size={18} class="trust-icon" />
         <span>Этапы и&nbsp;сроки фиксируем в&nbsp;договоре</span>
       </div>
-      <div class="trust-item">
+      <div class="trust-item trust-item--up">
         <Icon name="check" size={18} class="trust-icon" />
         <span>Поддержка 5/2 после запуска</span>
       </div>
-      <div class="trust-item">
+      <div class="trust-item trust-item--right trust-item--free">
         <Icon name="check" size={18} class="trust-icon" />
         <span>Бесплатная консультация, без&nbsp;обязательств</span>
       </div>
     </div>
+
+    <a href="#services" class="hero-scroll" aria-label="Прокрутить вниз">
+      <span class="hero-scroll-chevron"></span>
+    </a>
   </div>
 </section>
 
@@ -169,6 +177,22 @@ import Icon from './Icon.astro';
     color: transparent;
   }
 
+  /* Inline 1C logo replacing the text "1С" in H1 — naked red SVG, no chrome */
+  .hero-1c-mark {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: -0.08em;
+    margin: 0 0.06em;
+    line-height: 1;
+    transform-origin: center;
+  }
+  .hero-1c-mark img {
+    display: block;
+    height: 0.78em;
+    width: auto;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+  }
+
   .hero-title {
     max-width: 980px;
     animation: fadeUpBlur 900ms var(--ease-spring) both;
@@ -213,8 +237,6 @@ import Icon from './Icon.astro';
     border-top: 1px solid rgba(255, 255, 255, 0.18);
     width: 100%;
     max-width: 720px;
-    animation: fadeUp 800ms var(--ease-spring) both;
-    animation-delay: 540ms;
   }
   .trust-item {
     display: inline-flex;
@@ -223,9 +245,72 @@ import Icon from './Icon.astro';
     font-size: 0.875rem;
     color: rgba(255, 255, 255, 0.88);
     font-weight: 500;
+    opacity: 0;
   }
+  .trust-item--left  { animation: trustInLeft  700ms var(--ease-spring) 540ms both; }
+  .trust-item--up    { animation: trustInUp    700ms var(--ease-spring) 720ms both; }
+  .trust-item--right { animation: trustInRight 700ms var(--ease-spring) 900ms both; }
   .trust-icon {
     color: #6EE7B7;
+  }
+
+  .trust-item--free {
+    color: #86EFAC;
+    font-weight: 600;
+    text-shadow: 0 0 18px rgba(110, 231, 183, 0.35);
+  }
+  .trust-item--free :global(.trust-icon) {
+    color: #6EE7B7;
+    filter: drop-shadow(0 0 6px rgba(110, 231, 183, 0.7));
+    animation: freePulse 2.6s ease-in-out 1.6s infinite;
+  }
+
+  @keyframes trustInLeft {
+    from { opacity: 0; transform: translateX(-18px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes trustInUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes trustInRight {
+    from { opacity: 0; transform: translateX(18px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes freePulse {
+    0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 6px rgba(110, 231, 183, 0.6)); }
+    50%      { transform: scale(1.18); filter: drop-shadow(0 0 12px rgba(110, 231, 183, 1)); }
+  }
+
+  .hero-scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeUp 800ms var(--ease-spring) 1100ms both;
+    transition: opacity 200ms ease;
+  }
+  .hero-scroll:hover { opacity: 1 !important; }
+  .hero-scroll-chevron {
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-right: 2px solid rgba(255, 255, 255, 0.7);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.7);
+    transform: rotate(45deg);
+    margin-top: -4px;
+    animation: scrollBounce 1.8s cubic-bezier(0.45, 0, 0.55, 1) 1500ms infinite;
+  }
+  @keyframes scrollBounce {
+    0%, 100% { transform: rotate(45deg) translate(0, 0);    opacity: 0.55; }
+    50%      { transform: rotate(45deg) translate(4px, 4px); opacity: 1; }
   }
 
   .hero :global(.btn-primary) {
@@ -313,8 +398,15 @@ import Icon from './Icon.astro';
     .hero-title,
     .hero-sub,
     .hero-cta,
-    .hero-trust {
+    .hero-trust,
+    .trust-item,
+    .trust-item--free :global(.trust-icon),
+    .hero-scroll,
+    .hero-scroll-chevron,
+    .hero-1c-mark {
       animation: none;
     }
+    .trust-item { opacity: 1; }
+    .hero-scroll { opacity: 0.7; }
   }
 </style>

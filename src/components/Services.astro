@@ -1,6 +1,15 @@
 ---
 import Icon from './Icon.astro';
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const watermarkSrc: Record<string, string> = {
+  '1c':  `${base}/images/services/1c-logo.svg`,
+  'b24': `${base}/images/services/bitrix24-logo.svg`,
+  'web': `${base}/images/services/web-code.jpg`,
+  'pos': `${base}/images/services/pos-terminal.jpg`,
+};
+
 const services = [
   {
     icon: 'code',
@@ -9,6 +18,7 @@ const services = [
     bullets: ['Типовые конфигурации и доработки', 'Разработка с нуля', 'Интеграция с CRM, банком, маркетплейсами'],
     price: null,
     tgMsg: 'Здравствуйте! Хочу обсудить разработку или доработку 1С',
+    watermark: '1c',
   },
   {
     icon: 'wrench',
@@ -17,6 +27,7 @@ const services = [
     bullets: ['Обновления каждый месяц', 'Регламентные резервные копии', 'Поддержка по телефону и удалённо'],
     price: '4 990 ₽/мес',
     tgMsg: 'Здравствуйте! Хочу обсудить обслуживание 1С',
+    watermark: '1c',
   },
   {
     icon: 'globe',
@@ -25,6 +36,7 @@ const services = [
     bullets: ['Каталог и остатки из 1С', 'Онлайн-оплата и заявки в CRM', 'SEO-оптимизация под Яндекс'],
     price: '50 000 ₽',
     tgMsg: 'Здравствуйте! Хочу обсудить разработку сайта',
+    watermark: 'web',
   },
   {
     icon: 'shield',
@@ -33,6 +45,7 @@ const services = [
     bullets: ['Активация за день', 'Автообновления конфигураций', 'Линия консультаций 1С'],
     price: '16 200 ₽/год',
     tgMsg: 'Здравствуйте! Хочу оформить 1С:ИТС',
+    watermark: '1c',
   },
   {
     icon: 'server',
@@ -41,6 +54,7 @@ const services = [
     bullets: ['Подбор под бюджет и задачу', 'Поставка от партнёров', 'Монтаж и настройка'],
     price: null,
     tgMsg: 'Здравствуйте! Нужен подбор оборудования',
+    watermark: 'pos',
   },
   {
     icon: 'chart',
@@ -49,6 +63,7 @@ const services = [
     bullets: ['Воронки продаж и роботы', 'Телефония и почта', 'Двусторонний обмен с 1С'],
     price: '25 000 ₽',
     tgMsg: 'Здравствуйте! Хочу обсудить настройку Битрикс-24',
+    watermark: 'b24',
   },
 ];
 
@@ -57,17 +72,33 @@ const tgUrl = (msg: string) => `https://t.me/CyclesOfID?text=${encodeURIComponen
 
 <section class="section services has-glow" id="services">
   <div class="container">
-    <header class="section-head reveal">
-      <span class="eyebrow">Услуги</span>
-      <h2 class="h2">Один подрядчик на всю 1С</h2>
-      <p class="lead">
-        Лицензии, разработка, поддержка, оборудование, Битрикс — без сборки команды из подрядчиков под каждую задачу.
+    <header class="section-head services-head reveal">
+      <span class="eyebrow services-eyebrow">Услуги</span>
+      <h2 class="h2 services-title">
+        Один подрядчик на&nbsp;всю <span class="text-gradient title-accent">1С</span>
+      </h2>
+      <p class="lead services-lead">
+        <span class="kw kw-1">Лицензии</span>,
+        <span class="kw kw-2">разработка</span>,
+        <span class="kw kw-3">поддержка</span>,
+        <span class="kw kw-4">оборудование</span>,
+        <span class="kw kw-5">Битрикс</span>
+        — без сборки команды из подрядчиков под каждую задачу.
       </p>
     </header>
 
     <ul class="grid reveal-stagger">
       {services.map((service) => (
         <li class="card service-card">
+          <span class={`card-watermark wm-${service.watermark}`} aria-hidden="true">
+            <img
+              src={watermarkSrc[service.watermark]}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              class="watermark-img"
+            />
+          </span>
           <div class="icon-wrap">
             <Icon name={service.icon} size={28} />
           </div>
@@ -134,6 +165,99 @@ const tgUrl = (msg: string) => `https://t.me/CyclesOfID?text=${encodeURIComponen
     padding-top: var(--space-16);
   }
 
+  /* ===== Section header: animated reveal ===== */
+  .services-head { position: relative; }
+
+  .services-eyebrow {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--color-brand-700), var(--color-brand-purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0;
+    transform: translateX(-14px);
+    transition: opacity 600ms var(--ease-spring), transform 600ms var(--ease-spring);
+    transition-delay: 80ms;
+  }
+
+  .services-title {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(6px);
+    transition: opacity 700ms var(--ease-spring), transform 700ms var(--ease-spring),
+      filter 700ms ease;
+    transition-delay: 200ms;
+  }
+
+  .services-title .title-accent {
+    background: linear-gradient(135deg, var(--color-brand-500) 0%, var(--color-brand-purple) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 200% 200%;
+    animation: titleAccentShift 6s ease-in-out infinite;
+  }
+  @keyframes titleAccentShift {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+
+  /* Gradient underline that grows on scroll-in */
+  .services-head::after {
+    content: '';
+    display: block;
+    margin: var(--space-3) auto 0;
+    width: 0;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--color-brand-500), var(--color-brand-purple));
+    transition: width 700ms var(--ease-spring);
+    transition-delay: 480ms;
+  }
+
+  .services-lead {
+    opacity: 0;
+    transition: opacity 600ms ease;
+    transition-delay: 360ms;
+  }
+  .services-lead .kw {
+    opacity: 0;
+    display: inline-block;
+    transform: translateY(8px);
+    font-weight: 600;
+    transition: opacity 500ms var(--ease-spring), transform 500ms var(--ease-spring);
+  }
+  .kw-1 { color: var(--color-brand-700); }
+  .kw-2 { color: var(--color-brand-purple); }
+  .kw-3 { color: var(--color-brand-500); }
+  .kw-4 { color: #0E7490; }
+  .kw-5 { color: #B45309; }
+
+  /* Trigger reveal when section-head becomes visible */
+  .services-head.is-visible .services-eyebrow,
+  .services-head.is-visible .services-title {
+    opacity: 1;
+    transform: translate(0);
+    filter: blur(0);
+  }
+  .services-head.is-visible::after { width: 88px; }
+  .services-head.is-visible .services-lead { opacity: 1; }
+  .services-head.is-visible .kw {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .services-head.is-visible .kw-1 { transition-delay: 540ms; }
+  .services-head.is-visible .kw-2 { transition-delay: 660ms; }
+  .services-head.is-visible .kw-3 { transition-delay: 780ms; }
+  .services-head.is-visible .kw-4 { transition-delay: 900ms; }
+  .services-head.is-visible .kw-5 { transition-delay: 1020ms; }
+
+  /* Override the parent .reveal opacity — we drive child reveals manually */
+  .services-head.reveal {
+    opacity: 1;
+    transform: none;
+  }
+
   .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -143,6 +267,7 @@ const tgUrl = (msg: string) => `https://t.me/CyclesOfID?text=${encodeURIComponen
   .service-card {
     gap: var(--space-4);
     position: relative;
+    overflow: hidden;
     /* Override .card hover translateY — 3D tilt handles the lift via translateZ */
     transform: perspective(1000px)
       rotateX(var(--rx, 0deg))
@@ -151,6 +276,122 @@ const tgUrl = (msg: string) => `https://t.me/CyclesOfID?text=${encodeURIComponen
     transition: transform 320ms var(--ease-spring),
       box-shadow 250ms var(--ease-spring),
       border-color 250ms ease;
+  }
+
+  /* Real brand-asset watermark — top-right of each card.
+     Idle "breathing" animation; hover boosts opacity + scale + rotation. */
+  .card-watermark {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+    transform-origin: top right;
+    will-change: transform, opacity;
+    animation: wmBreathe 5.5s ease-in-out infinite;
+    transition: opacity 380ms ease,
+      transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      filter 380ms ease;
+  }
+  .watermark-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+  }
+  /* 1C logo: red SVG on yellow brand-badge background */
+  .wm-1c {
+    top: 18px;
+    right: 18px;
+    width: 118px;
+    height: 60px;
+    padding: 8px 14px;
+    background: #FFCD00;
+    border-radius: 8px;
+    opacity: 0.85;
+    box-shadow: 0 4px 14px rgba(217, 25, 32, 0.18);
+  }
+  /* Bitrix24 logo: horizontal lockup, top-right */
+  .wm-b24 {
+    top: 22px;
+    right: 18px;
+    width: 130px;
+    height: 28px;
+    opacity: 0.7;
+    filter: drop-shadow(0 2px 6px rgba(10, 159, 212, 0.2));
+  }
+  /* Web code photo: dissolves into card via radial mask, no hard edges */
+  .wm-web {
+    top: 8px;
+    right: 8px;
+    width: 160px;
+    height: 110px;
+    opacity: 0.7;
+    overflow: hidden;
+    filter: saturate(1.05) contrast(1.05);
+    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 60% 40%, #000 45%, rgba(0,0,0,0.5) 75%, transparent 100%);
+    mask-image: radial-gradient(ellipse 70% 70% at 60% 40%, #000 45%, rgba(0,0,0,0.5) 75%, transparent 100%);
+  }
+  .wm-web .watermark-img { object-fit: cover; }
+  /* POS terminal photo — same soft-dissolve treatment, slightly stronger */
+  .wm-pos {
+    top: 8px;
+    right: 8px;
+    width: 160px;
+    height: 110px;
+    opacity: 0.85;
+    overflow: hidden;
+    filter: saturate(1.1) contrast(1.08);
+    -webkit-mask-image: radial-gradient(ellipse 70% 70% at 60% 40%, #000 50%, rgba(0,0,0,0.5) 78%, transparent 100%);
+    mask-image: radial-gradient(ellipse 70% 70% at 60% 40%, #000 50%, rgba(0,0,0,0.5) 78%, transparent 100%);
+  }
+  .wm-pos .watermark-img { object-fit: cover; }
+
+  /* Idle breathing — subtle scale + opacity pulse so it feels alive */
+  @keyframes wmBreathe {
+    0%, 100% { transform: scale(1)    translateY(0); }
+    50%      { transform: scale(1.04) translateY(-2px); }
+  }
+
+  /* Hover: kill idle breathe, play expressive POP keyframe — bigger + bouncy */
+  @keyframes wmPop {
+    0%   { transform: scale(1)    rotate(0deg); }
+    55%  { transform: scale(1.62) rotate(-7deg); }
+    78%  { transform: scale(1.42) rotate(-3deg); }
+    100% { transform: scale(1.5)  rotate(-5deg); }
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .service-card:hover .card-watermark {
+      animation: wmPop 620ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      opacity: 1;
+    }
+    .service-card:hover .wm-web,
+    .service-card:hover .wm-pos {
+      opacity: 1;
+    }
+    .service-card:hover .wm-1c {
+      box-shadow: 0 12px 30px rgba(217, 25, 32, 0.42);
+    }
+    .service-card:hover .wm-b24 {
+      filter: drop-shadow(0 10px 26px rgba(10, 159, 212, 0.55));
+    }
+  }
+
+  /* Lift card content above watermark */
+  .service-card > *:not(.card-watermark) {
+    position: relative;
+    z-index: 1;
+  }
+  /* Title needs right padding so it doesn't slide under the watermark */
+  .service-card .h3 {
+    padding-right: 96px;
+  }
+
+  @media (max-width: 600px) {
+    .wm-1c     { width: 96px; height: 48px; padding: 6px 10px; top: 16px; right: 16px; }
+    .wm-b24    { width: 104px; height: 22px; top: 20px; right: 16px; }
+    .wm-web,
+    .wm-pos    { width: 130px; height: 90px; top: 10px; right: 10px; }
+    .service-card .h3 { padding-right: 76px; }
   }
 
   /* Override the .card:hover translateY (it conflicts with 3D rotate) */
@@ -362,6 +603,22 @@ const tgUrl = (msg: string) => `https://t.me/CyclesOfID?text=${encodeURIComponen
       transform: none !important;
       pointer-events: auto !important;
       transition: none;
+    }
+    .services-eyebrow,
+    .services-title,
+    .services-lead,
+    .services-lead .kw {
+      opacity: 1 !important;
+      transform: none !important;
+      filter: none !important;
+      transition: none !important;
+    }
+    .services-title .title-accent { animation: none !important; }
+    .services-head::after { width: 88px !important; transition: none !important; }
+    .card-watermark {
+      transition: none !important;
+      transform: none !important;
+      animation: none !important;
     }
   }
 </style>
