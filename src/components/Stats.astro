@@ -77,35 +77,37 @@ const stats = [
     color: var(--color-text-soft);
   }
 
-  /* Group slide-in from far-left.
+  /* Desktop-only slide-in from far-left.
      All three items start at roughly the same off-screen X (each item's
      translateX compensates for its own grid column position).
      They move together but stop in order: leftmost first, middle next,
-     rightmost last. Triggered by counter.ts intersection (threshold 0.5
-     + rootMargin -120px) so it doesn't fire on page load on tall screens. */
-  .stats-grid > :global(*) {
-    opacity: 0;
-    transition-property: opacity, transform;
-    transition-timing-function: ease-out, cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform, opacity;
-  }
-  .stats-grid > :global(*:nth-child(1)) {
-    transform: translateX(-180px);
-    transition-duration: 500ms;
-  }
-  .stats-grid > :global(*:nth-child(2)) {
-    transform: translateX(-340px);
-    transition-duration: 800ms;
-  }
-  .stats-grid > :global(*:nth-child(3)) {
-    transform: translateX(-500px);
-    transition-duration: 1100ms;
-  }
-  .stats-grid.is-visible > :global(*) {
-    opacity: 1;
-    transform: translateX(0);
+     rightmost last. Triggered by counter.ts intersection. */
+  @media (min-width: 769px) {
+    .stats-grid > :global(*) {
+      opacity: 0;
+      transition-property: opacity, transform;
+      transition-timing-function: ease-out, cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
+    }
+    .stats-grid > :global(*:nth-child(1)) {
+      transform: translateX(-180px);
+      transition-duration: 500ms;
+    }
+    .stats-grid > :global(*:nth-child(2)) {
+      transform: translateX(-340px);
+      transition-duration: 800ms;
+    }
+    .stats-grid > :global(*:nth-child(3)) {
+      transform: translateX(-500px);
+      transition-duration: 1100ms;
+    }
+    .stats-grid.is-visible > :global(*) {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 
+  /* Mobile: items sit in their final grid spot; counter still animates 0→target. */
   @media (max-width: 768px) {
     .stats .container {
       max-width: 320px;
@@ -113,13 +115,6 @@ const stats = [
     .stats-grid {
       grid-template-columns: repeat(3, 1fr);
       gap: var(--space-2);
-    }
-    /* Mobile: skip slide-in entirely. Items sit in their final grid spot;
-       only the counter animation (0 → target) plays via counter.ts. */
-    .stats-grid > :global(*) {
-      opacity: 1;
-      transform: none;
-      transition: none;
     }
   }
 </style>
