@@ -98,7 +98,6 @@ const cases = [
         return (
           <article class="case-card spotlight-card">
             <div class="case-media">
-              <span class="case-badge" style={`background:${c.color}`}>{c.industry}</span>
               <img
                 src={`${base}/images/cases/${slug}-960.webp`}
                 srcset={srcset}
@@ -111,7 +110,7 @@ const cases = [
               />
             </div>
             <div class="case-body">
-              <h3 class="h3 case-title">{c.industry}</h3>
+              <h3 class="h3 case-title" style={`color:${c.color}`}>{c.industry}</h3>
               <p class="case-pain">{c.pain}</p>
               <div class="case-solution">
                 <Icon name="check" size={14} class="case-check" />
@@ -177,22 +176,6 @@ const cases = [
     background: linear-gradient(to top, rgba(15, 23, 42, 0.22) 0%, transparent 55%);
     pointer-events: none;
   }
-  .case-badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    z-index: 2;
-    padding: 5px 11px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: #fff;
-    border-radius: var(--radius-full);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    letter-spacing: 0.01em;
-  }
-
   .case-body {
     padding: var(--space-5) var(--space-5) var(--space-4);
     display: flex;
