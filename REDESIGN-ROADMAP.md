@@ -35,9 +35,9 @@
 [x] 6   — Анимации: pulse CTA + scroll progress + mouse-tracking glow + Hero dots spotlight + Header glass + Stats redesign (commit d104c45, NOT pushed)
 [x] 7   — Услуги: упаковка hover-reveal/accordion + border-glow + benefit-bullets + цены + TG-CTA (NOT pushed)
 [x] 8   — Кейсы: grid 4×2 + B2B-формат + image hover-zoom + per-card spotlight gradient + footer-strip метрика (NOT pushed)
-[ ] 9   — Отзывы: real B2B (demo-first)     ← NEXT
-[ ] 10a — AI photo generation (Gemini Nano Banana 2 / Imagen 4)
-[ ] 10b — About-блок с фото владельца
+[x] 9   — Отзывы: B2B + per-industry avatar-initials + quote-mark hover (commit e4838d7, NOT pushed)
+[x] 10a — AI photo generation (Gemini Nano Banana 2): 8 case-photos в B2B-publication style + per-industry focus (NOT pushed)
+[ ] 10b — About-блок с фото владельца  ← NEXT
 [ ] 11  — Финальный copywriting pass (benefit headlines)
 ```
 
@@ -298,59 +298,120 @@ Defer на возможный future-pass (если клиент попроси�
 
 ---
 
-## Session 9 — Отзывы: B2B (demo-first)
+## Session 9 — Отзывы: B2B + per-industry avatar-initials + quote-mark hover (demo-first)
 
-**Status:** pending • **Research:** ~30 мин • **Demo-first** (placeholder отзывы, клиент правит позже) • **~80 LOC**
+**Status:** ✅ done 2026-05-07 • **commit e4838d7 (NOT pushed)** • **+150 / −53 LOC** (Reviews.astro полный rewrite)
+
+### What shipped
+
+- ✅ **3 placeholder отзыва** в B2B-формате, связанные с топ-3 кейсами (ЖКХ #01, Аптеки #07, Памятники #08). Past-tense pain → present-tense result + конкретные процессы (закрытие месяца / МДЛП / смета в Excel) + скромные метрики («3 дня → 1 день» / «0 расхождений за 2 мес» / «0 возвратов за полгода»). Локальный якорь Казань/Татарстан.
+- ✅ **Avatar-initials 48px** circle с per-industry coloring (matches Cases.astro badge colors: `#1D4ED8` ЖКХ / `#0E7490` Аптеки / `#334155` Памятники). Font-size 42% от диаметра (20px), weight 600, letter-spacing 0.06em, uppercase. Контраст white text ≥ 4.5:1 (WCAG 2.2 AA). `role="img"` + `aria-label="Аватар [Имя]"` для screen readers.
+- ✅ **Quote-mark hover** через `::before` pseudo с `content: '\201C'` (Georgia 6rem). Default `opacity: 0.12 + translateY(4px)`, hover/focus-within `opacity: 0.28 + translateY(0)`, 300ms cubic-bezier(0.4, 0, 0.2, 1). GPU-only (opacity + transform), gated `@media (hover: hover) and (pointer: fine)`. Дифференцирует Reviews от Services border-glow и Cases spotlight (decision Q1 ROADMAP, signature-эффекты не дублируются).
+- ✅ **Card hover** translateY(-4px) + border-color brand-500 + shadow-card-hover (consistent с Services/Cases).
+- ✅ **Layout:** Grid 3 → 2 → 1 col на ≤1024 / ≤640px. Padding адаптируется на mobile (8/6 → 6/5).
+- ✅ **prefers-reduced-motion** убирает `transform`, оставляет opacity-only (200ms linear) — opacity-only безвредна по WCAG 2.1 C39.
+- ✅ **`:focus-within`** дублирует hover для клавиатурной a11y.
+- ✅ **Mobile** quote-mark scaled down до 4.5rem (top -0.75rem) для пропорций; hover-эффекты не парсятся (perf optimization).
+- ✅ Удалён неиспользуемый `import Icon` (orphan-cleanup после Karpathy surgical principle).
+
+### Lighthouse session 9 (3×3)
+
+**Desktop 3×:** 100/100/100/100 (LCP 0.57s, CLS 0.000-0.009, SI 0.43-0.46s, TBT 0)
+**Mobile 3×:** 98/100/100/100 (LCP 2.18s, CLS 0.000, SI 1.51s, TBT 0)
+
+No regression vs session 8 baseline (desktop 100, mobile 98). LCP/SI идентичны или лучше.
 
 ### Research
 
-- Linear / Vercel / Stripe testimonials — формат: должность + компания + 1 строка боль + 1 строка результат
-- Avatar handling без stock-photos: инициалы в круге / abstract pattern / лого компании
-- B2B placeholder testimonials — правдоподобный tone, региональный контекст (Казань / 1С / отрасли клиентов T-Tech)
+[research/2026-05-07_b2b-testimonials-format/report.md](../DeepReserch/research/2026-05-07_b2b-testimonials-format/report.md) — 24 источника, 5 параллельных subagents:
+- **Cat. A** (стабильные стандарты): WCAG 2.2, eBay DS, Radix UI, Flowbite, Pope Tech, Tatiana Mac
+- **Cat. B** (implementation patterns 2025-2026): subframe.com, freefrontend, codegenes, b2better.co, SaaSFrame
+- **Cat. C** (конкуренты-эталоны): Linear, Vercel, Stripe, Attio, Intercom
+- **Cat. D** (RU 1С франчайзи): Рарус (3309 писем), 1АБ скан-галерея, БИТ, Интро-С (best card pattern), ЭС-Бай, Victory
+- **Cat. E** (RU copywriting): in-scale, sales-generator, TestimonialHero — past-tense + skromnaya метрика правила
 
-### Input (demo-first)
+### Файлы изменены
 
-- НЕ ждём реальные отзывы — пишем 2-3 placeholder'а в B2B-формате (должность + отрасль + боль + результат с метрикой)
-- Связать с кейсами session 8 (один отзыв ↔ один кейс) для целостности
-- Аватары: инициалы в круге с brand-color (избегаем stock-фото)
-- Клиент заменит на реальные перед push session 11
+- `src/components/Reviews.astro` — полный rewrite (+150/−53 LOC final)
+- `REDESIGN-ROADMAP.md` — статус session 9
+- `next-session-START.md` — handoff для session 10a (AI photo generation)
+- `.lighthouse/lh-9-*` — session 9 результаты (gitignored)
+- `D:/DeepReserch/research/2026-05-07_b2b-testimonials-format/report.md` — research отчёт
+- `D:/DeepReserch/research/INDEX.md` — обновлён
 
-### Deliverables
+### Возможные доработки (defer на session 11 client-feedback)
 
-- 1 commit, ≤ 2 файла, ≤ 80 LOC delta
+- Замена placeholder имён/метрик на реальные после получения реальных отзывов
+- Опционально PDF-ссылки на сканы благодарственных писем (RU B2B trust pattern, Рарус/1АБ/Интро-С); требует реальных сканов от клиента
+- Опционально 4-й отзыв (Пищевое производство — DataMatrix кейс) если 3 покажутся «жидко»
 
 ---
 
-## Session 10a — AI photo generation (Gemini Nano Banana 2 / Imagen 4)
+---
 
-**Status:** pending • **Research:** ~1 час** • **Input от клиента: API key Google AI Studio** • **~150 LOC скрипта + N сгенерированных PNG**
+## Session 10a — AI photo generation (Gemini Nano Banana 2)
+
+**Status:** ✅ done 2026-05-07 • **NOT pushed** • **+155 LOC script + 24 webp + 8 raw (gitignored)**
+
+### What shipped (final)
+
+- ✅ **`scripts/generate-tattech-photos.mjs`** — Node.js script (`@google/genai@1.52.0` SDK + sharp), CLI flags `--only`, `--model=fallback`, `--dry-run`, `.env.local` loader
+- ✅ **Model:** `gemini-3.1-flash-image-preview` (Nano Banana 2, primary), fallback `gemini-2.5-flash-image`
+- ✅ **8 case-photos** сгенерированы → конвертированы sharp в 3 webp размера (640/960/1200, 16:10 aspect via `fit:cover`, quality 80, effort 6)
+- ✅ **Pipeline:** API call returns base64 JPEG (16:9 native) → Buffer → sharp resize+crop в 16:10 → `public/images/cases/{slug}-{w}.webp` (replace existing — Cases.astro paths не тронуты)
+- ✅ **Raw JPEG** в `public/images/photos/raw/` — gitignored (только webp в репо)
+- ✅ **`.env.local`** loader (manual fs parse, no dotenv dep) — key reused from `D:\whisper-typing\.env` (billing-enabled project)
+
+### Strategy pivots (важно для будущих сессий)
+
+1. **v1 prompts (lo-fi documentary, "shot on iPhone 8" / security camera) — REJECTED** клиентом как «грязно/любительски/похоже на AI». См. `feedback_b2b_cases_varied_style.md` updated.
+2. **v2 prompts (professional B2B-publication, all offices) — partially REJECTED** — «везде блин офисы». Только `04-tires` (showroom) + `07-pharmacy` (POS counter) одобрены.
+3. **v3 prompts (industry-focus, NOT office)** — финальная стратегия:
+   - Outdoor: ЖКХ (жилой комплекс с двором), стройка (site с краном), памятники (showroom yard со скульптурами)
+   - Indoor industrial: пищевка (conveyor line с банками)
+   - Indoor close-up: инжиниринг (CAD pump model on monitor, no people)
+   - Indoor retail (people): шины (showroom + scanner), одежда (rack + stockroom), аптека (POS counter)
+
+### Lighthouse session 10a (3×3)
+
+**Desktop 3×:** 100/100/100/100 (LCP 0.57s, CLS 0, TBT 0, SI 0.48-0.63s) — без регрессии vs session 9
+**Mobile 3×:** **96**/100/100/100 (LCP 2.20s, CLS 0, TBT 0, SI ~4.03s)
+- Δ vs session 9 baseline (98): **−2 perf, +2.5s SI** — heavier webp payload (60-150 KB vs 30-50 KB scraped)
+- LCP/CLS/TBT без регрессии
+- Mobile target ≥90 — перевыполнен. Defer optimization (quality 80→75 или smaller fallback) на session 11 polish
+
+### Cyrillic readability в AI-output
+
+Nano Banana 2 хорошо handle русский текст в кадре: вывески «МАСТЕРСКАЯ КАМНЯ "КАМЕННЫЙ ВЕК"», «ПАМЯТНИКИ • ОГРАДЫ • УСТАНОВКА», «ОПАСНАЯ ЗОНА», engraved family names на памятниках, branded shelf labels «МУЖСКАЯ КОЛЛЕКЦИЯ», тары «АРБИДОЛ»/«ВАЛИДОЛ» — всё readable. Минорные AI-typos в редких местах но не критично для landing.
+
+### Stack & cost
+
+- **API key:** whisper-typing project (billing-enabled). New T-Tech key (`AIzaSyB...FGcAs`) не активирован для image-gen — оставлен на потом для отдельного billing.
+- **Cost:** ~16 generations × ~$0.045 = **$0.72** total (canary v1 rejected + canary v2 + batch v2 partial reject + re-batch v3 + 08-monuments retry).
+- **Free tier:** Imagen 4 = no free; gemini-2.5-flash-image = ~500/day; gemini-3.1-flash-image-preview = «very limited» (~0 для нового key).
 
 ### Research
 
-- На дату 2026-05-07: какая актуальная Google image-gen модель? (Gemini Nano Banana 2 = Gemini 2.5 Flash Image? Imagen 4? что-то новее?)
-- Free quota: $200 кредит на новых аккаунтах AI Studio + free tier
-- Batch generation pattern (стиль один раз, N картинок в одном look-and-feel)
-- Resolution / quality / face restrictions
+[research/2026-05-07_gemini-image-gen/report.md](../DeepReserch/research/2026-05-07_gemini-image-gen/report.md) — 28 источников, 4 параллельных subagents (models / variation prompting / sharp pipeline / free tier).
 
-### Input от клиента
+### Файлы изменены
 
-- API ключ из https://aistudio.google.com/apikey (бесплатный $200 кредит)
+- `scripts/generate-tattech-photos.mjs` — новый (+155 LOC)
+- `package.json` + `package-lock.json` — `@google/genai@^1.52.0`
+- `.gitignore` — `.env.local`, `.env.*.local`, `public/images/photos/raw/`
+- `public/images/cases/{01..08}-{640|960|1200}.webp` — 24 файла, replace existing (Cases.astro paths без изменений)
+- `REDESIGN-ROADMAP.md` — статус 10a
+- `next-session-START.md` — handoff для 10b
+- `.lighthouse/lh-10a-*` — 6 reports (gitignored)
+- `D:/DeepReserch/research/2026-05-07_gemini-image-gen/report.md` — research отчёт
+- `D:/DeepReserch/research/INDEX.md` — обновлён
+- `C:/Users/.../memory/feedback_b2b_cases_varied_style.md` — корректирован (varied subject, NOT varied camera)
 
-### Цели
+### Возможные доработки (defer)
 
-Сгенерировать пакет фото для T-Tech в едином B2B-стиле (clean office, не stock):
-
-- **Office (3-4)**: open-space, laptop+notebook flat-lay, modern interior с растениями
-- **Process (3-4)**: люди работают за компьютерами с 1С интерфейсом, обсуждение в zoom-room
-- **Team (2-3)**: condon обсуждение (faces blurred or back-view), handshake business meeting
-- **Hero alternatives (1-2)**: optional, abstract «1С в действии» если место для замены
-
-Стиль: editorial, желто-синяя палитра (matches T-Tech brand), natural light, Russian-corporate-tasteful.
-
-### Deliverables
-
-- 1 commit: `scripts/generate-tattech-photos.mjs` + сгенерированные `public/images/photos/*.webp` (через sharp)
-- `research/2026-MM-DD_gemini-image-gen/report.md` с актуальной моделью на дату
+- Mobile SI 4.0s → quality webp 80→75 если хочется session 11 perf-pass
+- Activate billing на новом T-Tech key → switch `.env.local` (когда user подключит payment к T-Tech project)
+- Hero/About фото — defer на session 10b (pose photos владельца)
 
 ---
 

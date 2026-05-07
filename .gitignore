@@ -15,7 +15,9 @@ pnpm-debug.log*
 
 # environment variables
 .env
+.env.local
 .env.production
+.env.*.local
 
 # macOS-specific files
 .DS_Store
@@ -26,3 +28,6 @@ pnpm-debug.log*
 # lighthouse audits + preview log
 .lighthouse/
 preview.log
+
+# AI-generated raw photos (only optimized webp in repo)
+public/images/photos/raw/
