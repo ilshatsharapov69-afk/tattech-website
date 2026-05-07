@@ -1,0 +1,169 @@
+# Sveltia CMS config — T-Tech website
+# Drop-in совместим с Decap CMS. Документация: https://sveltiacms.app/
+
+backend:
+  name: github
+  repo: ilshatsharapov69-afk/tattech-website
+  branch: main
+  # base_url: https://YOUR-WORKER.workers.dev   # ← раскомментировать после деплоя Cloudflare Worker (см. DEPLOY-CMS.md)
+  # Пока base_url закомментирован — клиент логинится через "Sign In with Token" (Personal Access Token).
+  commit_messages:
+    create: 'cms: создан {{collection}} «{{slug}}»'
+    update: 'cms: обновлён {{collection}} «{{slug}}»'
+    delete: 'cms: удалён {{collection}} «{{slug}}»'
+    uploadMedia: 'cms: загружено медиа «{{path}}»'
+    deleteMedia: 'cms: удалено медиа «{{path}}»'
+
+# Для локальной разработки: запустить `npx @sveltia/cms-proxy-server` и раскомментировать строку ниже.
+# local_backend: true
+
+media_folder: 'public/images'
+public_folder: '/tattech-website/images'
+
+# Локализация UI
+locale: 'ru'
+
+collections:
+  # ─────────────────────────────────────────────────────────────
+  # 1. УСЛУГИ (8 страниц-услуг — folder collection)
+  # ─────────────────────────────────────────────────────────────
+  - name: services
+    label: 'Услуги'
+    label_singular: 'Услугу'
+    description: 'Страницы услуг (/uslugi → детальная). Frontmatter единственный контент, тело markdown не используется.'
+    folder: 'src/content/services'
+    extension: 'md'
+    format: 'frontmatter'
+    create: false
+    delete: false
+    slug: '{{fields.slug}}'
+    identifier_field: 'slug'
+    summary: '{{title}} (порядок: {{order}})'
+    sortable_fields: ['order', 'title']
+    fields:
+      - { name: slug, label: 'Slug (URL)', widget: string, hint: 'Часть URL, например 1s-razrabotka. Не менять без надобности.' }
+      - { name: title, label: 'Название (короткое)', widget: string }
+      - { name: metaTitle, label: 'SEO Title (<title>)', widget: string, hint: 'До 60 символов. Что видно в Google.' }
+      - { name: metaDescription, label: 'SEO Description', widget: text, hint: 'До 160 символов. Что видно в Google под заголовком.' }
+      - { name: heroTitle, label: 'Заголовок Hero (H1)', widget: string }
+      - { name: heroLead, label: 'Подзаголовок Hero', widget: text }
+      - name: heroPills
+        label: 'Бейджи в Hero (до 4)'
+        widget: list
+        max: 4
+        default: []
+        field: { name: pill, label: 'Бейдж', widget: string }
+      - { name: icon, label: 'Иконка', widget: string, hint: 'Имя иконки из src/components/icons/. Например: code, settings, shield, layout.' }
+      - name: included
+        label: 'Что входит (3–6 пунктов)'
+        widget: list
+        min: 3
+        max: 6
+        fields:
+          - { name: title, label: 'Заголовок пункта', widget: string }
+          - { name: desc, label: 'Описание (опц.)', widget: text, required: false }
+      - name: pricing
+        label: 'Прайс-таблица (опц., если не используется ItsTable)'
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { name: lead, label: 'Подводка', widget: text, required: false }
+          - name: tiers
+            label: 'Тарифы (1–4)'
+            widget: list
+            min: 1
+            max: 4
+            fields:
+              - { name: label, label: 'Название тарифа', widget: string }
+              - { name: price, label: 'Цена', widget: string }
+              - { name: note, label: 'Примечание', widget: string, required: false }
+              - { name: primary, label: 'Основной тариф (выделен)', widget: boolean, default: false }
+          - { name: footnote, label: 'Сноска снизу', widget: text, required: false }
+      - name: itsHighlight
+        label: 'Подсветка для ИТС-страниц'
+        widget: select
+        options: ['tehno', 'prof', 'none']
+        required: false
+        hint: 'Только для /1s-its* страниц. Для всех остальных — оставить пустым.'
+      - name: relatedSlugs
+        label: 'Похожие услуги (slug, до 4)'
+        widget: list
+        max: 4
+        default: []
+        field: { name: slug, label: 'Slug', widget: string, hint: 'Например: obsluzhivanie-1s, 1s-razrabotka' }
+      - { name: casesEyebrow, label: 'Кейсы — надзаголовок', widget: string, default: 'Опыт в отрасли' }
+      - { name: casesTitle, label: 'Кейсы — заголовок', widget: string }
+      - { name: casesLead, label: 'Кейсы — подзаголовок', widget: text, required: false }
+      - name: caseTags
+        label: 'Фильтр кейсов по отраслям (1–8)'
+        widget: list
+        min: 1
+        max: 8
+        field: { name: tag, label: 'Отрасль', widget: string, hint: 'Точное совпадение с industry в Кейсах. Напр. "ЖКХ", "Строительство".' }
+      - { name: faqEyebrow, label: 'FAQ — надзаголовок', widget: string, default: 'Частые вопросы' }
+      - { name: faqTitle, label: 'FAQ — заголовок', widget: string, default: 'Что чаще всего спрашивают' }
+      - name: faq
+        label: 'FAQ (3–6 пар вопрос/ответ)'
+        widget: list
+        min: 3
+        max: 6
+        fields:
+          - { name: q, label: 'Вопрос', widget: string }
+          - { name: a, label: 'Ответ', widget: text }
+      - { name: order, label: 'Порядок сортировки', widget: number, default: 99, value_type: int, min: 0, max: 999 }
+
+  # ─────────────────────────────────────────────────────────────
+  # 2. КЕЙСЫ (один JSON-файл, 8 кейсов в массиве)
+  # ─────────────────────────────────────────────────────────────
+  - name: cases
+    label: 'Кейсы'
+    label_singular: 'Кейс'
+    files:
+      - file: 'src/data/cases.json'
+        name: 'cases_list'
+        label: 'Список кейсов (показываются на главной + /nashi-kejsi)'
+        format: 'json'
+        fields:
+          - name: items
+            label: 'Кейсы'
+            widget: list
+            summary: '{{fields.industry}} — {{fields.solution}}'
+            fields:
+              - { name: img, label: 'Имя файла-картинки (без расширения)', widget: string, hint: 'Например 01-zhkh — соответствует public/images/cases/01-zhkh-{640,960,1200}.webp' }
+              - { name: industry, label: 'Отрасль', widget: string, hint: 'Также используется как фильтр-тег. Точное совпадение с caseTags в Услугах.' }
+              - { name: pain, label: 'Проблема клиента', widget: text }
+              - { name: solution, label: 'Что внедрили', widget: string }
+              - { name: metric, label: 'Метрика результата', widget: string }
+              - { name: deadline, label: 'Срок', widget: string }
+              - { name: color, label: 'Цвет заголовка (HEX)', widget: string, pattern: ['^#[0-9A-Fa-f]{6}$', 'Должно начинаться с # и содержать 6 символов 0-9A-F'] }
+
+  # ─────────────────────────────────────────────────────────────
+  # 3. ПРОГРАММЫ 1С (один JSON-файл, 5 программ в массиве)
+  # ─────────────────────────────────────────────────────────────
+  - name: programs
+    label: 'Программы 1С'
+    label_singular: 'Программу'
+    files:
+      - file: 'src/data/programs.json'
+        name: 'programs_list'
+        label: 'Программы 1С (главная + /programmy-1s)'
+        format: 'json'
+        fields:
+          - name: items
+            label: 'Программы'
+            widget: list
+            summary: '{{fields.title}} — {{fields.price}}'
+            fields:
+              - { name: emoji, label: 'Эмодзи', widget: string }
+              - { name: title, label: 'Название', widget: string }
+              - { name: price, label: 'Цена', widget: string, hint: 'Например "от 4 000 ₽" или "48 500 ₽"' }
+              - { name: priceNote, label: 'Под ценой', widget: string }
+              - { name: desc, label: 'Описание (1 предложение)', widget: string }
+              - name: bullets
+                label: 'Bullet-points (3 пункта)'
+                widget: list
+                min: 3
+                max: 3
+                field: { name: bullet, label: 'Пункт', widget: string }
+              - { name: msg, label: 'Текст для Telegram CTA', widget: string, hint: 'Что подставится в text= при переходе в TG' }

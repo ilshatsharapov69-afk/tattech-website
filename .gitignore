@@ -28,8 +28,10 @@ pnpm-debug.log*
 # lighthouse audits + preview log
 .lighthouse/
 lighthouse-c5/
+lighthouse-phase-b/
 preview.log
 preview-*.log
+dev.log
 
 # AI-generated raw photos (only optimized webp in repo)
 public/images/photos/raw/

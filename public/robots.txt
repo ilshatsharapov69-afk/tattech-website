@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /tattech-website/admin/
 
 Sitemap: https://ilshatsharapov69-afk.github.io/tattech-website/sitemap-index.xml
