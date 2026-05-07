@@ -1,0 +1,130 @@
+---
+interface FaqItem {
+  q: string;
+  a: string;
+}
+
+interface Props {
+  items: FaqItem[];
+  eyebrow?: string;
+  title?: string;
+  lead?: string;
+}
+
+const {
+  items,
+  eyebrow = 'Частые вопросы',
+  title = 'Что чаще всего спрашивают',
+  lead,
+} = Astro.props;
+---
+
+<section class="section service-faq">
+  <div class="container">
+    <header class="section-head reveal">
+      <span class="eyebrow">{eyebrow}</span>
+      <h2 class="h2">{title}</h2>
+      {lead && <p class="lead">{lead}</p>}
+    </header>
+
+    <div class="service-faq-list reveal">
+      {items.map((item) => (
+        <details class="service-faq-item">
+          <summary class="service-faq-q">
+            <span>{item.q}</span>
+            <span class="service-faq-toggle" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </span>
+          </summary>
+          <div class="service-faq-a">{item.a}</div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .service-faq {
+    background: var(--color-bg-alt);
+  }
+
+  .service-faq-list {
+    max-width: 800px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .service-faq-item {
+    background: #fff;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+  }
+  .service-faq-item[open] {
+    border-color: var(--color-brand-500);
+    box-shadow: var(--shadow-md);
+  }
+
+  .service-faq-q {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-5) var(--space-6);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.45;
+  }
+  .service-faq-q::-webkit-details-marker {
+    display: none;
+  }
+
+  .service-faq-toggle {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--color-brand-500);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 200ms var(--ease-spring), background 200ms ease;
+  }
+  .service-faq-item[open] .service-faq-toggle {
+    transform: rotate(45deg);
+    background: var(--color-brand-500);
+    color: #fff;
+  }
+
+  .service-faq-a {
+    padding: 0 var(--space-6) var(--space-5);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--color-text-soft);
+  }
+
+  @media (max-width: 600px) {
+    .service-faq-q {
+      padding: var(--space-4) var(--space-5);
+      font-size: 0.9375rem;
+    }
+    .service-faq-a {
+      padding: 0 var(--space-5) var(--space-4);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service-faq-toggle {
+      transition: background 200ms ease;
+    }
+  }
+</style>

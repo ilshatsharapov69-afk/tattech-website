@@ -1,95 +1,39 @@
 ---
 import Icon from './Icon.astro';
+import { cases as allCases } from '../data/cases.ts';
+
+interface Props {
+  tags?: string[];
+  eyebrow?: string;
+  title?: string;
+  lead?: string;
+  sectionId?: string;
+}
+
+const {
+  tags,
+  eyebrow = 'Кейсы',
+  title = 'Что меняется после внедрения',
+  lead = '9 лет, 420 проектов — у каждого конкретная задача, фиксированный срок и измеримый результат.',
+  sectionId = 'cases',
+} = Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-
-// PLACEHOLDER PAIN/DEADLINE — клиент уточняет к session 11.
-// Метрики (metric) — РЕАЛЬНЫЕ с tat-tech.ru, не переписываем.
-const cases = [
-  {
-    img: '01-zhkh',
-    industry: 'ЖКХ',
-    pain: 'Учёт начислений вёлся в двух базах — расхождения по платежам выявлялись раз в квартал.',
-    solution: '1С:Учёт в УК ЖКХ',
-    metric: '240 зданий в 4 городах',
-    deadline: 'Развёрнуто за 4 мес',
-    color: '#1D4ED8',
-  },
-  {
-    img: '02-food',
-    industry: 'Пищевое производство',
-    pain: 'Маркировка DataMatrix оформлялась отдельно от отгрузочных — риск штрафа до 300 000 ₽ за партию.',
-    solution: '1С:ERP + Меркурий + Честный знак',
-    metric: 'Учёт автотранспорта + обмен с гос. системами',
-    deadline: 'Внедрено за 3 мес',
-    color: '#047857',
-  },
-  {
-    img: '03-construction',
-    industry: 'Строительство',
-    pain: 'Документы по объектам — в Excel и почте. Поиск согласований занимал часы.',
-    solution: '1С:Документооборот 8',
-    metric: '50 пользователей, канбан + Telegram',
-    deadline: 'Развёрнуто за 5 мес',
-    color: '#B45309',
-  },
-  {
-    img: '04-tires',
-    industry: 'Сеть шин и дисков',
-    pain: '1С:Розница 7.7 не получала обновлений — продажа маркированных товаров блокировалась.',
-    solution: '1С:Управление торговлей 8.3',
-    metric: 'Миграция 7.7 → 8.3 + маркировка',
-    deadline: 'Переход за 2 мес',
-    color: '#B91C1C',
-  },
-  {
-    img: '05-engineering',
-    industry: 'Инжиниринг',
-    pain: 'Сделки и проекты вели в трёх системах — связать стадию проекта с договором было невозможно.',
-    solution: '1С:Управление торговлей',
-    metric: 'Оборот до 1 млрд ₽/год, CRM + проекты',
-    deadline: 'Поэтапно за 6 мес',
-    color: '#6D28D9',
-  },
-  {
-    img: '06-clothing',
-    industry: 'Сеть одежды',
-    pain: 'Обновление конфигурации занимало неделю — магазины простаивали или работали офлайн.',
-    solution: '1С:Комплексная автоматизация',
-    metric: '65 000 позиций/год, обновления ↓ до полудня',
-    deadline: 'Перевод за 4 мес',
-    color: '#BE185D',
-  },
-  {
-    img: '07-pharmacy',
-    industry: 'Аптечная сеть',
-    pain: 'Приёмка и уведомление в МДЛП — в двух интерфейсах. Ошибка = блокировка партии.',
-    solution: '1С:Управление торговлей + МДЛП',
-    metric: 'Маркировка лекарств + маркетплейсы',
-    deadline: 'Подключено за 2 мес',
-    color: '#0E7490',
-  },
-  {
-    img: '08-monuments',
-    industry: 'Производство памятников',
-    pain: 'Каждый заказ — ручная смета в Excel, без связи со складом материалов и планом производства.',
-    solution: '1С:Управление торговлей',
-    metric: '1000+ изделий/год, 8 лет сопровождения',
-    deadline: 'С 2018 года, без сбоев',
-    color: '#334155',
-  },
-];
+const cases = tags && tags.length > 0
+  ? allCases.filter((c) => tags.includes(c.industry))
+  : allCases;
+const gridId = `${sectionId}-grid`;
 ---
 
-<section class="section cases" id="cases">
+<section class="section cases" id={sectionId}>
   <div class="container">
     <header class="section-head reveal">
-      <span class="eyebrow">Кейсы</span>
-      <h2 class="h2">Что меняется после внедрения</h2>
-      <p class="lead">9 лет, 420 проектов — у каждого конкретная задача, фиксированный срок и измеримый результат.</p>
+      <span class="eyebrow">{eyebrow}</span>
+      <h2 class="h2">{title}</h2>
+      <p class="lead">{lead}</p>
     </header>
 
-    <div class="cases-grid" id="cases-grid">
+    <div class="cases-grid" id={gridId}>
       {cases.map((c) => {
         const slug = c.img;
         const srcset = [640, 960, 1200]
@@ -318,8 +262,7 @@ const cases = [
   const canHover = matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   if (!reduced && canHover) {
-    const grid = document.getElementById('cases-grid');
-    if (grid) {
+    document.querySelectorAll<HTMLElement>('.cases-grid').forEach((grid) => {
       const rectCache = new WeakMap<Element, DOMRect>();
       const MAX_TILT = 8; // degrees
 
@@ -358,6 +301,6 @@ const cases = [
       window.addEventListener('scroll', invalidateCache, { passive: true });
       const ro = new ResizeObserver(invalidateCache);
       ro.observe(grid);
-    }
+    });
   }
 </script>

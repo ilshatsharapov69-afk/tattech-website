@@ -1,0 +1,125 @@
+---
+import Icon from '../Icon.astro';
+
+interface IncludedItem {
+  title: string;
+  desc?: string;
+}
+
+interface Props {
+  items: IncludedItem[];
+  eyebrow?: string;
+  title?: string;
+  lead?: string;
+}
+
+const {
+  items,
+  eyebrow = 'Что входит',
+  title = 'Что входит в работу',
+  lead,
+} = Astro.props;
+---
+
+<section class="section included">
+  <div class="container">
+    <header class="section-head reveal">
+      <span class="eyebrow">{eyebrow}</span>
+      <h2 class="h2">{title}</h2>
+      {lead && <p class="lead">{lead}</p>}
+    </header>
+
+    <ul class="included-grid reveal-stagger">
+      {items.map((item) => (
+        <li class="included-card">
+          <span class="included-check" aria-hidden="true">
+            <Icon name="check" size={16} />
+          </span>
+          <div class="included-body">
+            <h3 class="h3 included-title">{item.title}</h3>
+            {item.desc && <p class="included-desc">{item.desc}</p>}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .included {
+    background: var(--color-bg);
+  }
+
+  .included-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-5);
+    max-width: 1040px;
+    margin-inline: auto;
+  }
+
+  .included-card {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: var(--space-4);
+    align-items: flex-start;
+    padding: var(--space-5) var(--space-6);
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    transition: border-color 220ms ease, box-shadow 220ms var(--ease-spring),
+      transform 220ms var(--ease-spring);
+  }
+  .included-card:hover {
+    border-color: var(--color-brand-500);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .included-check {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--color-success);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .included-title {
+    font-size: 1.0625rem;
+    margin: 0 0 6px;
+    line-height: 1.35;
+  }
+
+  .included-desc {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--color-text-soft);
+  }
+
+  @media (max-width: 800px) {
+    .included-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+    .included-card {
+      padding: var(--space-4) var(--space-5);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .included-card,
+    .included-card:hover {
+      transform: none;
+      transition: border-color 220ms ease;
+    }
+  }
+</style>

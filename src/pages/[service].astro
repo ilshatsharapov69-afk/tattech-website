@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content';
+import InnerLayout from '../layouts/InnerLayout.astro';
+import IncludedList from '../components/service/IncludedList.astro';
+import ServicePricing from '../components/service/ServicePricing.astro';
+import ServiceFAQOverlay from '../components/service/ServiceFAQ.astro';
+import Cases from '../components/Cases.astro';
+import Process from '../components/Process.astro';
+
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+  return services.map((service) => ({
+    params: { service: service.data.slug },
+    props: { service },
+  }));
+}
+
+const { service } = Astro.props;
+const data = service.data;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const breadcrumb = [
+  { label: 'Услуги', href: `${base}/uslugi` },
+  { label: data.title },
+];
+---
+
+<InnerLayout
+  title={data.metaTitle}
+  description={data.metaDescription}
+  heroTitle={data.heroTitle}
+  heroLead={data.heroLead}
+  heroPills={data.heroPills}
+  breadcrumb={breadcrumb}
+>
+  <IncludedList items={data.included} />
+
+  <ServicePricing
+    tiers={data.pricing.tiers}
+    lead={data.pricing.lead}
+    footnote={data.pricing.footnote}
+    ctaMessage={`Здравствуйте! Хочу получить смету: ${data.title}.`}
+  />
+
+  <Cases
+    tags={data.caseTags}
+    eyebrow={data.casesEyebrow}
+    title={data.casesTitle}
+    lead={data.casesLead}
+    sectionId={`cases-${data.slug}`}
+  />
+
+  <Process />
+
+  <ServiceFAQOverlay
+    items={data.faq}
+    eyebrow={data.faqEyebrow}
+    title={data.faqTitle}
+  />
+</InnerLayout>

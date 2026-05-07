@@ -1,0 +1,178 @@
+---
+import Icon from '../Icon.astro';
+
+interface Tier {
+  label: string;
+  price: string;
+  note?: string;
+  primary?: boolean;
+}
+
+interface Props {
+  tiers: Tier[];
+  lead?: string;
+  footnote?: string;
+  eyebrow?: string;
+  title?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  ctaMessage?: string;
+}
+
+const {
+  tiers,
+  lead,
+  footnote,
+  eyebrow = 'Сколько стоит',
+  title = 'Цены и тарифы',
+  ctaLabel = 'Получить смету',
+  ctaHref,
+  ctaMessage = 'Здравствуйте! Хочу получить смету.',
+} = Astro.props;
+
+const tgUrl =
+  ctaHref ??
+  `https://t.me/CyclesOfID?text=${encodeURIComponent(ctaMessage)}`;
+---
+
+<section class="section pricing">
+  <div class="container">
+    <header class="section-head reveal">
+      <span class="eyebrow">{eyebrow}</span>
+      <h2 class="h2">{title}</h2>
+      {lead && <p class="lead">{lead}</p>}
+    </header>
+
+    <div class="pricing-grid reveal-stagger">
+      {tiers.map((tier) => (
+        <article class={`pricing-card${tier.primary ? ' is-primary' : ''}`}>
+          {tier.primary && <span class="pricing-badge">Популярно</span>}
+          <h3 class="h3 pricing-label">{tier.label}</h3>
+          <div class="pricing-price">{tier.price}</div>
+          {tier.note && <p class="pricing-note">{tier.note}</p>}
+        </article>
+      ))}
+    </div>
+
+    <div class="pricing-cta reveal">
+      <a
+        href={tgUrl}
+        target="_blank"
+        rel="noopener"
+        class="btn btn-primary btn-lg"
+        data-magnetic
+      >
+        <Icon name="telegram" size={18} />
+        <span>{ctaLabel}</span>
+      </a>
+      {footnote && <p class="pricing-footnote">{footnote}</p>}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pricing {
+    background: var(--color-bg-tint);
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-5);
+    max-width: 1040px;
+    margin-inline: auto;
+    margin-bottom: var(--space-8);
+  }
+
+  .pricing-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-7) var(--space-6);
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    transition: border-color 220ms ease, box-shadow 220ms var(--ease-spring),
+      transform 220ms var(--ease-spring);
+  }
+  .pricing-card:hover {
+    border-color: var(--color-brand-500);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .pricing-card.is-primary {
+    border-color: var(--color-brand-500);
+    box-shadow: 0 8px 32px -10px rgba(37, 99, 235, 0.30);
+  }
+
+  .pricing-badge {
+    position: absolute;
+    top: -10px;
+    left: var(--space-6);
+    background: var(--gradient-text);
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+  }
+
+  .pricing-label {
+    font-size: 1.0625rem;
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .pricing-price {
+    font-size: clamp(1.5rem, 2.4vw, 1.875rem);
+    font-weight: 700;
+    line-height: 1.2;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .pricing-note {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-text-soft);
+  }
+
+  .pricing-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    text-align: center;
+  }
+
+  .pricing-footnote {
+    margin: 0;
+    max-width: 640px;
+    font-size: 0.875rem;
+    color: var(--color-text-soft);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 800px) {
+    .pricing-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+    .pricing-card {
+      padding: var(--space-6) var(--space-5);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pricing-card,
+    .pricing-card:hover {
+      transform: none;
+    }
+  }
+</style>
