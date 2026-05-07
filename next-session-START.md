@@ -22,10 +22,13 @@
    ```
 
 3. **Schema.org JSON-LD:**
-   - **Organization** (общий, во всех Base layouts): name, url, logo, address (ул. Дубравная 43а), telephone, contactPoint, sameAs (Telegram/WhatsApp). Положить в Footer.astro или Base.astro как inline `<script type="application/ld+json">`.
-   - **Service** (на каждой service-detail page): name, description, provider, areaServed, offers (price из first pricing tier). Сделать через [service].astro inline JSON-LD.
-   - **FAQPage** (главная + 8 service pages): mainEntity[] из faq array. Inline JSON-LD на page level.
-   - **LocalBusiness** (только на /contacts): geo coords (lat/lng для Дубравной 43а), opening hours `Mo-Fr 09:00-18:00`, telephone.
+
+   ⚠ **Важно:** в `src/layouts/Base.astro` (lines 60-79) УЖЕ ЕСТЬ глобальный `LocalBusiness` JSON-LD. Это неправильно — `LocalBusiness` должен быть только на `/contacts`. **План:** заменить глобальный на `Organization`, добавить `LocalBusiness` only on /contacts.astro inline.
+
+   - **Organization** (заменить текущий LocalBusiness в Base.astro): name, url, logo, address, telephone, contactPoint (multiple: phone/email/Telegram/WhatsApp), sameAs.
+   - **Service** (на каждой service-detail page): name, description, provider, areaServed, offers (price из first pricing tier or itsHighlight pricing). Сделать через [service].astro inline JSON-LD.
+   - **FAQPage** (главная + 8 service pages): mainEntity[] из faq array. На главной — добавить в FAQ.astro inline. На service-pages — в [service].astro.
+   - **LocalBusiness** (только на /contacts): inline JSON-LD на странице с geo coords (lat 55.821 / lng 49.150 для Дубравной 43а), openingHoursSpecification, telephone, всё что было в Base.
    - **BreadcrumbList** уже есть из C1 (Breadcrumb.astro inline JSON-LD).
 
 4. **Per-page meta polish:**
