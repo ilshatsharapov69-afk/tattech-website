@@ -1,133 +1,97 @@
-# T-Tech — Phase C закрыта, далее Phase A / B / D (client-driven)
+# T-Tech Phase B — Decap CMS внедрение + тест
 
-> Этот файл всегда содержит промт для **следующей** запланированной сессии. Phase C полностью DONE 2026-05-09 — 13 inner pages + SEO baseline live.
->
-> Следующая сессия зависит от клиента: revision-loop по контенту (A), CMS (B) или перенос на свой домен (D).
+> Phase C закрыта (5 сессий, 13 inner pages, SEO baseline). Клиент Ленар согласился на Decap CMS (+3 000 ₽ к договору). **Эта сессия: внедрить и протестировать end-to-end.**
 
-## Phase C — DONE summary
+## Что делаем
 
-5 сессий, ~12h работы Claude. Live: https://ilshatsharapov69-afk.github.io/tattech-website/
+Подключаем Decap CMS к Astro Content Collection (`services`) + редактируемые data-файлы (`cases.ts`, `programs.ts`) + контент-блоки на главной (About bio, Reviews, Hero copy, ценники Services).
 
-| Session | Что задеплоено | Commit |
-|---|---|---|
-| C1 | /contacts + /privacy + 404 + InnerLayout + Header nav | (см. git log) |
-| C2 | services Collection + [service].astro + 3 service-detail pages + 3 subcomponents | `5c3f34b` |
-| C3 | 5 service-detail pages (ITS family + оборудование + Битрикс24) + ItsTable.astro | `2c103a2` |
-| C4 | 3 aggregator pages (/uslugi /programmy-1s /nashi-kejsi) + ServiceCrossLinks | `590dbb6` |
-| C5 | sitemap.xml + robots.txt + Schema.org JSON-LD (Org/LocalBusiness/Service/FAQPage) + meta audit + footer fix | `8dcd57e` |
+Цель — клиент логинится на `tat-tech.ru/admin/` (или `ilshatsharapov69-afk.github.io/tattech-website/admin/`), правит контент через UI → Decap коммитит в main → 27s deploy → live.
 
-**Lighthouse C5 (3 pages × 3+3 = 18 прогонов локально):**
-- Desktop 9/9: 100/100/100/100, LCP 0.4-0.7s
-- Mobile 9/9: home 93-94, /uslugi 99, /1s-razrabotka 94-95 perf; все a11y/bp/seo 100; LCP 2.0-2.7s
+## ⚠ Главное препятствие — auth на GitHub Pages
 
-**Live URLs:**
-- https://ilshatsharapov69-afk.github.io/tattech-website/sitemap-index.xml (200 ✓)
-- https://ilshatsharapov69-afk.github.io/tattech-website/robots.txt (200 ✓)
+Сайт хостится на GitHub Pages, **не Netlify**. Стандартный Decap workflow «Netlify Identity + git-gateway» не работает.
 
-## ⏳ ПЕРЕД следующей сессией — единый Telegram-message Ленару
+**Перед началом сессии — mini-research (1 subagent, 8-10 sources, ~15 мин):**
+- Какой OAuth-backend для Decap CMS на GitHub Pages в 2026 году best practice?
+- Варианты на проверку: Cloudflare Worker as OAuth proxy / Vercel-hosted decap-proxy / Sveltia CMS (fork с native GitHub OAuth, без proxy) / GitHub OAuth App + DIY proxy
+- Что выбрать с т.з. простоты setup'а, бесплатности, надёжности на 2026
+- Если research покажет что Sveltia CMS реально drop-in замена — взять её (proxy не нужен, GitHub OAuth напрямую)
 
-См. `memory project_tattech_client_confirmations.md`. Собрать в один DM:
+## Stack & contraints
 
-**Цены (placeholder подтвердить):**
-- 1С:ИТС Техно/ПРОФ — все суммы со scraped tat-tech.ru (5 964 / 12 892 / 23 283 / 44 064 / 79 315 ПРОФ; 9 834 / 18 600 Техно). Это льготные на 2026 — свежие?
-- Почасовка 3 500 / 3 200 / 3 000 ₽/час
-- Абонентский «от 4 990 ₽/мес» на /obsluzhivanie-1s
-- Лендинг «от 50 000 ₽» + корпсайт «от 150 000 ₽» на /razrabotka-sajtov
-- Bitrix24 «от 25 000 ₽ под ключ»
-- Цены 1С-программ (Бухгалтерия от 4 000, УТ от 8 200, ДО 48 500, Розница от 4 400, ЗУП от 9 100)
+- Astro 6, plain CSS, branch `main`, GitHub Pages deploy
+- **Один новый add-on:** Decap CMS (либо `decap-cms` npm, либо `<script>` standalone в `public/admin/index.html`)
+- Может потребоваться 1 small infra service (Cloudflare Worker для OAuth proxy) — бесплатный, без креди-карты
+- Karpathy guidelines (auto-loaded)
+- Workflow: 1-3 commits + push + `gh run watch` smoke test
 
-**Контент (placeholder → реальный):**
-- About Ленара (38 слов биографии)
-- About trust pills (Казань / Партнёр 1С / 8 лет)
-- Cases (8 штук) pain/deadline — метрики реальные, остальное мы написали
-- Reviews (3 testimonials) — полностью placeholder
-- Cases AI-photos (8 штук через Gemini Nano Banana 2)
+## План сессии (предварительный — уточнить после research)
 
-**Технические:**
-- email `ttech.kzn.it@gmail.com` — рабочий?
-- Yandex Maps на /contacts vs 2GIS?
-- Privacy policy юристом проверить
-- Domain tat-tech.ru + перенос с GitHub Pages — Phase D
-- Decap CMS (+3 000 ₽) — Phase B
+1. **Research backend (15 мин)** — выбрать OAuth-стратегию.
+2. **`public/admin/index.html`** — Decap (или Sveltia) entry point.
+3. **`public/admin/config.yml`** — backend конфиг + collections schema:
+   - `services` (folder `src/content/services`, file mode, fields из content schema: slug, title, metaTitle, metaDescription, heroTitle, heroLead, heroPills[], icon, included[], pricing.tiers[], itsHighlight, relatedSlugs[], faq[], casesTitle, caseTags[], order)
+   - `cases` (file mode → `src/data/cases.ts` — но это TS, не markdown! → **решение:** перенести cases в `src/content/cases/*.md` или `src/data/cases.json`)
+   - `programs` (то же самое — `src/data/programs.ts` → JSON или markdown collection)
+   - `home_blocks` (file mode → `src/content/home/{about,reviews,hero,services-meta}.md` или прямые правки в `src/components/About.astro` / `Reviews.astro` через `src/data/home.json`)
+4. **Refactor** TS data files (`cases.ts`, `programs.ts`) → JSON или markdown collections, чтобы Decap мог редактировать.
+5. **OAuth setup:**
+   - Создать GitHub OAuth App (settings/developers/new-oauth-app), callback на proxy URL
+   - Deploy proxy (Cloudflare Worker или Vercel function) с `CLIENT_ID` + `CLIENT_SECRET` env vars
+   - Подставить proxy URL в `config.yml` `backend.base_url`
+6. **Локальный тест:** `npm run dev` → `localhost:4321/tattech-website/admin/` → login → edit one service price → save → проверить commit в репо (на test branch?).
+7. **Live тест:** push → wait deploy → `tat-tech.ru/admin/` (или github.io URL) → клиентский flow повторить.
+8. **Документация для Ленара:** короткий how-to (RU, в `D:\tattech-website\CMS-GUIDE.md`):
+   - Как залогиниться (GitHub login)
+   - Где править цены / About / Reviews / Cases
+   - Что произойдёт после Save (commit + auto-deploy ~30s)
+   - Что делать если возникла ошибка
+9. **Финал:** 1-3 commits + push + smoke test + memory update (`project_tattech_client.md` — новый блок `2026-05-XX — Phase B Session B1 DONE`).
 
-**Логотипы клиентов** — 6-8 SVG/PNG для будущей полосы доверия.
+## Edge cases / риски
 
-## Phase A — Revision-loop (если клиент пришлёт правки)
+- **Decap не любит TypeScript data files** — нужен refactor `cases.ts`/`programs.ts` в JSON или Astro Content Collection. Это меняет импорты в `Cases.astro`, `Programs.astro`, `programmy-1s.astro`, `nashi-kejsi.astro`. Lighthouse re-run после refactor (no regression check).
+- **Markdown body для services:** сейчас все service.md имеют пустое body (только frontmatter). Decap по дефолту требует body — либо настроить `editor: { preview: false }` + body skip, либо добавить optional body field. Не блокер.
+- **Image uploads:** Decap может загружать картинки в `public/images/`. Для `og-image.png` per-service это nice-to-have. Defer на отдельную сессию.
+- **Concurrent edits:** клиент + Claude правят одни файлы — стандартный git conflict. Документировать как разруливать.
 
-Когда клиент вернёт фидбек — заменить placeholder в:
-- `src/components/About.astro` (bio, trust pills)
-- `src/data/cases.ts` (pain/deadline для 8 кейсов)
-- `src/components/Reviews.astro` (3 testimonials)
-- Ценники в `src/components/Services.astro`, `src/data/programs.ts`, и 8 service.md frontmatter (`pricing.tiers[].price`)
+## Lighthouse re-check после Phase B
 
-**Workflow:** 1 commit `phase-a-1: client revision pass 1` (или несколько мелких если несколько раундов). Lighthouse spot-check после правок (text-only changes — perf не должна меняться).
+После refactor data files + добавления Decap admin (только `/admin/` страницы — не должны быть в основном bundle):
+- Run на 3 random pages (например главная + /uslugi + /1s-its-prof) — desktop + mobile preset.
+- Compare с C5 baseline (desktop 100/100/100/100, mobile 93-99 perf).
+- /admin/ страницы в sitemap НЕ попадают (уже исключены через `astro:sitemap` config или вручную).
 
-## Phase B — Decap CMS (+3 000 ₽ к договору)
+## Что после Phase B
 
-Изначальная клиентская задача — клиент сам редактирует контент через CMS UI без правок кода.
+- **Phase A** — revision-loop по placeholder контенту, когда клиент пришлёт правки (или сам внесёт через CMS — самостоятельно).
+- **Phase D** — перенос на tat-tech.ru + свой сервер + SSL.
+- **Phase F** — Node 20 → 24 в GitHub Actions (до 2026-06-02).
 
-**Шаги:**
-1. `npm install -D decap-cms-app` (или standalone admin/index.html подключение)
-2. `public/admin/index.html` — Decap entry point
-3. `public/admin/config.yml` — backend (git-gateway или GitHub direct), collections (services, cases, programs, reviews)
-4. Map Astro Content Collection schema → Decap `fields` (zod schema → yaml)
-5. Edit-сценарии: услуги (pricing tiers, FAQ), кейсы, программы, отзывы, About bio, цены
-6. Auth: GitHub OAuth (через Netlify Identity или git-gateway proxy) — клиент логинится своим gh аккаунтом
-7. Test: клиент открывает `/admin`, меняет цену, сохраняет → commit в main → 27s deploy → live
+## Файлы в курсе
 
-**Workflow:** 2-3 сессии. ~3-4h работы Claude. Документация для клиента (русский how-to PDF / Loom).
-
-## Phase D — Перенос на свой сервер + tat-tech.ru + SSL
-
-1. Регистрация / уже зарегистрирован домен tat-tech.ru — DNS settings
-2. Сервер клиента (VPS / shared hosting?) — узнать конфигурацию
-3. Build → SCP / rsync → SSL (Let's Encrypt через certbot или Cloudflare proxy)
-4. `astro.config.mjs`: `base: '/'`, `site: 'https://tat-tech.ru'` — рекомпиляция
-5. Redirect от старого GitHub Pages URL → tat-tech.ru (либо просто отключить gh-pages workflow)
-6. Обновить sitemap.xml + Yandex Webmaster + Search Console под новый домен
-
-**Workflow:** 1-2 сессии. Зависит от инфраструктуры клиента.
-
-## Phase E — Optional perf polish (mobile SI 4.2-4.6s)
-
-Defer пока не попросит. Quality 80→75 на webp, smaller fallback изображения, lazy iframe (уже есть на /contacts).
-
-## Phase F — Node 20 → 24 в GitHub Actions (до 2026-06-02)
-
-`.github/workflows/deploy.yml` — обновить `setup-node@v4` `node-version: 20` → 24. Простой PR (1 файл). Проверить build green.
-
-## Stack reminder
-
-- Astro 6, plain CSS, branch `main`
-- Один add-on: `@astrojs/sitemap` (добавлен в C5)
-- Karpathy guidelines (auto-loaded через ~/.claude/CLAUDE.md)
-- Workflow: 1 commit + push отдельным шагом + `gh run watch` smoke test
+- `D:\tattech-website\PHASE-C-ROADMAP.md` (контекст Phase C, для понимания content schema)
+- `D:\tattech-website\src\content.config.ts` (services collection schema — мапить в Decap fields 1-в-1)
+- `D:\tattech-website\src\data\cases.ts` + `programs.ts` (refactor candidates)
+- `D:\tattech-website\src\components\About.astro` + `Reviews.astro` (placeholder content, кандидаты на CMS-редактируемость)
+- `memory project_tattech_client.md` — полная история проекта
+- `memory project_tattech_client_confirmations.md` — placeholder/вопросы Ленару (решаются после CMS — клиент сам внесёт)
 
 ## Live preview
 
 ```bash
 cd D:\tattech-website
 npm run dev
-# открыть http://localhost:4321/tattech-website/
+# http://localhost:4321/tattech-website/
+# CMS будет на http://localhost:4321/tattech-website/admin/
 ```
 
-## Что вставить в новый чат
+## Live URLs
 
-```
-T-Tech [Phase A/B/D — выбрать что начать первым].
+- https://ilshatsharapov69-afk.github.io/tattech-website/ (текущий)
+- https://ilshatsharapov69-afk.github.io/tattech-website/admin/ (после Phase B)
 
-Phase C полностью DONE — 13 inner pages + sitemap + robots + Schema.org JSON-LD live на https://ilshatsharapov69-afk.github.io/tattech-website/.
-
-Прочитай:
-- D:\tattech-website\next-session-START.md (этот файл — план A/B/D)
-- memory project_tattech_client.md (полная история всех 5 C-сессий)
-- memory project_tattech_client_confirmations.md (что попросить клиента)
-
-Какую phase начать:
-- Phase A — revision-loop по placeholder контенту (если клиент прислал правки)
-- Phase B — Decap CMS (+3 000 ₽ к договору)
-- Phase D — перенос на tat-tech.ru + свой сервер + SSL
-
-Repo: D:\tattech-website
-Last commit: 8dcd57e (phase-c-5 done)
-```
+Repo: `D:\tattech-website`
+Last commit: `9a07839` (fix space-7 padding bug)
+Branch: `main`
