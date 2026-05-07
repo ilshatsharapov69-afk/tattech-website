@@ -37,8 +37,8 @@
 [x] 8   — Кейсы: grid 4×2 + B2B-формат + image hover-zoom + per-card spotlight gradient + footer-strip метрика (NOT pushed)
 [x] 9   — Отзывы: B2B + per-industry avatar-initials + quote-mark hover (commit e4838d7, NOT pushed)
 [x] 10a — AI photo generation (Gemini Nano Banana 2): 8 case-photos в B2B-publication style + per-industry focus (NOT pushed)
-[ ] 10b — About-блок с фото владельца  ← NEXT
-[ ] 11  — Финальный copywriting pass (benefit headlines)
+[x] 10b — About-блок с фото владельца Ленара (real Telegram selfie 1:1 sq, compact 180×180 + bio + 3 trust pills, between FAQ↔CTA) (NOT pushed)
+[ ] 11  — Финальный copywriting pass (benefit headlines)  ← NEXT
 ```
 
 8 сессий total после pre-flight.
@@ -417,30 +417,62 @@ Nano Banana 2 хорошо handle русский текст в кадре: вы�
 
 ## Session 10b — About-блок с фото владельца (demo-first)
 
-**Status:** pending • **Research:** ~30 мин • **Demo-first** (placeholder фото + bio, клиент даст реальное позже) • **~120 LOC**
+**Status:** ✅ done 2026-05-07 • **NOT pushed** • **+85 LOC About.astro + 30 LOC sharp script + 3 webp + 3 dist** • **Real photo от user (Telegram selfie)**
+
+### What shipped
+
+- ✅ **`src/components/About.astro`** — компактный B2B founder-spotlight, 2-col grid (180px square photo / 1fr text), max-width 720px centered, between FAQ ↔ CTABanner (по запросу user'а — не Reviews↔Programs из roadmap'а; placement-логика «trust-anchor прямо перед финальным CTA» подтверждена research-источниками)
+- ✅ **Photo:** real Telegram selfie от Ленара (640×640 square source, no crop) → sharp resize-only (no `fit:cover` на ≠1:1 target) → 3 webp variants (240/400/600 wide, 1:1 aspect, ~18/42/76 KB). Filenames `lenar-v2-{w}.webp` (v2 prefix forced cache-bust mid-session — см. lessons learned)
+- ✅ **Layout:** Photo column **180×180px explicit pixels** (НЕ aspect-ratio CSS — explicit pixel sizing после mid-session bug где browser-cache подменял картинку другого aspect'а несмотря на CSS `aspect-ratio: 1/1`). Mobile (≤640px) → 120×120
+- ✅ **Animation:** только hover-zoom `scale(1.05)` + shadow grow var(--shadow-md) → var(--shadow-lg), 400ms `var(--ease-spring)`. Gated `(hover: hover) and (pointer: fine)`. Никаких pulse/halo/spinning — пользователь явно отверг decoration-эффекты («просто вставь как есть»). Differentiation от других секций: Cases image-zoom — на mouse-tracked spotlight, About image-zoom — без spotlight, минимальный
+- ✅ **Bio (PLACEHOLDER, к session 11):** "За 8 лет в автоматизации 1С я понял: главная боль клиентов — не в программе, а в подрядчиках, которые пропадают после сдачи. Команда у нас небольшая — значит, за каждым проектом стоит конкретный человек, который остаётся на связи и после запуска." (~38 слов RU, формула Credibility Hook → Pain Mirror → Operational Promise — research/2026-05-07_b2b-about-section/)
+- ✅ **Role:** «Основатель T-Tech» (не CEO для 7-человечной — research: warmer for small business)
+- ✅ **Trust pills (3):** «Казань» / «Официальный партнёр 1С» / «8 лет на рынке» — research-ranked elements (location-accountability + verifiable cert + personal-tenure)
+- ✅ **`scripts/process-founder-photo.mjs`** — Node sharp script с fallback (real photo если есть `lenar-raw.{jpg,jpeg,png}`, иначе SVG-placeholder с brand-blue gradient + initials «ЛГ»). Не cropит — preserves original aspect (Telegram = 640×640).
+- ✅ **`.gitignore`:** добавлено `public/images/about/lenar-raw.*` (raw selfie не в репо, только webp)
+
+### Lighthouse session 10b (3×3)
+
+**Desktop 3×:** 100/100/100/100 (LCP 0.57s, CLS 0.000-0.009, SI 0.45-0.48s, TBT 0)
+**Mobile 3×:** 96/98/98 perf, 100/100/100 a11y/bp/seo (LCP 2.18-2.26s, CLS 0, TBT 0, SI 1.51/1.51/4.03s)
+
+**No regression vs session 10a baseline** (desktop 100, mobile 96). Mobile **улучшилось** на 2 из 3 прогонов (96→98 perf, SI 4.03s→1.51s) — вероятно вариативность simulated throttling, не systematic.
+
+### Strategy pivots (важно для session 11+)
+
+1. **Placement: FAQ↔CTABanner, не Reviews↔Programs.** Изначальный roadmap-план был between Reviews и Programs. User сказал «лучше перед самым концом» — sequencing-логика «возражения (FAQ) → trust-anchor (founder) → CTA» подтверждена research-источниками (CTA Placement Best Practices 2026). Финал на 100% совпал с research-рекомендацией.
+2. **Layout: 2-col compact (180px photo), не founder-hero.** Research рекомендовал 2-col asymmetric с 4:5 portrait. После 3 итераций по фидбеку user'а — square 1:1 (его photo 640×640), compact 180px (de-emphasised), no border-radius, no halo, only hover-zoom. Финальный паттерн: «founder spotlight as honest small-business signal», NOT «founder hero». Research-direction корректна, но visual scale меньше из-за specifics клиента (small Telegram selfie + de-emphasised section).
+3. **Mid-session cache hell.** Aspect-ratio менялся в одной сессии (4:5 → 1:1). Browser cached old CSS+webp агрессивно. Fix: filename rename (`lenar-{w}` → `lenar-v2-{w}`) + explicit pixel sizing (вместо `aspect-ratio: 1/1` + `width: 100%`). Lesson: при mid-session aspect-changes → сразу новые filenames + explicit dimensions, не aspect-ratio.
 
 ### Research
 
-- B2B about-section patterns: личное лицо vs «команда» vs «миссия». Trust-driving элементы
-- Placeholder portrait варианты: silhouette / initials в круге / generated portrait / icon-illustration
+[research/2026-05-07_b2b-about-section/report.md](../DeepReserch/research/2026-05-07_b2b-about-section/report.md) — 31 источник, 4 параллельных subagents:
+- **Cat. A** — общие B2B-паттерны 2025-2026 (Stripe/Resend/Basecamp/Consulting Success conversion data)
+- **Cat. B** — RU 1С-конкуренты: 8 сайтов проверено (Рарус/WiseAdvice/ИБР-Казань/ЦА-Казань/Ф1Софт/Комлайн/АрсанСофт/Интро-С). Только 1 из 8 (ИБР-Казань) показывает реальные имена/лица — асимметричная возможность для T-Tech
+- **Cat. C** — founder-bio copywriting (theb2bplaybook + Basecamp + Copyhackers + RU Котов/petr-panda) — формула Credibility Hook → Pain Mirror → Promise, 50-75 слов optimal
+- **Cat. D** — CSS-only portrait анимации 2026 (CSS-Tricks scroll-driven, @property gradient borders, Codrops, WCAG 2.2 reduced-motion)
 
-### Input (demo-first)
+### Файлы изменены
 
-- Владелец = **Ленар Гильмутдинов** (см. memory `project_tattech_owner.md`)
-- Фото — placeholder (silhouette / initials / generated). Клиент даст реальное до push session 11.
-- Bio — 1-2 предложения placeholder от первого лица в B2B-tone. Клиент редактирует.
-- Должность — placeholder «Основатель T-Tech» или «CEO». Клиент уточнит.
+- `src/components/About.astro` — новый, +85 LOC
+- `src/pages/index.astro` — +2 LOC (import + insert между FAQ и CTABanner)
+- `scripts/process-founder-photo.mjs` — новый, +30 LOC (sharp pipeline + SVG-placeholder fallback)
+- `.gitignore` — +2 LOC (lenar-raw.*)
+- `public/images/about/lenar-v2-{240|400|600}.webp` — 3 файла (~18/42/76 KB)
+- `public/images/about/lenar-raw.jpg` — gitignored (real selfie, 164 KB)
+- `REDESIGN-ROADMAP.md` — статус 10b
+- `next-session-START.md` — handoff для session 11
+- `.lighthouse/lh-10b-*` — 6 reports (gitignored)
+- `D:/DeepReserch/research/2026-05-07_b2b-about-section/report.md` — research (31 source)
+- `D:/DeepReserch/research/INDEX.md` — обновлён
+- `C:/Users/.../memory/project_tattech_client.md` — статус 10b
 
-### Цели
+### Возможные доработки (defer до клиентского input session 11)
 
-- Новый компонент `src/components/About.astro`
-- Размещение: между Reviews и Programs (или TBD)
-- Использует placeholder фото + сгенерированные office/team фото из 10a (или fallback scraped)
-
-### Deliverables
-
-- 1 commit, новый компонент + обновлён `index.astro`
-- ≤ 120 LOC delta
+- **Real bio + role от Ленара** — placeholder текущий, клиент даст финальный copy в session 11
+- **Real numbers в trust pills** — «8 лет на рынке» текущее, клиент уточнит actual founder-tenure (placeholder, не company-age)
+- **LinkedIn-link** — research-ranked trust element #5, defer (нужен реальный URL)
+- **Section eyebrow text** — «О компании» текущее (generic), session 11 может pivot на «Кто за этим стоит» как H2
 
 ---
 

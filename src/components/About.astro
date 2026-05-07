@@ -1,0 +1,87 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// PLACEHOLDER bio — клиент уточняет к session 11.
+// Bio formula: Credibility Hook → Pain Mirror → Operational Promise (50–75 words RU).
+// Research: research/2026-05-07_b2b-about-section/report.md
+const founder = {
+  name: 'Ленар Гильмутдинов',
+  role: 'Основатель T-Tech',
+  bio: 'За 8 лет в автоматизации 1С я понял: главная боль клиентов — не в программе, а в подрядчиках, которые пропадают после сдачи. Команда у нас небольшая — значит, за каждым проектом стоит конкретный человек, который остаётся на связи и после запуска.',
+  trust: ['Казань', 'Официальный партнёр 1С', '8 лет на рынке'],
+};
+
+// v2 prefix on webp filenames forces fresh fetch (mid-session aspect change confused cache).
+const photoBase = `${base}/images/about/lenar-v2`;
+---
+
+<section class="section about" id="about">
+  <div class="container">
+    <div class="about-card reveal">
+      <figure class="about-photo">
+        <img
+          src={`${photoBase}-400.webp`}
+          srcset={`${photoBase}-240.webp 240w, ${photoBase}-400.webp 400w, ${photoBase}-600.webp 600w`}
+          sizes="(max-width: 640px) 120px, 180px"
+          alt={`${founder.name}, ${founder.role}`}
+          width="400"
+          height="400"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+
+      <div class="about-text">
+        <span class="eyebrow">О компании</span>
+        <h2 class="about-name">{founder.name}</h2>
+        <p class="about-role">{founder.role}</p>
+        <p class="about-bio">{founder.bio}</p>
+        <ul class="about-trust">
+          {founder.trust.map((t) => <li>{t}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about { padding-block: var(--space-12); }
+
+  .about-card {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: center;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .about-photo { margin: 0; width: 180px; height: 180px; }
+  .about-photo img {
+    display: block; width: 180px; height: 180px; object-fit: cover;
+    box-shadow: var(--shadow-md);
+    transition: transform 400ms var(--ease-spring), box-shadow 400ms var(--ease-spring);
+  }
+
+  .about-text .eyebrow { display: inline-block; margin-bottom: var(--space-2); }
+  .about-name { font-size: 1.125rem; font-weight: 700; margin: 0 0 2px; color: var(--color-text); }
+  .about-role { font-size: 0.8125rem; color: var(--color-brand-500); font-weight: 500; margin: 0 0 var(--space-3); line-height: 1.3; }
+  .about-bio { font-size: 0.875rem; line-height: 1.55; color: var(--color-text-soft); margin: 0 0 var(--space-3); }
+
+  .about-trust { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .about-trust li {
+    padding: 4px var(--space-3); background: var(--color-bg-alt);
+    border: 1px solid var(--color-border); border-radius: var(--radius-full);
+    font-size: 0.75rem; color: var(--color-text-soft); font-weight: 500;
+  }
+
+  /* Hover — Cases-style image zoom + lift, gated to non-touch. */
+  @media (hover: hover) and (pointer: fine) {
+    .about-photo img:hover { transform: scale(1.05); box-shadow: var(--shadow-lg); }
+  }
+
+  @media (max-width: 640px) {
+    .about-card { grid-template-columns: 120px minmax(0, 1fr); gap: var(--space-4); }
+    .about-photo, .about-photo img { width: 120px; height: 120px; }
+  }
+</style>

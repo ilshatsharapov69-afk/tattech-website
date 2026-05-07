@@ -31,3 +31,5 @@ preview.log
 
 # AI-generated raw photos (only optimized webp in repo)
 public/images/photos/raw/
+# Founder raw selfie source (only optimized webp in repo)
+public/images/about/lenar-raw.*
